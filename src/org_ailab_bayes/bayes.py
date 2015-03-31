@@ -1,8 +1,7 @@
 '''
-Created on Oct 19, 2010
-
-@author: Peter
+@author: superhy
 '''
+
 from numpy import *
 
 def loadDataSet():

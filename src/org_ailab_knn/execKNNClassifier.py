@@ -1,9 +1,8 @@
 # -*- coding: UTF-8 -*-
 
-import kNN
-import matplotlib
-import matplotlib.pyplot as plt
 from numpy.core.numeric import array
+import kNN
+import matplotlib.pyplot as plt
 
 def loadClassifierNum():
     # 生成数据

@@ -1,8 +1,7 @@
 '''
-Created on Oct 27, 2010
-Logistic Regression Working Module
-@author: Peter
+@author: superhy
 '''
+
 from numpy import *
 
 def loadDataSet():
