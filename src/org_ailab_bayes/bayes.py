@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 '''
 @author: superhy
 '''
@@ -136,7 +138,7 @@ def calcMostFreq(vocabList, fullText):
     return sortedFreq[:30]       
 
 def localWords(feed1, feed0):
-    import feedparser
+    import email.feedparser
     docList = []; classList = []; fullText = []
     minLen = min(len(feed1['entries']), len(feed0['entries']))
     for i in range(minLen):
