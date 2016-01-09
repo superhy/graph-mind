@@ -31,4 +31,8 @@ class wordSeg:
         return segParaList
 
 if __name__ == '__main__':
-    pass
+    mainObj = wordSeg('e', [])
+    segRes = mainObj.singleSegEngine('我爱北京天安门')
+        
+    for word in segRes:
+        print word
