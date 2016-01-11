@@ -9,7 +9,16 @@ Created on 2016年1月9日
 class advanceSegOpt:
     
     def conutAvgWordsNum(self, segParaList):
-        pass
+        paraNum = len(segParaList)
+        allWordsNum = 0
+        for segPara in segParaList:
+            segStr = '/'.join(segPara)
+            segWords = segStr.split('/')
+            allWordsNum += len(segWords)
+            
+        avgWordsNum = allWordsNum * 1.0 /paraNum
+        
+        return avgWordsNum
 
 if __name__ == '__main__':
     pass
