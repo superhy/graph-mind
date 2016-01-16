@@ -76,7 +76,7 @@ if __name__ == '__main__':
     posSentences, negSentences = segObj.fetchXMLText()
     allSentences = posSentences
     allSentences.extend(negSentences)
-    wordSegObj = wordSeg('e', allSentences)
+    wordSegObj = wordSeg('a', allSentences)
     segParaList = wordSegObj.serialSeger()
     advanceSegOptObj = advanceSegOpt()
     avgWordsNum = advanceSegOptObj.conutAvgWordsNum(segParaList)
