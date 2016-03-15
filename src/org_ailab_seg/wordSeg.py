@@ -6,6 +6,7 @@ Created on 2016年1月9日
 @author: hylovedd
 '''
 import jieba
+from jieba import posseg
 
 class wordSeg:
     def __init__(self, segMode, paraList):
@@ -13,26 +14,43 @@ class wordSeg:
         self.paraList = paraList
         
     def singleSegEngine(self, segStr):
-        wordList = []
+        wordGenList = []
         if self.segMode == 'a':
-            wordList = jieba.cut(segStr, cut_all = True)
+            wordGenList = jieba.cut(segStr, cut_all=True)
         elif self.segMode == 's':
-            wordList = jieba.cut_for_search(segStr)
+            wordGenList = jieba.cut_for_search(segStr)
         else:
-            wordList = jieba.cut(segStr, cut_all = False)
+            wordGenList = jieba.cut(segStr, cut_all=False)
+        
+        wordStr = '_'.join(wordGenList)
+        wordList = wordStr.split('_')
             
         return wordList
     
-    def serialSeger(self):
+    def singlePosSegEngine(self, segStr):
+        wordPosGenList = posseg.cut(segStr, HMM=True)
+        
+        wordPosList = []
+        for wordPair in wordPosGenList:
+            wordPosList.append(u'/'.join(wordPair))
+        
+        return wordPosList
+    
+    def serialSeger(self, posNeedFlag=False):
         segParaList = []
-        for para in self.paraList:
-            segParaList.append(self.singleSegEngine(para))
+        if posNeedFlag == True:
+            for para in self.paraList:
+                segParaList.append(self.singlePosSegEngine(para))
+        else:
+            for para in self.paraList:
+                segParaList.append(self.singleSegEngine(para))
         
         return segParaList
 
 if __name__ == '__main__':
     mainObj = wordSeg('e', [])
     segRes = mainObj.singleSegEngine('我爱北京天安门')
+    segRes2 = mainObj.singlePosSegEngine('我爱北京天安门')
         
-    for word in segRes:
-        print word
+    writenStr = ' '.join(segRes2)
+    print writenStr

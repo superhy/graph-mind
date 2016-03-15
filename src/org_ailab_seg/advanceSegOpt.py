@@ -6,19 +6,38 @@ Created on 2016年1月9日
 @author: superhy
 '''
 
+from nltk.util import pr
+
+
 class advanceSegOpt:
     
     def conutAvgWordsNum(self, segParaList):
         paraNum = len(segParaList)
         allWordsNum = 0
+        
         for segPara in segParaList:
-            segStr = '/'.join(segPara)
-            segWords = segStr.split('/')
-            allWordsNum += len(segWords)
+            allWordsNum += len(segPara)
             
-        avgWordsNum = allWordsNum * 1.0 /paraNum
+        avgWordsNum = allWordsNum * 1.0 / paraNum
         
         return avgWordsNum
+    
+    def writeIntoFile(self, filePath, segParaList):
+        # 重新载入字符集
+        import sys
+        reload(sys)
+        sys.setdefaultencoding('utf-8')
+        # 以覆盖写入方式打开文件
+        fileObj = file(filePath, 'w')
+        writenStr = ''
+        for segPara in segParaList:
+            segStr = ''
+            for segWord in segPara:
+                segStr += (u' ' + segWord)
+            print segStr
+            writenStr += (segStr + u'\r\n')
+        fileObj.write(writenStr)
+        fileObj.close()
 
 if __name__ == '__main__':
     pass

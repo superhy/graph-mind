@@ -5,11 +5,14 @@ Created on 2016年1月9日
 
 @author: hylovedd
 '''
-from bs4 import BeautifulSoup
-from org_ailab_seg.wordSeg import wordSeg
 import xml
 from xml.etree import ElementTree
+
+from bs4 import BeautifulSoup
+
 from org_ailab_seg.advanceSegOpt import advanceSegOpt
+from org_ailab_seg.wordSeg import wordSeg
+
 
 class segSentiWbTest:
     # analysis nlpcc2014 dateset
@@ -77,8 +80,13 @@ if __name__ == '__main__':
     allSentences = posSentences
     allSentences.extend(negSentences)
     wordSegObj = wordSeg('a', allSentences)
-    segParaList = wordSegObj.serialSeger()
+    segParaList = wordSegObj.serialSeger(True)
     advanceSegOptObj = advanceSegOpt()
-    avgWordsNum = advanceSegOptObj.conutAvgWordsNum(segParaList)
+    segParaList1 = segParaList
+    avgWordsNum = advanceSegOptObj.conutAvgWordsNum(segParaList1)
     
     print avgWordsNum
+    
+    writePath = u'segNLPCC2014.txt'
+    segParaList2 = segParaList
+    advanceSegOptObj.writeIntoFile(writePath, segParaList2)
