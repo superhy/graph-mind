@@ -13,11 +13,15 @@ class connJVM():
     
     def testRunJVM(self):
         jpype.startJVM(self.JVMPath)
-        javaClass = jpype.JClass('Hello')
+        
+        javaClass = jpype.JClass('Hello')     
         print('javaClass: ' + str(javaClass))
+        
         javaInstance = javaClass()
         print('javaInstance: ' + str(javaInstance))
+        
         javaInstance.printHello()
+        
         jpype.shutdownJVM()
         
 
