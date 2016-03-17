@@ -11,6 +11,12 @@ from nltk.util import pr
 
 class advanceSegOpt:
     
+    def reLoadEncoding(self):
+        # 重新载入字符集
+        import sys
+        reload(sys)
+        sys.setdefaultencoding('utf-8')
+    
     def conutAvgWordsNum(self, segParaList):
         paraNum = len(segParaList)
         allWordsNum = 0
@@ -23,10 +29,7 @@ class advanceSegOpt:
         return avgWordsNum
     
     def writeIntoFile(self, filePath, segParaList):
-        # 重新载入字符集
-        import sys
-        reload(sys)
-        sys.setdefaultencoding('utf-8')
+        self.reLoadEncoding()
         # 以覆盖写入方式打开文件
         fileObj = file(filePath, 'w')
         writenStr = ''

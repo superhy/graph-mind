@@ -20,7 +20,7 @@ def loadClassifierNum():
     
 def loadTextClassifierNum():
     # 加载数据
-    datingDataMat, datingLabels = kNN.file2matrix('datingTestSet2.txt')
+    datingDataMat, datingLabels = kNN.filedata2matrix('datingTestSet2.txt')
     
     # 打印数据
     print datingDataMat
@@ -34,7 +34,7 @@ def loadTextClassifierNum():
     
 def loadClassifierNormNum():
     # 加载数据
-    datingDataMat, datingLabels = kNN.file2matrix('datingTestSet2.txt')
+    datingDataMat, datingLabels = kNN.filedata2matrix('datingTestSet2.txt')
     normMat, ranges, minVals = kNN.autoNorm(datingDataMat)
     
     # 打印数据

@@ -27,7 +27,7 @@ def createDataSet():
     labels = ['A', 'A', 'B', 'B']
     return group, labels
 
-def file2matrix(filename):
+def filedata2matrix(filename):
     fr = open(filename)
     numberOfLines = len(fr.readlines())  # get the number of lines in the file
     returnMat = zeros((numberOfLines, 3))  # prepare matrix to return
@@ -54,7 +54,7 @@ def autoNorm(dataSet):
    
 def datingClassTest():
     hoRatio = 0.50  # hold out 10%
-    datingDataMat, datingLabels = file2matrix('datingTestSet2.txt')  # load data setfrom file
+    datingDataMat, datingLabels = filedata2matrix('datingTestSet2.txt')  # load data setfrom file
     normMat, ranges, minVals = autoNorm(datingDataMat)
     m = normMat.shape[0]
     numTestVecs = int(m * hoRatio)

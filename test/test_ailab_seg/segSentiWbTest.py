@@ -85,7 +85,7 @@ if __name__ == '__main__':
     segParaList1 = segParaList
     avgWordsNum = advanceSegOptObj.conutAvgWordsNum(segParaList1)
     
-    print avgWordsNum
+    print(avgWordsNum)
     
     writePath = u'segNLPCC2014.txt'
     segParaList2 = segParaList
