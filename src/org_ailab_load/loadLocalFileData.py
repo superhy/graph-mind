@@ -6,8 +6,9 @@ Created on 2015年10月25日
 @author: hylovedd
 '''
 
-from numpy import zeros
 import os
+
+from numpy import zeros
 
 
 # ML book test
@@ -26,12 +27,10 @@ def filedata2matrix(filePath):
         index += 1
     return returnMat, classLabelVector
 
-def checkFile(filePath):
-    if os.path.exists(filePath) == False:
-        return u'null'
-    elif os.path.isdir(filePath):
-        return u'dir'
-    elif os.path.isfile(filePath):
+def checkFile(file):
+    if os.path.exists(file) == False:
+        return u'none'
+    elif os.path.isfile(file):
         return u'file'
     else:
         return u'error'
