@@ -23,7 +23,10 @@ class wordVecOpt:
         self._window = _window
         self._minCount = _minCount
         self._workers = _workers
-        
+    
+    def loadModelfromFile(self, modelFilePath):
+        return Word2Vec.load(modelFilePath)
+    
     def trainWord2VecModel(self, corpusFile):
         advanceSegOpt().reLoadEncoding()
         fileType = loadLocalFileData.checkFile(corpusFile)
@@ -37,13 +40,23 @@ class wordVecOpt:
             return model
     
     def queryMostSimilarWordVec(self, model, wordStr):
-        wordSimilarList = model.most_similar(wordStr.decode('utf-8'))
-        return wordSimilarList
+        similarPairList = model.most_similar(wordStr.decode('utf-8'))
+        return similarPairList
     
-    def queryMsimilarWVfromFile(self, modelFilePath, wordStr):
+    def queryMsimilarWVfromFile(self, wordStr, modelFilePath=None):
         advanceSegOpt().reLoadEncoding()
-        model = Word2Vec.load(modelFilePath)
+        if modelFilePath == None:
+            modelFilePath = self.modelPath
+        model = self.loadModelfromFile(modelFilePath)
         return self.queryMostSimilarWordVec(model, wordStr)
+    
+    def culSimBtwWordVecs(self, model, wordStr1, wordStr2):
+        similarValue = model.similarity(wordStr1.decode('utf-8'), wordStr2.decode('utf-8'))
+        return similarValue
+    
+    def queryNSimBtwWordVecs(self, model, wordStr1, wordStr2):
+        nSimilarPairList = model.n_similarity(wordStr1.decode('utf-8'), wordStr2.decode('utf-8'))
+        return nSimilarPairList
     
 if __name__ == '__main__':
     pass

@@ -15,22 +15,31 @@ def testTrainWord2VecModel():
     modelPath = u'NLPCC2014word2vecModel.vector'
     wordVecOptObj = wordVecOpt(modelPath)
     model = wordVecOptObj.trainWord2VecModel(corpusFilePath)
-    wordStr = u'调戏/v'
-    print(u'word vec object: ' + wordStr)
+    wordStr = u'韩寒/nr'
+    print(u'Train model and word vec object: ' + wordStr)
     queryList = wordVecOptObj.queryMostSimilarWordVec(model, wordStr)
     for e in queryList:
         print e[0], e[1]
     
 def testQueryWordVec():
-    advanceSegOptObj = advanceSegOpt()
-    advanceSegOptObj.reLoadEncoding()
-    filePath = u"../segNLPCC2014.txt"
-    file = open(filePath, u'r')
     modelPath = u'NLPCC2014word2vecModel.vector'
-    wordVecOptObj = wordVecOpt(filePath, modelPath)
-    wordStr = u'调戏'
-    wordVecOptObj.queryMsimilarWVfromFile(modelPath, wordStr)
+    wordVecOptObj = wordVecOpt(modelPath)
+    wordStr = u'韩寒/nr'
+    print(u'Load model then word vec object: ' + wordStr)
+    queryList = wordVecOptObj.queryMsimilarWVfromFile(wordStr)
+    for e in queryList:
+        print e[0], e[1]
+        
+    model = wordVecOptObj.loadModelfromFile(modelPath)
+    wordStr1 = u'韩寒/nr'
+    wordStr2 = u'女人/n'  
+    simRes = wordVecOptObj.culSimBtwWordVecs(model, wordStr1, wordStr2)
+    print(u'\r\n' + wordStr1 + u' to ' + wordStr2 + u'\' similarity:')
+    print(simRes)
+    
+    queryNSimList = wordVecOptObj.queryNSimBtwWordVecs(model, wordStr1, wordStr2)
+    print(queryNSimList)
     
 if __name__ == '__main__':
-    testTrainWord2VecModel()
-    #testQueryWordVec()
+    #testTrainWord2VecModel()
+    testQueryWordVec()
