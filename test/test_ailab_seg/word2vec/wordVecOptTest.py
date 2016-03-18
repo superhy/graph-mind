@@ -37,8 +37,12 @@ def testQueryWordVec():
     print(u'\r\n' + wordStr1 + u' to ' + wordStr2 + u'\' similarity:')
     print(simRes)
     
-    queryNSimList = wordVecOptObj.queryNSimBtwWordVecs(model, wordStr1, wordStr2)
-    print(queryNSimList)
+    wordList1 = [u'韩寒/nr', u'女人/n']
+    wordList2 = [u'可爱/v']
+    queryPNSimList = wordVecOptObj.queryMSimilarVecswithPosNeg(model, wordList1, wordList2)
+    print(u'\r\n Pos: ' + u';'.join(wordList1) + u'Neg: ' + u';'.join(wordList2) + u'word vecs:')
+    for e in queryPNSimList:
+        print e[0], e[1]
     
 if __name__ == '__main__':
     #testTrainWord2VecModel()

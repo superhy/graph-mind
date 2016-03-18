@@ -54,9 +54,15 @@ class wordVecOpt:
         similarValue = model.similarity(wordStr1.decode('utf-8'), wordStr2.decode('utf-8'))
         return similarValue
     
-    def queryNSimBtwWordVecs(self, model, wordStr1, wordStr2):
-        nSimilarPairList = model.n_similarity(wordStr1.decode('utf-8'), wordStr2.decode('utf-8'))
-        return nSimilarPairList
+    def queryMSimilarVecswithPosNeg(self, model, posWordStrList, negWordStrList):
+        posWordList = []
+        negWordList = []
+        for wordStr in posWordStrList:
+            posWordList.append(wordStr.decode('utf-8'))
+        for wordStr in negWordStrList:
+            negWordList.append(wordStr.decode('utf-8'))
+        pnSimilarPairList = model.most_similar(positive=posWordList, negative=negWordList)
+        return pnSimilarPairList
     
 if __name__ == '__main__':
     pass
