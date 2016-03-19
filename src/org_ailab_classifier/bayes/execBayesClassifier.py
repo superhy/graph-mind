@@ -1,7 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-import bayes
 from numpy import *
+
+from org_ailab_classifier.bayes import bayes
+
 
 def loadClassifierNum():
     # 初始化数据
@@ -17,7 +19,7 @@ def loadClassifierNum():
         num += 1
 
 def execTrainClassifier():
-    listOPosts, listClasses = bayes.loadDataSet();
+    listOPosts, listClasses = bayes.loadDataSet()
     myVocabList = bayes.createVocabList(listOPosts)
     
     trainMat = []
@@ -37,7 +39,7 @@ def execTrainClassifier0():
     for postinDoc in listOPosts:
         trainMat.append(bayes.setOfWords2Vec(myVocabList, postinDoc))
     
-    p0V, p1V, pAb = bayes.trainNB0(trainMat, listClasses)
+    p0V, p1V, pAb = bayes.trainNBPre(trainMat, listClasses)
     print pAb
     print p0V
     print p1V

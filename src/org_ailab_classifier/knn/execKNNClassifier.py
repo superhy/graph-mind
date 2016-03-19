@@ -1,8 +1,11 @@
 # -*- coding: UTF-8 -*-
 
+from astropy import test
 from numpy.core.numeric import array
-import kNN
+
 import matplotlib.pyplot as plt
+from org_ailab_classifier.knn import kNN
+
 
 def loadClassifierNum():
     # 生成数据
