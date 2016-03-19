@@ -12,7 +12,7 @@ import warnings
 from Cython.Build.Cythonize import multiprocessing
 from gensim.models.word2vec import Word2Vec, LineSentence
 
-from org_ailab_load import loadLocalFileData
+from org_ailab_io import loadLocalFileData
 from org_ailab_seg.advanceSegOpt import advanceSegOpt
 
 
