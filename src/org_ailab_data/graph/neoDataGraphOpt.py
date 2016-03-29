@@ -13,22 +13,18 @@ from py2neo.database.auth import authenticate
 
 _user = "neo4j"
 _password = "qdhy199148"
-_database = "http://localhost:7474/db/data/"
 
-class neoGraphOpt:
-    def __init__(self, host=None, http_port=None, bolt_port=None, user=_user, password=_password, datebase=_database):
-        self.host = host
-        self.http_port = http_port
-        self.bolt_port = bolt_port
+class neoGraphDBBean:
+    def __init__(self, user=_user, password=_password):
         self.user = user;
         self.password = password
-        self.datebase = datebase
+        self.graph = self.connectGraph()
         
     def connectGraph(self):
-        #graph = Graph(u'http://neo4j:<qdhy199148>@localhost:7474/db/data/')
-        authenticate("localhost:7474", "neo4j", "qdhy199148")
+        # graph = Graph(user = self.user, password = self.password)
+        authenticate("localhost:7474", self.user, self.password)
         graph = Graph("http://localhost:7474/db/data/")
-        #graph = Graph(user = self.user, password = self.password)
+        
         return graph
         
     def createNode(self, nodeType, nodeName):
@@ -43,10 +39,21 @@ class neoGraphOpt:
         relat = self.createRelationship(relationship, node1, node2)
         
         return relat
+    
+    def createRelationShipWithNodes(self, relationship):
+        # get a graph's new transactions
+        trs = self.graph.begin()  # autocommit = false
+        trs.create(relationship)
+        trs.commit()
+        
+        # check commit success or not
+        print(self.graph.exists(relationship))
 
 if __name__ == '__main__':
-    neoObj = neoGraphOpt()
-    print(neoObj.createNodeAndRelats("teacher", "huangqingsong", "student", "huyang", "teach"))
+    neoObj = neoGraphDBBean()
+    relat = neoObj.createNodeAndRelats("teacher", "huangqingsong", "student", "huyang", "teach")
+    print(relat)
     
-    test_graph = neoObj.connectGraph()
-    print test_graph
+    # print(neoObj.graph)
+    # todo: warning don't repeat add relationships, the function is not completed
+    neoObj.createRelationShipWithNodes(relat)
