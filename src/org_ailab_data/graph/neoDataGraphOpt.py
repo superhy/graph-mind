@@ -10,7 +10,6 @@ from py2neo import Node, Relationship
 from py2neo.database import Graph
 from py2neo.database.auth import authenticate
 
-
 _user = "neo4j"
 _password = "qdhy199148"
 
@@ -19,7 +18,10 @@ class neoGraphDBBean:
         self.user = user;
         self.password = password
         self.graph = self.connectGraph()
-        
+                
+    '''
+    connect to database
+    '''
     def connectGraph(self):
         # graph = Graph(user = self.user, password = self.password)
         authenticate("localhost:7474", self.user, self.password)
@@ -27,37 +29,96 @@ class neoGraphDBBean:
         
         return graph
         
+    '''
+    construct graph
+    '''
     def createNode(self, nodeType, nodeName):
         return Node(nodeType, name=nodeName)
     
-    def createNodeWithProperty(self, propertyDic):
-        # set property with dic
-        pass
-    
-    def createRelationship(self, relationship, node1, node2):
-        return Relationship(node1, relationship, node2)
-    
-    def createNodeAndRelats(self, nodeTyep1, nodeName1, nodeTyep2, nodeName2, relationship):
-        node1 = self.createNode(nodeTyep1, nodeName1)
-        node2 = self.createNode(nodeTyep2, nodeName2)
-        relat = self.createRelationship(relationship, node1, node2)
+    def createNodeWithProperty(self, nodeType, nodeName, propertyDic):
+        '''
+        set property with dic
+        ''' 
+        node = self.createNode(nodeType, nodeName)
+        for key in propertyDic:
+            node[key] = propertyDic[key]
         
-        return relat
+        return node  
+             
+    def createRelationship(self, relationshipName, node1, node2):
+        return Relationship(node1, relationshipName, node2)
     
-    def createRelationShipWithNodes(self, relationship):
-        # get a graph's new transactions
+    def createRelationshipWithProperty(self, relationshipName, node1, node2, propertyDic):
+        '''
+        ditto
+        note: relationship is a kind of subgraph
+        ''' 
+        relationship = self.createRelationship(relationshipName, node1, node2)
+        for key in propertyDic:
+            relationship[key] = propertyDic[key]
+            
+        return relationship
+    
+    def unionSubGraphs(self, subGraphs):
+        unionGraph = subGraphs[0] | subGraphs[1]
+        for i in range(2, len(subGraphs)):  # range is [...)
+            unionGraph = (unionGraph | subGraphs[i])
+            
+        return unionGraph
+    
+    def constructSubGraphInDB(self, subGraph):
+        '''
+        get a graph's new transactions
+        '''
         trs = self.graph.begin()  # autocommit = false
-        trs.create(relationship)
+        trs.create(subGraph)
         trs.commit()
         
         # check commit success or not
-        print(self.graph.exists(relationship))
-
+        print(self.graph.exists(subGraph))
+        
+    '''
+    update or delete elements from graph
+    '''
+        
+    '''
+    query records from graph
+    '''
+    
 if __name__ == '__main__':
     neoObj = neoGraphDBBean()
-    relat = neoObj.createNodeAndRelats("teacher", "huangqingsong", "student", "huyang", "teach")
-    print(relat)
+#     relat = neoObj.combNodeAndRelats("teacher", "huangqingsong", "student", "huyang", "teach")
+#     print(relat)
     
-    # print(neoObj.graph)
+    dic1 = {}
+    dic1[u'post'] = [u'yuanzhang', u'jaoshou']
+    dic1[u'age'] = 56
+    node1 = neoObj.createNodeWithProperty("teacher", "huangqingsong", dic1)
+    
+    dic2 = {}
+    dic2[u'hobby'] = [u'coding', u'movie', u'game']
+    dic2[u'age'] = 25
+    node2 = neoObj.createNodeWithProperty("student", "huyang", dic2)
+    
+    dic3 = {}
+    dic3[u'year'] = [2013, 2014, 2015, 2016]
+    dic3[u'subject'] = u'ML'
+    relat1 = neoObj.createRelationshipWithProperty("teach", node1, node2, dic3)
+    # print(relat1)
+    # print(node1[u'post'])
+    
+    dic4 = {}
+    dic4[u'post'] = [u'jiangshi']
+    dic4[u'age'] = 37
+    node4 = neoObj.createNodeWithProperty("teacher", "liulijun", dic4)
+    
+    dic5 = {}
+    dic5[u'year'] = [2013, 2014, 2015, 2016]
+    dic5[u'subject'] = u'health'
+    relat2 = neoObj.createRelationshipWithProperty("help", node4, node2, dic5)
+    
+    graph = neoObj.unionSubGraphs([relat1, relat2])
+    print(graph.relationships())
+    
     # todo: warning don't repeat add relationships, the function is not completed
-    neoObj.createRelationShipWithNodes(relat)
+    neoObj.constructSubGraphInDB(graph)
