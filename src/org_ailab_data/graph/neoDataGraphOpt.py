@@ -30,6 +30,10 @@ class neoGraphDBBean:
     def createNode(self, nodeType, nodeName):
         return Node(nodeType, name=nodeName)
     
+    def createNodeWithProperty(self, propertyDic):
+        # set property with dic
+        pass
+    
     def createRelationship(self, relationship, node1, node2):
         return Relationship(node1, relationship, node2)
     
