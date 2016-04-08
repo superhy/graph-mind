@@ -14,7 +14,7 @@ def testTrainWord2VecModel():
     corpusFile = open(corpusFilePath, u'r')
     modelPath = u'NLPCC2014word2vecModel.vector'
     wordVecOptObj = wordVecOpt(modelPath)
-    model = wordVecOptObj.trainWord2VecModel(corpusFilePath)
+    model = wordVecOptObj.initTrainWord2VecModel(corpusFilePath)
     wordStr = u'韩寒/nr'
     print(u'Train model and word vec object: ' + wordStr)
     queryList = wordVecOptObj.queryMostSimilarWordVec(model, wordStr)

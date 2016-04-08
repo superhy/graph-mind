@@ -15,7 +15,7 @@ def checkFile(file):
     elif os.path.isfile(file):
         return u'file'
     else:
-        return u'error'
+        return u'other'
 
 if __name__ == '__main__':
     pass

@@ -86,6 +86,9 @@ class neoGraphDBBean:
     '''
     
 if __name__ == '__main__':
+    
+    # all test
+    
     neoObj = neoGraphDBBean()
 #     relat = neoObj.combNodeAndRelats("teacher", "huangqingsong", "student", "huyang", "teach")
 #     print(relat)
