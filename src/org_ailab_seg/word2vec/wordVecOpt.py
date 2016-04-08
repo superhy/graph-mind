@@ -31,27 +31,49 @@ class wordVecOpt:
         '''
         return Word2Vec.load(modelFilePath)
     
-    def initTrainWord2VecModel(self, corpusFile):
+    def initTrainWord2VecModel(self, corpusFile, safe_model=False):
         '''
         init and train a new w2v model
-        ()
+        (corpusFile can be a path of corpus file or directory)
+        about lazy_model:
+            if safe_model is true, the process of training uses update way to refresh model,
+        and this can keep the usage of os's memory safe but slowly.
+            and if safe_model is false, the process of training uses the way that load all
+        corpus lines into a sentences list and train them one time.
         '''
         advanceSegOpt().reLoadEncoding()
         
-        fileType = loadLocalFileData.checkFile(corpusFile)
-        if fileType == u'null':
+        fileType = loadLocalFileData.checkFileState(corpusFile)
+        if fileType == u'error':
             warnings.warn('load file error!')
+            return None
         else:
-            if fileType == u'other':
+            model = None
+            if fileType == u'file':
+                model = Word2Vec(LineSentence(corpusFile), size=self._size, window=self._window, min_count=self._minCount, workers=self._workers)
+            elif fileType == u'directory':
+                if safe_model == True:
+                    pass
+                else:
+                    pass
+            elif fileType == u'other':
+                #TODO is sentences list directly (same to next function)
                 pass
                 
-            model = Word2Vec(LineSentence(corpusFile), size=self._size, window=self._window, min_count=self._minCount, workers=self._workers)
             model.save(self.modelPath)
             model.init_sims(replace=True)
             print('producing word2vec model ... ok!')
             return model
         
-    def updateWord2VecModel(self, modelFilePath=None):
+    def updateW2VModelUnit(self, model, corpusSingleFile):
+        '''
+        only can be a singleFile
+        '''
+        trainedWordCount = model.train(LineSentence(corpusSingleFile))
+        print('update model, update words num is: ' + trainedWordCount)
+        return model
+    
+    def updateWord2VecModel(self, modelFilePath=None, corpusFile, safe_model=False):
         pass
     
     def queryMostSimilarWordVec(self, model, wordStr):

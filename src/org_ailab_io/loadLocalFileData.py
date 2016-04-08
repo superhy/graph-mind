@@ -7,15 +7,25 @@ Created on 2015年10月25日
 '''
 
 import os
+import types
 
 
-def checkFile(file):
-    if os.path.exists(file) == False:
-        return u'none'
-    elif os.path.isfile(file):
-        return u'file'
+def checkFileState(file):
+    '''
+    (file can be a file path or other object)
+    '''
+    fileObjectType = type(file)
+    if fileObjectType is types.StringType:
+        if os.path.isdir(file):
+            return u'directory'
+        elif os.path.isfile(file):
+            return u'file'
+        else:
+            return u'error'
     else:
         return u'other'
 
 if __name__ == '__main__':
-    pass
+    model = None
+    model = 'ok'
+    print(type(model) == types.StringType or types.BooleanType)

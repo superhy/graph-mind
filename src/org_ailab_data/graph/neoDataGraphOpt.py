@@ -22,6 +22,7 @@ class neoGraphDBBean:
     '''
     connect to database
     '''
+    
     def connectGraph(self):
         # graph = Graph(user = self.user, password = self.password)
         authenticate("localhost:7474", self.user, self.password)
@@ -32,6 +33,7 @@ class neoGraphDBBean:
     '''
     construct graph
     '''
+    
     def createNode(self, nodeType, nodeName):
         return Node(nodeType, name=nodeName)
     
