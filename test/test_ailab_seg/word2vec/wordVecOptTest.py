@@ -10,8 +10,7 @@ from org_ailab_seg.advanceSegOpt import advanceSegOpt
 
 
 def testTrainWord2VecModel():
-    corpusFilePath = u"../segNLPCC2014.txt"
-    corpusFile = open(corpusFilePath, u'r')
+    corpusFilePath = u'../segNLPCC2014.txt'
     modelPath = u'NLPCC2014word2vecModel.vector'
     wordVecOptObj = wordVecOpt(modelPath)
     model = wordVecOptObj.initTrainWord2VecModel(corpusFilePath)
@@ -45,5 +44,5 @@ def testQueryWordVec():
         print e[0], e[1]
     
 if __name__ == '__main__':
-    #testTrainWord2VecModel()
-    testQueryWordVec()
+    testTrainWord2VecModel()
+    #testQueryWordVec()

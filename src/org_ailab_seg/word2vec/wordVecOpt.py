@@ -12,8 +12,9 @@ import warnings
 from Cython.Build.Cythonize import multiprocessing
 from gensim.models.word2vec import Word2Vec, LineSentence
 
-from org_ailab_io import loadLocalFileData
+from org_ailab_io import localFileOptUnit
 from org_ailab_seg.advanceSegOpt import advanceSegOpt
+from win32con import SLE_ERROR
 
 
 class wordVecOpt:
@@ -31,50 +32,113 @@ class wordVecOpt:
         '''
         return Word2Vec.load(modelFilePath)
     
-    def initTrainWord2VecModel(self, corpusFile, safe_model=False):
+    def loadSetencesFromFiles(self, files):
+        '''
+        load all sentences list from files
+        '''
+        sentences = []
+        for file in files:
+            sentences.extend(LineSentence(file))
+        return sentences
+    
+    def initTrainWord2VecModel(self, corpusFilePath, safe_model=False):
         '''
         init and train a new w2v model
-        (corpusFile can be a path of corpus file or directory)
-        about lazy_model:
+        (corpusFilePath can be a path of corpus file or directory or a file directly, in some time it can be sentences directly
+        about soft_model:
             if safe_model is true, the process of training uses update way to refresh model,
         and this can keep the usage of os's memory safe but slowly.
             and if safe_model is false, the process of training uses the way that load all
-        corpus lines into a sentences list and train them one time.
+        corpus lines into a sentences list and train them one time.)
         '''
         advanceSegOpt().reLoadEncoding()
         
-        fileType = loadLocalFileData.checkFileState(corpusFile)
+        fileType = localFileOptUnit.checkFileState(corpusFilePath)
         if fileType == u'error':
             warnings.warn('load file error!')
             return None
         else:
             model = None
-            if fileType == u'file':
+            if fileType == u'opened':
+                print('training model from singleFile!')
+                model = Word2Vec(LineSentence(corpusFilePath), size=self._size, window=self._window, min_count=self._minCount, workers=self._workers)
+            elif fileType == u'file':
+                corpusFile = open(corpusFilePath, u'r')
+                print('training model from singleFile!')
                 model = Word2Vec(LineSentence(corpusFile), size=self._size, window=self._window, min_count=self._minCount, workers=self._workers)
             elif fileType == u'directory':
+                corpusFiles = localFileOptUnit.listAllFileInDirectory(corpusFilePath)
+                print('training model from listFiles of directory!')
                 if safe_model == True:
-                    pass
+                    model = Word2Vec(LineSentence(corpusFiles[0]), size=self._size, window=self._window, min_count=self._minCount, workers=self._workers)
+                    for file in corpusFiles[1:len(corpusFiles)]:
+                        model = self.updateW2VModelUnit(model, file)
                 else:
-                    pass
+                    sentences = self.loadSetencesFromFiles(corpusFiles)
+                    model = Word2Vec(sentences, size=self._size, window=self._window, min_count=self._minCount, workers=self._workers)
             elif fileType == u'other':
-                #TODO is sentences list directly (same to next function)
+                # TODO add sentences list directly
                 pass
                 
             model.save(self.modelPath)
-            model.init_sims(replace=True)
+            model.init_sims()
             print('producing word2vec model ... ok!')
             return model
         
-    def updateW2VModelUnit(self, model, corpusSingleFile):
+    def updateW2VModelUnit(self, model, corpusSingleFilePath):
         '''
-        only can be a singleFile
+        (only can be a singleFile)
         '''
-        trainedWordCount = model.train(LineSentence(corpusSingleFile))
-        print('update model, update words num is: ' + trainedWordCount)
+        fileType = localFileOptUnit.checkFileState(corpusSingleFilePath)
+        if fileType == u'directory':
+            warnings.warn('can not deal a directory!')
+            return model
+        
+        if fileType == u'opened':
+            trainedWordCount = model.train(LineSentence(corpusSingleFilePath))
+            print('update model, update words num is: ' + trainedWordCount)
+        elif fileType == u'file':
+            corpusSingleFile = open(corpusSingleFilePath, u'r')
+            trainedWordCount = model.train(LineSentence(corpusSingleFile))
+            print('update model, update words num is: ' + trainedWordCount)
+        else:
+            # TODO add sentences list directly (same as last function)
+            pass
         return model
     
-    def updateWord2VecModel(self, modelFilePath=None, corpusFile, safe_model=False):
-        pass
+    def updateWord2VecModel(self, modelFilePath=None, corpusFilePath):
+        '''
+        update w2v model from disk
+        (about corpusFilePath and safe_model is same as function initTrainWord2VecModel
+        default set safe_model == True)
+        '''
+        advanceSegOpt().reLoadEncoding()
+        
+        fileType = localFileOptUnit.checkFileState(corpusFilePath)
+        if fileType == u'error':
+            warnings.warn('load file error!')
+            return None
+        else:
+            if modelFilePath == None:
+                modelFilePath = self.modelPath
+            model = self.loadModelfromFile(modelFilePath)
+            # TODO add safe_model == False
+            if fileType == u'file' or u'opened':
+                model = self.updateW2VModelUnit(model, corpusFilePath)
+            elif fileType == u'directory':
+                corpusFiles = localFileOptUnit.listAllFileInDirectory(corpusFilePath)
+                for file in corpusFiles:
+                    model = self.updateW2VModelUnit(model, file)
+        return model
+    
+    def finishTrainModel(self, modelFilePath=None):
+        '''
+        warning: after this, the model is read-only (can't be update)
+        '''
+        if modelFilePath == None:
+            modelFilePath = self.modelPath
+        model = self.loadModelfromFile(modelFilePath)
+        model.init_sims(replace=True)
     
     def queryMostSimilarWordVec(self, model, wordStr):
         '''
@@ -110,6 +174,10 @@ class wordVecOpt:
         '''
         advanceSegOpt.reLoadEncoding()
         
+        if modelFilePath == None:
+            modelFilePath = self.modelPath
+        model = self.loadModelfromFile(modelFilePath)
+        return self.culSimBtwWordVecs(model, wordStr1, wordStr2)
     
     def queryMSimilarVecswithPosNeg(self, model, posWordStrList, negWordStrList):
         '''
@@ -124,6 +192,17 @@ class wordVecOpt:
             negWordList.append(wordStr.decode('utf-8'))
         pnSimilarPairList = model.most_similar(positive=posWordList, negative=negWordList)
         return pnSimilarPairList
+    
+    def queryMSVwithPosNegFromFile(self, posWordStrList, negWordStrList, modelFilePath=None):
+        '''
+        (with sub function queryMSimilarVecswithPosNeg)
+        '''
+        advanceSegOpt.reLoadEncoding()
+        
+        if modelFilePath == None:
+            modelFilePath = self.modelPath
+        model = self.loadModelfromFile(modelFilePath)
+        return self.queryMSimilarVecswithPosNeg(model, posWordStrList, negWordStrList)
     
 if __name__ == '__main__':
     pass
