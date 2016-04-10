@@ -13,6 +13,7 @@ class wordTypeFilter:
     
     def findNounWord(self, segParaList, nounPosTags=_nounPosTags):
         '''
+        (using Chinese notes)
         找出分词结果形成的词库中所有的名词性词汇（准备作为实体，图中的节点）
         传入所有的分词结果，以列表数组的方式传入
         返回的是一个数组，数组中是过滤得到的名词
@@ -33,6 +34,7 @@ class wordTypeFilter:
     
     def filterNotNounWordDic(self, similarPairList, not_nounPosTags=_not_nounPosTags):
         '''
+        (using Chinese notes)
         找出词向量关联映射对中所有的非名词性词汇（准备作为修饰性关系词，图中的边元素）
         传入词向量关联映射对，以二维列表数组的方式传入
         返回的同样是字典数组，数组中是过滤得到的 修饰词:概率 映射对
