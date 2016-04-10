@@ -10,7 +10,7 @@ from xml.etree import ElementTree
 
 from bs4 import BeautifulSoup
 
-from org_ailab_seg.advanceSegOpt import advanceSegOpt
+from org_ailab_seg import extraSegOpt.advanceSegOpt
 from org_ailab_seg.wordSeg import wordSeg
 
 
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     allSentences.extend(negSentences)
     wordSegObj = wordSeg('a', allSentences)
     segParaList = wordSegObj.serialSeger(True)
-    advanceSegOptObj = advanceSegOpt()
+    advanceSegOptObj = extraSegOpt()
     segParaList1 = segParaList
     avgWordsNum = advanceSegOptObj.conutAvgWordsNum(segParaList1)
     

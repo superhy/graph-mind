@@ -13,7 +13,7 @@ from Cython.Build.Cythonize import multiprocessing
 from gensim.models.word2vec import Word2Vec, LineSentence
 
 from org_ailab_io import localFileOptUnit
-from org_ailab_seg.advanceSegOpt import advanceSegOpt
+from org_ailab_seg import extraSegOpt.advanceSegOpt
 from win32con import SLE_ERROR
 
 
@@ -51,7 +51,7 @@ class wordVecOpt:
             and if safe_model is false, the process of training uses the way that load all
         corpus lines into a sentences list and train them one time.)
         '''
-        advanceSegOpt().reLoadEncoding()
+        extraSegOpt().reLoadEncoding()
         
         fileType = localFileOptUnit.checkFileState(corpusFilePath)
         if fileType == u'error':
@@ -112,7 +112,7 @@ class wordVecOpt:
         (about corpusFilePath and safe_model is same as function initTrainWord2VecModel
         default set safe_model == True)
         '''
-        advanceSegOpt().reLoadEncoding()
+        extraSegOpt().reLoadEncoding()
         
         fileType = localFileOptUnit.checkFileState(corpusFilePath)
         if fileType == u'error':
@@ -153,7 +153,7 @@ class wordVecOpt:
         load model + query MsimilarWV for single word total function
         (with sub function queryMostSimilarWordVec)
         '''
-        advanceSegOpt().reLoadEncoding()
+        extraSegOpt().reLoadEncoding()
         
         if modelFilePath == None:
             modelFilePath = self.modelPath
@@ -172,7 +172,7 @@ class wordVecOpt:
         '''
         (with sub function culSimBtwWordVecs)
         '''
-        advanceSegOpt.reLoadEncoding()
+        extraSegOpt.reLoadEncoding()
         
         if modelFilePath == None:
             modelFilePath = self.modelPath
@@ -197,7 +197,7 @@ class wordVecOpt:
         '''
         (with sub function queryMSimilarVecswithPosNeg)
         '''
-        advanceSegOpt.reLoadEncoding()
+        extraSegOpt.reLoadEncoding()
         
         if modelFilePath == None:
             modelFilePath = self.modelPath

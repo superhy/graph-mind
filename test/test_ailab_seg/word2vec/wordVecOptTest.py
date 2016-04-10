@@ -6,7 +6,7 @@ Created on 2016年3月17日
 @author: superhy
 '''
 from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
-from org_ailab_seg.advanceSegOpt import advanceSegOpt
+from org_ailab_seg import extraSegOpt.advanceSegOpt
 
 
 def testTrainWord2VecModel():
