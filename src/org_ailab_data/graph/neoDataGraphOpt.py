@@ -13,7 +13,7 @@ from py2neo.database.auth import authenticate
 _user = "neo4j"
 _password = "qdhy199148"
 
-class neoGraphDBBean:
+class neoDataGraphOpt:
     def __init__(self, user=_user, password=_password):
         self.user = user;
         self.password = password
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     
     # all test
     
-    neoObj = neoGraphDBBean()
+    neoObj = neoDataGraphOpt()
 #     relat = neoObj.combNodeAndRelats("teacher", "huangqingsong", "student", "huyang", "teach")
 #     print(relat)
     
@@ -115,14 +115,16 @@ if __name__ == '__main__':
     dic4 = {}
     dic4[u'post'] = [u'jiangshi']
     dic4[u'age'] = 37
-    node4 = neoObj.createNodeWithProperty("teacher", "liulijun", dic4)
+    node3 = neoObj.createNodeWithProperty("teacher", "liulijun", dic4)
     
     dic5 = {}
     dic5[u'year'] = [2013, 2014, 2015, 2016]
     dic5[u'subject'] = u'health'
-    relat2 = neoObj.createRelationshipWithProperty("help", node4, node2, dic5)
+    relat2 = neoObj.createRelationshipWithProperty("help", node3, node2, dic5)
     
-    graph = neoObj.unionSubGraphs([relat1, relat2])
+    relat3 = neoObj.createRelationship('help', node1, node3)
+    
+    graph = neoObj.unionSubGraphs([relat1, relat2, relat3])
     print(graph.relationships())
     
     # todo: warning don't repeat add relationships, the function is not completed

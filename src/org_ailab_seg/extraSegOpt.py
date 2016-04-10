@@ -9,7 +9,7 @@ Created on 2016年1月9日
 from nltk.util import pr
 
 
-class advanceSegOpt:
+class extraSegOpt:
     
     def reLoadEncoding(self):
         # 重新载入字符集

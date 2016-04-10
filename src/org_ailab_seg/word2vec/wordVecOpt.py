@@ -11,10 +11,10 @@ import warnings
 
 from Cython.Build.Cythonize import multiprocessing
 from gensim.models.word2vec import Word2Vec, LineSentence
+from win32con import SLE_ERROR
 
 from org_ailab_io import localFileOptUnit
-from org_ailab_seg import extraSegOpt.advanceSegOpt
-from win32con import SLE_ERROR
+from org_ailab_seg.extraSegOpt import extraSegOpt
 
 
 class wordVecOpt:
@@ -106,7 +106,7 @@ class wordVecOpt:
             pass
         return model
     
-    def updateWord2VecModel(self, modelFilePath=None, corpusFilePath):
+    def updateWord2VecModel(self, corpusFilePath, modelFilePath=None):
         '''
         update w2v model from disk
         (about corpusFilePath and safe_model is same as function initTrainWord2VecModel
@@ -140,15 +140,15 @@ class wordVecOpt:
         model = self.loadModelfromFile(modelFilePath)
         model.init_sims(replace=True)
     
-    def queryMostSimilarWordVec(self, model, wordStr):
+    def queryMostSimilarWordVec(self, model, wordStr, topN=20):
         '''
         MSimilar words basic query function
         return 2-dim List [0] is word [1] is double-prob
         '''
-        similarPairList = model.most_similar(wordStr.decode('utf-8'))
+        similarPairList = model.most_similar(wordStr.decode('utf-8'), topn=topN)
         return similarPairList
     
-    def queryMsimilarWVfromFile(self, wordStr, modelFilePath=None):
+    def queryMsimilarWVfromFile(self, wordStr, modelFilePath=None, topN=20):
         '''
         load model + query MsimilarWV for single word total function
         (with sub function queryMostSimilarWordVec)
@@ -158,7 +158,7 @@ class wordVecOpt:
         if modelFilePath == None:
             modelFilePath = self.modelPath
         model = self.loadModelfromFile(modelFilePath)
-        return self.queryMostSimilarWordVec(model, wordStr)
+        return self.queryMostSimilarWordVec(model, wordStr, topN)
     
     def culSimBtwWordVecs(self, model, wordStr1, wordStr2):
         '''
@@ -179,7 +179,7 @@ class wordVecOpt:
         model = self.loadModelfromFile(modelFilePath)
         return self.culSimBtwWordVecs(model, wordStr1, wordStr2)
     
-    def queryMSimilarVecswithPosNeg(self, model, posWordStrList, negWordStrList):
+    def queryMSimilarVecswithPosNeg(self, model, posWordStrList, negWordStrList, topN=20):
         '''
         pos-neg MSimilar words basic query function
         return 2-dim List [0] is word [1] is double-prob
@@ -190,10 +190,10 @@ class wordVecOpt:
             posWordList.append(wordStr.decode('utf-8'))
         for wordStr in negWordStrList:
             negWordList.append(wordStr.decode('utf-8'))
-        pnSimilarPairList = model.most_similar(positive=posWordList, negative=negWordList)
+        pnSimilarPairList = model.most_similar(positive=posWordList, negative=negWordList, topn=topN)
         return pnSimilarPairList
     
-    def queryMSVwithPosNegFromFile(self, posWordStrList, negWordStrList, modelFilePath=None):
+    def queryMSVwithPosNegFromFile(self, posWordStrList, negWordStrList, modelFilePath=None, topN=20):
         '''
         (with sub function queryMSimilarVecswithPosNeg)
         '''
@@ -202,7 +202,7 @@ class wordVecOpt:
         if modelFilePath == None:
             modelFilePath = self.modelPath
         model = self.loadModelfromFile(modelFilePath)
-        return self.queryMSimilarVecswithPosNeg(model, posWordStrList, negWordStrList)
+        return self.queryMSimilarVecswithPosNeg(model, posWordStrList, negWordStrList, topN)
     
 if __name__ == '__main__':
     pass

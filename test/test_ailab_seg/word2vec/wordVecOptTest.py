@@ -5,9 +5,9 @@ Created on 2016年3月17日
 
 @author: superhy
 '''
-from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
-from org_ailab_seg import extraSegOpt.advanceSegOpt
 
+from org_ailab_seg.extraSegOpt import extraSegOpt
+from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
 
 def testTrainWord2VecModel():
     corpusFilePath = u'../segNLPCC2014.txt'
@@ -36,13 +36,13 @@ def testQueryWordVec():
     print(u'\r\n' + wordStr1 + u' to ' + wordStr2 + u'\'similarity:')
     print(simRes)
     
-    wordList1 = [u'韩寒/nr', u'女人/n']
-    wordList2 = [u'可爱/v']
+    wordList1 = [u'韩寒/nr', u'可爱/v']
+    wordList2 = []
     queryPNSimList = wordVecOptObj.queryMSimilarVecswithPosNeg(model, wordList1, wordList2)
     print(u'\r\nPos: ' + u';'.join(wordList1) + u' Neg: ' + u';'.join(wordList2) + u'\'word vecs:')
     for e in queryPNSimList:
         print e[0], e[1]
     
 if __name__ == '__main__':
-    testTrainWord2VecModel()
-    #testQueryWordVec()
+    #testTrainWord2VecModel()
+    testQueryWordVec()
