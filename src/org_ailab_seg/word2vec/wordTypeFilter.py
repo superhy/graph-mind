@@ -5,6 +5,8 @@ Created on 2016年3月30日
 
 @author: hylovedd
 '''
+from test_ailab_seg.segSentiWbTest import segSentiWbTest
+from gensim.models.word2vec import LineSentence
 
 _nounPosTags = []
 _not_nounPosTags = []
@@ -52,6 +54,19 @@ class wordTypeFilter:
                     adjWordsProbList.append(pair)
         
         return adjWordsProbList
+    
+    def collectAllWordsFromSegSentences(self, segSetences):
+        allWordList = []
+        for sentence in segSetences:
+            for word in sentence:
+                if not (word in allWordList):
+                    allWordList.append(word)
+        return allWordList
+    
+    def collectAllWordsFromSegFile(self, segFilePath):
+        segFile = open(segFilePath, u'r')
+        segSetences = LineSentence(segFile)
+        return self.collectAllWordsFromSegSentences(segSetences)
 
 if __name__ == '__main__':
     word = u'韩寒/nr'

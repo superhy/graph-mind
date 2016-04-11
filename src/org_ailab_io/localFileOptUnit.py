@@ -15,7 +15,7 @@ def checkFileState(filePath):
     (filePath can be a file path or other object)
     '''
     fileObjectType = type(filePath)
-    print(fileObjectType)
+    print(u'filePath object type is ' + str(fileObjectType))
     
     if fileObjectType is types.FileType:
         return u'opened'

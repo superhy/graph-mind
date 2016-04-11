@@ -14,6 +14,7 @@ def testTrainWord2VecModel():
     modelPath = u'NLPCC2014word2vecModel.vector'
     wordVecOptObj = wordVecOpt(modelPath)
     model = wordVecOptObj.initTrainWord2VecModel(corpusFilePath)
+    print(u'process corpus num :' + str(model.corpus_count))
     wordStr = u'韩寒/nr'
     print(u'Train model and word vec object: ' + wordStr)
     queryList = wordVecOptObj.queryMostSimilarWordVec(model, wordStr)
@@ -30,6 +31,7 @@ def testQueryWordVec():
         print e[0], e[1]
         
     model = wordVecOptObj.loadModelfromFile(modelPath)
+    print(u'\nmodel\'s corpus num:' + str(model.corpus_count))
     wordStr1 = u'韩寒/nr'
     wordStr2 = u'女人/n'  
     simRes = wordVecOptObj.culSimBtwWordVecs(model, wordStr1, wordStr2)

@@ -63,8 +63,11 @@ class neoDataGraphOpt:
     
     def unionSubGraphs(self, subGraphs):
         unionGraph = subGraphs[0] | subGraphs[1]
+        print(u'union subGraphs' + str(subGraphs[0].relationships()))
+        print(u'union subGraphs' + str(subGraphs[1].relationships()))
         for i in range(2, len(subGraphs)):  # range is [...)
             unionGraph = (unionGraph | subGraphs[i])
+            print(u'union subGraphs' + str(subGraphs[i].relationships()))
             
         return unionGraph
     
@@ -74,6 +77,7 @@ class neoDataGraphOpt:
         '''
         trs = self.graph.begin()  # autocommit = false
         trs.create(subGraph)
+        
         trs.commit()
         
         # check commit success or not

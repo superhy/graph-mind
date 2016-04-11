@@ -11,7 +11,6 @@ import warnings
 
 from Cython.Build.Cythonize import multiprocessing
 from gensim.models.word2vec import Word2Vec, LineSentence
-from win32con import SLE_ERROR
 
 from org_ailab_io import localFileOptUnit
 from org_ailab_seg.extraSegOpt import extraSegOpt
@@ -172,7 +171,7 @@ class wordVecOpt:
         '''
         (with sub function culSimBtwWordVecs)
         '''
-        extraSegOpt.reLoadEncoding()
+        extraSegOpt().reLoadEncoding()
         
         if modelFilePath == None:
             modelFilePath = self.modelPath
@@ -197,7 +196,7 @@ class wordVecOpt:
         '''
         (with sub function queryMSimilarVecswithPosNeg)
         '''
-        extraSegOpt.reLoadEncoding()
+        extraSegOpt().reLoadEncoding()
         
         if modelFilePath == None:
             modelFilePath = self.modelPath
