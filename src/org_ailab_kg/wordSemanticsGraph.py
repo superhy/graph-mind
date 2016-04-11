@@ -8,22 +8,63 @@ Created on 2016年4月11日
 
 from org_ailab_data.graph.neoDataGraphOpt import neoDataGraphOpt
 from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
+from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
 
 
 class wordSemanticsGraph():
     
-    def createBasicNounNodes(self, wvOptObj, wordList):
+    def createBasicNounNodes(self, neoOptObj, wordList):
+        nounWordList = wordTypeFilter().findNounWord(wordList)
+        
         nounNodes = []
-        for word in wordList:
+        for word in nounWordList:
             wordStr = word.split(u'/')[0]
             wordPos = word.split(u'/')[1]
-            node = wvOptObj.createNodeWithProperty('noun', wordStr, {u'pos' : wordPos})
+            node = neoOptObj.createNodeWithProperty('noun', wordStr, {u'pos' : wordPos})
             nounNodes.append(node)
+            print(u'create node [' + word + u']!')
         return nounNodes
     
-    def buildBasicSemGraph(self, w2vModelPath, wordList, topN=20):
-        graphDBBeanObj = neoDataGraphOpt()
-        wvOptObj = wordVecOpt(w2vModelPath)                    
+    def createBasicRelasBtwNounNodes(self, wvOptObj, neoOptObj, nounNode1, nounNode2, topN):
+        nodeWord1 = nounNode1[u'name'] + u'/' + nounNode1[u'pos']
+        nodeWord2 = nounNode2[u'name'] + u'/' + nounNode2[u'pos']
+        posWordList = [nodeWord1, nodeWord2]
+        negWordList = []
+        
+        relatQueryRes = wvOptObj.queryMSVwithPosNegFromFile(posWordList, negWordList, topN=topN)
+        adjWordProbList = wordTypeFilter().filterNotNounWordDic(relatQueryRes)
+        adjRelatName = adjWordProbList[0][0].split(u'/')[0]
+        relatLabelDic = {}
+        for adjWord in adjWordProbList:
+            wordStr = adjWord[0].split(u'/')[0]
+            wordPos = adjWord[0].split(u'/')[1]
+            wordProb = adjWord[1]
+            relatLabelDic[wordStr] = (str(wordProb) + u'(' + wordPos + u')')
+            
+        relationShip = neoOptObj.createRelationshipWithProperty(adjRelatName, nounNode1, nounNode2, relatLabelDic)
+        print(u'create relationship from [' + nodeWord1 + u'] to [' + nodeWord2 + u']!')
+        return relationShip
+    
+    def unionSemRelatSubGraph(self, neoOptObj, relationShips):
+        return neoOptObj.unionSubGraphs(relationShips)
+    
+    def constructSemGraphOnNeo(self, neoOptObj, subGraph):
+        neoOptObj.constructSubGraphInDB(subGraph)
+    
+    def buildBasicSemGraph(self, w2vModelPath, allWordList, topN=20):
+        graphOptObj = neoDataGraphOpt()
+        wvOptObj = wordVecOpt(w2vModelPath)
+        
+        nounNodes = self.createBasicNounNodes(graphOptObj, allWordList)
+        allRelationShips = []
+        for i in range(0, len(nounNodes)):
+            for j in range(0, len(nounNodes)):
+                if i != j:
+                    adjRelationShip = self.createBasicRelasBtwNounNodes(wvOptObj, graphOptObj, nounNodes[i], nounNodes[j], topN)
+                    allRelationShips.append(adjRelationShip)
+        semSubGraph = self.unionSemRelatSubGraph(graphOptObj, allRelationShips)
+        self.constructSemGraphOnNeo(graphOptObj, semSubGraph)
+        print('construct semgraph on neo!')
     
 if __name__ == '__main__':
     pass

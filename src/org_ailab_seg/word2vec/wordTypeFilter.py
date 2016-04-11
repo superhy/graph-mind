@@ -40,19 +40,18 @@ class wordTypeFilter:
         返回的同样是字典数组，数组中是过滤得到的 修饰词:概率 映射对
         修饰词的形式是 词/词性 组合
         '''
-        adjWordsProbMap = {}
+        adjWordsProbList = []
         for pair in similarPairList:
             word = pair[0]
-            prob = pair[1]
             wordPos = word.split(u'/')[1]
             if len(not_nounPosTags) == 0 or not_nounPosTags == True:
                 if (wordPos.find('n') == -1) or (wordPos.find('an') != -1 or wordPos.find('vn') != -1 or wordPos.find('un') != -1):
-                    adjWordsProbMap[word] = prob
+                    adjWordsProbList.append(pair) 
             else:
                 if wordPos in not_nounPosTags:
-                    adjWordsProbMap[word] = prob
+                    adjWordsProbList.append(pair)
         
-        return adjWordsProbMap
+        return adjWordsProbList
 
 if __name__ == '__main__':
     word = u'韩寒/nr'

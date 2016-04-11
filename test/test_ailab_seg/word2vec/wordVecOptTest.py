@@ -38,9 +38,10 @@ def testQueryWordVec():
     
     wordList1 = [u'韩寒/nr', u'可爱/v']
     wordList2 = []
-    queryPNSimList = wordVecOptObj.queryMSimilarVecswithPosNeg(model, wordList1, wordList2)
+    queryPNSimList = wordVecOptObj.queryMSimilarVecswithPosNeg(model, wordList1, wordList2, 30)
     print(u'\r\nPos: ' + u';'.join(wordList1) + u' Neg: ' + u';'.join(wordList2) + u'\'word vecs:')
     for e in queryPNSimList:
+        #print type(e)
         print e[0], e[1]
     
 if __name__ == '__main__':

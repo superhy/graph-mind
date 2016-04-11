@@ -38,7 +38,7 @@ class extraSegOpt:
             for segWord in segPara:
                 segStr += (u' ' + segWord)
             print segStr
-            writenStr += (segStr + u'\r\n')
+            writenStr += (segStr + u'\n')
         fileObj.write(writenStr)
         fileObj.close()
 

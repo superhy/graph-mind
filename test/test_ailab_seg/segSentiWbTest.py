@@ -10,7 +10,7 @@ from xml.etree import ElementTree
 
 from bs4 import BeautifulSoup
 
-from org_ailab_seg import extraSegOpt.advanceSegOpt
+from org_ailab_seg.extraSegOpt import extraSegOpt
 from org_ailab_seg.wordSeg import wordSeg
 
 
@@ -81,12 +81,10 @@ if __name__ == '__main__':
     allSentences.extend(negSentences)
     wordSegObj = wordSeg('a', allSentences)
     segParaList = wordSegObj.serialSeger(True)
-    advanceSegOptObj = extraSegOpt()
-    segParaList1 = segParaList
-    avgWordsNum = advanceSegOptObj.conutAvgWordsNum(segParaList1)
+    extraSegOptObj = extraSegOpt()
+    avgWordsNum = extraSegOptObj.conutAvgWordsNum(segParaList)
     
     print(avgWordsNum)
     
     writePath = u'segNLPCC2014.txt'
-    segParaList2 = segParaList
-    advanceSegOptObj.writeIntoFile(writePath, segParaList2)
+    extraSegOptObj.writeIntoFile(writePath, segParaList)
