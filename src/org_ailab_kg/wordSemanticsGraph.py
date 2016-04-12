@@ -8,8 +8,6 @@ Created on 2016年4月11日
 
 import os
 
-from blaze.expr.core import path
-
 from org_ailab_data.graph.neoDataGraphOpt import neoDataGraphOpt
 from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
 from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt

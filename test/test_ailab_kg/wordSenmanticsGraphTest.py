@@ -24,7 +24,7 @@ def testBuildBasicSemGraph():
     w2vModelPath = u'NLPCC2014Liteword2vecModel.vector'
     
     allWordList = wordTypeFilter().collectAllWordsFromSegFile(segFilePath)
-    wordSemanticsGraph().buildBasicSemGraph(w2vModelPath, allWordList, 20, 0.15)
+    wordSemanticsGraph().buildBasicSemGraph(w2vModelPath, allWordList, 20, 0.2)
 
 if __name__ == '__main__':
     #createTestW2VModel()

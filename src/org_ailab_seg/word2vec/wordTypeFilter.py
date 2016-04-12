@@ -5,8 +5,10 @@ Created on 2016年3月30日
 
 @author: hylovedd
 '''
-from test_ailab_seg.segSentiWbTest import segSentiWbTest
+
 from gensim.models.word2vec import LineSentence
+from test_ailab_seg.segSentiWbTest import segSentiWbTest
+
 
 _nounPosTags = []
 _not_nounPosTags = []
