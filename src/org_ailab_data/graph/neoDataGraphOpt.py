@@ -77,7 +77,6 @@ class neoDataGraphOpt:
         '''
         trs = self.graph.begin()  # autocommit = false
         trs.create(subGraph)
-        
         trs.commit()
         
         # check commit success or not
