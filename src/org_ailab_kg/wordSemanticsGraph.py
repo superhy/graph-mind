@@ -64,7 +64,7 @@ class wordSemanticsGraph():
     def constructSemGraphOnNeo(self, neoOptObj, subGraph):
         neoOptObj.constructSubGraphInDB(subGraph)
     
-    def buildBasicSemGraph(self, w2vModelPath, allWordList, topN=20, edgeThreshold=0.2):
+    def buildBasicSemGraph(self, w2vModelPath, allWordList, topN=20, edgeThreshold=0.2, unionRange=60):
         graphOptObj = neoDataGraphOpt()
         wvOptObj = wordVecOpt(w2vModelPath)
         
