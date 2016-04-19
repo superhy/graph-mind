@@ -6,6 +6,7 @@ Created on 2016年4月11日
 @author: hylovedd
 '''
 
+from __builtin__ import str
 import os
 
 from org_ailab_data.graph.neoDataGraphOpt import neoDataGraphOpt
@@ -71,15 +72,30 @@ class wordSemanticsGraph():
         print('ready to build semantic graph!')
         
         nounNodes = self.createBasicNounNodes(graphOptObj, allWordList)
-        allRelationShips = []
+        cacheRelationShips = []
+        unionCache = 0
+        graphRelatSize = 0;
         for i in range(0, len(nounNodes)):
             for j in range(0, len(nounNodes)):
                 if i != j:
                     adjRelationShip = self.createBasicRelasBtwNounNodes(wvOptObj, graphOptObj, nounNodes[i], nounNodes[j], topN, edgeThreshold)
-                    allRelationShips.append(adjRelationShip)
-        semSubGraph = self.unionSemRelatSubGraph(graphOptObj, allRelationShips)
-        self.constructSemGraphOnNeo(graphOptObj, semSubGraph)
-        print('construct semgraph on neo!')
+                    if unionCache < unionRange:
+                        cacheRelationShips.append(adjRelationShip)
+                        print('add relat to cache pool.')
+                        unionCache += 1
+                    else:
+                        semSubGraph = self.unionSemRelatSubGraph(graphOptObj, cacheRelationShips)
+                        self.constructSemGraphOnNeo(graphOptObj, semSubGraph)
+                        print('construct subgraph cache range: ' + str(unionRange) + '!')
+                        graphRelatSize += unionCache
+                        unionCache = 0
+                        cacheRelationShips = []
+        if unionCache > 0:
+            semSubGraph = self.unionSemRelatSubGraph(graphOptObj, cacheRelationShips)
+            self.constructSemGraphOnNeo(graphOptObj, semSubGraph)
+            print('construct surplus subgraph size: ' + str(unionCache) + '!')
+            graphRelatSize += unionCache
+        print('construct semgraph on neo size: ' + str(graphRelatSize) + '!')
     
 if __name__ == '__main__':
     pass
