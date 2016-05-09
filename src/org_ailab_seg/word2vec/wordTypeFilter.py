@@ -15,7 +15,7 @@ from test_ailab_seg.segSentiWbTest import segSentiWbTest
 _entityPosTags = WORD_POS.noun
 _qualifyPosTags = WORD_POS.place + WORD_POS.verb + WORD_POS.adj + WORD_POS.dist + WORD_POS.adv
 
-class wordTypeFilter:
+class wordTypeFilter(object):
     
     def entityWordFilter(self, wordProbPairList, entityPosTags=_entityPosTags):
         '''
