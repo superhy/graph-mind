@@ -6,7 +6,7 @@ Created on 2016年4月12日
 @author: hylovedd
 '''
 
-from org_ailab_kg.wordSemanticsGraph import wordSemanticsGraph
+from org_ailab_kg.basicSemanticsGraph import basicSemanticsGraph
 from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
 from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
 
@@ -24,7 +24,7 @@ def testBuildBasicSemGraph():
     w2vModelPath = u'NLPCC2014Liteword2vecModel.vector'
     
     allWordList = wordTypeFilter().collectAllWordsFromSegFile(segFilePath)
-    wordSemanticsGraph().buildBasicSemGraph(w2vModelPath, allWordList, 20, 0.2)
+    basicSemanticsGraph().buildBasicSemGraph(w2vModelPath, allWordList, 20, 0.2)
 
 if __name__ == '__main__':
     #createTestW2VModel()

@@ -14,13 +14,19 @@ from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
 from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
 
 
-class wordSemanticsGraph():
+class basicSemanticsGraph():
     
-    def createBasicNounNodes(self, neoOptObj, wordList):
-        nounWordList = wordTypeFilter().findNounWord(wordList)
+    def createBasicEmtityNodes(self, neoOptObj, wordList):
+        # transform wordList into wordPairs
+        wordPairs = []
+        for word in wordList:
+            wordPair = [word, 0.0]
+            wordPairs.append(wordPair)
+        entityWordPairs = wordTypeFilter().entityWordFilter(wordPairs)
         
         nounNodes = []
-        for word in nounWordList:
+        for wordPair in entityWordPairs:
+            word = wordPair[0]
             wordStr = word.split(u'/')[0]
             wordPos = word.split(u'/')[1]
             if wordStr != u'':
@@ -29,14 +35,14 @@ class wordSemanticsGraph():
                 print(u'create node [' + word + u']!')
         return nounNodes
     
-    def createBasicRelasBtwNounNodes(self, wvOptObj, neoOptObj, nounNode1, nounNode2, topN, edgeThreshold):
+    def createBasicRelasBtwNodes(self, wvOptObj, neoOptObj, nounNode1, nounNode2, topN, edgeThreshold):
         nodeWord1 = nounNode1[u'name'] + u'/' + nounNode1[u'pos']
         nodeWord2 = nounNode2[u'name'] + u'/' + nounNode2[u'pos']
         posWordList = [nodeWord1, nodeWord2]
         negWordList = []
         
         relatQueryRes = wvOptObj.queryMSVwithPosNegFromFile(posWordList, negWordList, topN=topN)
-        adjWordProbList = wordTypeFilter().filterNotNounWordDic(relatQueryRes)
+        adjWordProbList = wordTypeFilter().qualifyWordFilter(relatQueryRes)
         relatLabel = u'semantic'
         relatLabelDic = {}
         maxRelatProb = 0.0
@@ -71,14 +77,14 @@ class wordSemanticsGraph():
         
         print('ready to build semantic graph!')
         
-        nounNodes = self.createBasicNounNodes(graphOptObj, allWordList)
+        nounNodes = self.createBasicEmtityNodes(graphOptObj, allWordList)
         cacheRelationShips = []
         unionCache = 0
         graphRelatSize = 0;
         for i in range(0, len(nounNodes)):
             for j in range(0, len(nounNodes)):
                 if i != j:
-                    adjRelationShip = self.createBasicRelasBtwNounNodes(wvOptObj, graphOptObj, nounNodes[i], nounNodes[j], topN, edgeThreshold)
+                    adjRelationShip = self.createBasicRelasBtwNodes(wvOptObj, graphOptObj, nounNodes[i], nounNodes[j], topN, edgeThreshold)
                     if unionCache < unionRange:
                         cacheRelationShips.append(adjRelationShip)
                         print('add relat to cache pool.')
