@@ -6,6 +6,9 @@ Created on 2016年5月9日
 '''
 
 from kohonen import kohonen
+import numpy
+
+from org_ailab_tools.math import statisticsMathOpt
 
 
 class KohonenSOM(object):
@@ -44,17 +47,52 @@ class KohonenSOM(object):
         for key in matrixDic:
             self._model.learn(matrixDic[key])
         
-        def neuFlatShapMap(neuId, shape):
-            return (neuId / shape[0], neuId % shape[0])
+#         def neuFlatShapMap(neuId, shape):
+#             return neuId / shape[0], neuId % shape[0]
+
+        def matIntoList(mat):
+            disList = []
+            for i in range(self._shape[0]):
+                for j in range(self._shape[1]):
+                    disList.append(d[i][j])
+            return disList
         
+        clustResDic = {}
+        for key in matrixDic:
+            w = self._model.winner(matrixDic[key])
+            d = self._model.distances(matrixDic[key])
+            
+            dList = matIntoList(d)
+            dAve = numpy.average(dList)
+            weight = dAve - dList[w]
+            ent = statisticsMathOpt.shannonEnt(dList, w)
+            clustResDic[key] = (w, weight, ent)
+        return clustResDic
 
 if __name__ == '__main__':
     '''
     some basic test
     '''
     
-    som = KohonenSOM(3, (2, 2))
+    som = KohonenSOM(3, (2, 1))
     m = som.prodMapModel()
+    print('called res:')
+    matrixDic = {0 : [80, 90, 90],
+                 1 : [100, 90, 90],
+                 2 : [80, 90, 80],
+                 4 : [70, 90, 100],
+                 5 : [80, 90, 90],
+                 6 : [100, 90, 90],
+                 7 : [80, 90, 80],
+                 8 : [70, 90, 100],
+                 9 : [80, 90, 90],
+                 10 : [100, 90, 90],
+                 11 : [80, 90, 80],
+                 12 : [70, 90, 100],
+                 13 : [3, 3, 2],
+                 14 : [3, 4, 3]}
+    clustResDic = som.clust(matrixDic)
+    print(clustResDic)
     print('----------------------------------------')
     m.learn([80, 90, 90])
     m.learn([100, 90, 90])
@@ -82,13 +120,13 @@ if __name__ == '__main__':
 #     m.learn((5, 5, 3))
     
     print(m.winner([4, 4, 4]))
-    print(m.winner([5, 5, 2]))
-    print(m.winner([90, 90, 80]))
+    print(m.winner([3, 3, 2]))
+    print(m.winner([80, 90, 80]))
     print(m.winner([70, 90, 80]))
     print(m.winner([5, 5, 3]))
     print(m.distances([4, 4, 4]))
-    print(m.distances([5, 5, 2]))
-    print(m.distances([90, 90, 80]))
+    print(m.distances([3, 3, 2]))
+    print(m.distances([80, 90, 80]))
     print(m.distances([70, 90, 80]))
     print(m.distances([5, 5, 3]))
     print('----------------------------------------')
