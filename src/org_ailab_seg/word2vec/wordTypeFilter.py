@@ -8,7 +8,7 @@ Created on 2016年3月30日
 
 from gensim.models.word2vec import LineSentence
 
-from org_ailab_io.cache import WORD_POS
+from org_ailab_tools.cache import WORD_POS
 from test_ailab_seg.segSentiWbTest import segSentiWbTest
 
 

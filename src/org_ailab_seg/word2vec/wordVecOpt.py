@@ -12,8 +12,8 @@ import warnings
 from Cython.Build.Cythonize import multiprocessing
 from gensim.models.word2vec import Word2Vec, LineSentence
 
-from org_ailab_io import localFileOptUnit
 from org_ailab_seg.extraSegOpt import extraSegOpt
+from org_ailab_tools import localFileOptUnit
 
 
 class wordVecOpt:

@@ -41,7 +41,7 @@ def listAllFileInDirectory(dirPath, io=u'r'):
     return loadedFiles
 
 if __name__ == '__main__':
-    files = listAllFileInDirectory(u'../org_ailab_io')
+    files = listAllFileInDirectory(u'../org_ailab_tools')
     for file in files[2:len(files)]:
         print(checkFileState(file))
     
