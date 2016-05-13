@@ -33,8 +33,15 @@ class canopyAidCluster(object):
             
         return len(clusters), clusters
     
-    def cntAvgThreshold(self):
-        pass
+    def cntAvgThreshold(self, matrixDic):
+        '''
+        
+        '''
+        disSum = 0.0;
+        for key in matrixDic:
+            disSum += sum(0.0 if key == k else statisticsMathOpt.euclideanMetric(matrixDic[key], matrixDic[k]) for k in matrixDic)
+        pNum = len(matrixDic) * (len(matrixDic) + 1) / 2
+        return disSum / pNum / 2
 
 if __name__ == '__main__':
     p = []
