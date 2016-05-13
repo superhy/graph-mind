@@ -43,6 +43,9 @@ class KohonenSOM(object):
         input matrix dic: key is id of feature element(id); value is vector of feature element(vec)
         '''
         
+        if self._shape == None:
+            pass
+        
         # train the cluster model
         for key in matrixDic:
             self._model.learn(matrixDic[key])
