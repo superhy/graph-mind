@@ -9,6 +9,7 @@ from kohonen import kohonen
 import numpy
 
 from org_ailab_tools.math import statisticsMathOpt
+from org_ailab_cluster.canopyAidCluster import canopyAidCluster
 
 
 class KohonenSOM(object):
@@ -44,7 +45,8 @@ class KohonenSOM(object):
         '''
         
         if self._shape == None:
-            pass
+            N, clusters = canopyAidCluster().aidClust(matrixDic)
+            
         
         # train the cluster model
         for key in matrixDic:

@@ -15,6 +15,9 @@ class canopyAidCluster(object):
         '''
         
         '''
+        if self._T2 == None:
+            self._T2 = self.cntAvgThreshold(matrixDic)
+        
         points = []
         clusters = []
         for key in matrixDic:
