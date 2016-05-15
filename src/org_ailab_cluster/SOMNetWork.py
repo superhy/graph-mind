@@ -21,10 +21,22 @@ class KohonenSOM(object):
         self._final = final
         self._noise_variance = noise_variance
         
-        self.prodMapModel()
-        
-    def prodMapModel(self):
+    def prodMapModel(self, matrixDic):
         ET = kohonen.ExponentialTimeseries
+        
+        if self._shape == None:
+            N, clusters = canopyAidCluster().aidClust(matrixDic)
+            
+            print('canopy aid-clust res:')
+            print('N: ' + str(N))
+            print('clusters:')
+            for cluster in clusters:
+                print(cluster)
+                
+            f = int(numpy.sqrt(N))
+            while(N % f != 0):
+                f -= 1
+            self._shape = (N / f, f)
 
         def kwargs(shape=self._shape, z=self._noise_variance):
             return dict(dimension=self._dimension,
@@ -44,9 +56,7 @@ class KohonenSOM(object):
         input matrix dic: key is id of feature element(id); value is vector of feature element(vec)
         '''
         
-        if self._shape == None:
-            N, clusters = canopyAidCluster().aidClust(matrixDic)
-            
+        self.prodMapModel(matrixDic)
         
         # train the cluster model
         for key in matrixDic:
@@ -79,8 +89,7 @@ if __name__ == '__main__':
     some basic test
     '''
     
-    som = KohonenSOM(3, (2, 1))
-    m = som.prodMapModel()
+    som = KohonenSOM(3)
     print('called res:')
     matrixDic = {0 : [80, 90, 90],
                  1 : [100, 90, 90],
@@ -97,8 +106,10 @@ if __name__ == '__main__':
                  13 : [3, 3, 2],
                  14 : [3, 4, 3]}
     clustResDic = som.clust(matrixDic)
+    print(som._shape)
     print(clustResDic)
     print('----------------------------------------')
+    m = som.prodMapModel(matrixDic)
     m.learn([80, 90, 90])
     m.learn([100, 90, 90])
     m.learn([80, 90, 80])

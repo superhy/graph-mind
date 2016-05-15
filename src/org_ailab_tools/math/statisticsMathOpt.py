@@ -46,5 +46,7 @@ if __name__ == '__main__':
     ent1 = shannonEnt(x1, min_x1)
     ent2 = shannonEnt(x2, min_x2)
     
+    print(int(numpy.sqrt(5)))
+    
     print(ent1)
     print(ent2)
