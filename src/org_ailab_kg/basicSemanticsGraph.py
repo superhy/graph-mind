@@ -14,7 +14,7 @@ from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
 from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
 
 
-class basicSemanticsGraph():
+class basicSemanticsGraph(object):
     
     def createBasicEmtityNodes(self, neoOptObj, wordList):
         # transform wordList into wordPairs

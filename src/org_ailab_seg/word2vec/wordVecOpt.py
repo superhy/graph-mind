@@ -138,6 +138,21 @@ class wordVecOpt:
             modelFilePath = self.modelPath
         model = self.loadModelfromFile(modelFilePath)
         model.init_sims(replace=True)
+        
+    def getWordVec(self, model, wordStr):
+        '''
+        '''
+        return model[wordStr]
+    
+    def getWordVecfromFile(self, wordStr, modelFilePath = None):
+        '''
+        '''
+        extraSegOpt().reLoadEncoding()
+        
+        if modelFilePath == None:
+            modelFilePath = self.modelPath
+        model = self.loadModelfromFile(modelFilePath)
+        return self.getWordVec(model, wordStr)
     
     def queryMostSimilarWordVec(self, model, wordStr, topN=20):
         '''

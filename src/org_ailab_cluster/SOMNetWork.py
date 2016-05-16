@@ -73,6 +73,7 @@ class KohonenSOM(object):
             return disList
         
         clustResDic = {}
+        clusters = [[] for i in range(self._shape[0] * self._shape[1])]
         for key in matrixDic:
             w = self._model.winner(matrixDic[key])
             d = self._model.distances(matrixDic[key])
@@ -81,8 +82,12 @@ class KohonenSOM(object):
             dAve = numpy.average(dList)
             weight = dAve - dList[w]
             ent = statisticsMathOpt.shannonEnt(dList, w)
+            #
             clustResDic[key] = (w, weight, ent)
-        return clustResDic
+            #
+            clusters[w].append((key, w, weight, ent))
+        
+        return clusters, clustResDic
 
 if __name__ == '__main__':
     '''
@@ -105,9 +110,11 @@ if __name__ == '__main__':
                  12 : [70, 90, 100],
                  13 : [3, 3, 2],
                  14 : [3, 4, 3]}
-    clustResDic = som.clust(matrixDic)
+    clusters, clustResDic = som.clust(matrixDic)
     print(som._shape)
     print(clustResDic)
+    for cluster in clusters:
+        print(cluster)
     print('----------------------------------------')
     m = som.prodMapModel(matrixDic)
     m.learn([80, 90, 90])
