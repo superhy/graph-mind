@@ -11,7 +11,7 @@ from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
 
 class lexClustSemanticsGraph(object):
     
-    def createLexClustEmtityNodes(self, neoOptObj, wvOptObj, cluster = None, wordList):
+    def createLexClustEmtityNodes(self, neoOptObj, wvOptObj, wordList, cluster=None, canopy_t_ratio=3):
         '''
         '''
         if cluster == None:
@@ -29,7 +29,8 @@ class lexClustSemanticsGraph(object):
             word = wordPair[0]
             wordVec = wvOptObj.getWordVecfromFile(word)
             wordMatrixDic[word] = wordVec
-            #TODO
+        wordClusters, wordClustResDic = cluster.clust(wordMatrixDic, canopy_t_ratio)
+        #TODO
         
         lexGroupNodes = []
 

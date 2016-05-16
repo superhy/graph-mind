@@ -11,12 +11,12 @@ class canopyAidCluster(object):
         self._T1 = T1
         self._T2 = T2
         
-    def aidClust(self, matrixDic):
+    def aidClust(self, matrixDic, T_RATIO=2):
         '''
         
         '''
         if self._T2 == None:
-            self._T2 = self.cntAvgThreshold(matrixDic)
+            self._T2 = self.cntAvgThreshold(matrixDic, T_RATIO)
         
         points = []
         clusters = []
@@ -36,7 +36,7 @@ class canopyAidCluster(object):
             
         return len(clusters), clusters
     
-    def cntAvgThreshold(self, matrixDic):
+    def cntAvgThreshold(self, matrixDic, T_RATIO):
         '''
         
         '''
@@ -44,7 +44,7 @@ class canopyAidCluster(object):
         for key in matrixDic:
             disSum += sum(0.0 if key == k else statisticsMathOpt.euclideanMetric(matrixDic[key], matrixDic[k]) for k in matrixDic)
         pNum = len(matrixDic) * (len(matrixDic) + 1) / 2
-        return disSum / pNum / 2
+        return disSum / pNum / T_RATIO
 
 if __name__ == '__main__':
     p = []

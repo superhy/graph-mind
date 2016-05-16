@@ -21,11 +21,11 @@ class KohonenSOM(object):
         self._final = final
         self._noise_variance = noise_variance
         
-    def prodMapModel(self, matrixDic):
+    def prodMapModel(self, matrixDic, canopy_t_ratio):
         ET = kohonen.ExponentialTimeseries
         
         if self._shape == None:
-            N, clusters = canopyAidCluster().aidClust(matrixDic)
+            N, clusters = canopyAidCluster().aidClust(matrixDic, canopy_t_ratio)
             
             print('canopy aid-clust res:')
             print('N: ' + str(N))
@@ -51,12 +51,12 @@ class KohonenSOM(object):
     def resetModel(self):
         self._model.reset()
         
-    def clust(self, matrixDic):
+    def clust(self, matrixDic, canopy_t_ratio = 2):
         '''
         input matrix dic: key is id of feature element(id); value is vector of feature element(vec)
         '''
         
-        self.prodMapModel(matrixDic)
+        self.prodMapModel(matrixDic, canopy_t_ratio)
         
         # train the cluster model
         for key in matrixDic:
