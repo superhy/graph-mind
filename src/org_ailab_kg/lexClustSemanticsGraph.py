@@ -27,12 +27,28 @@ class lexClustSemanticsGraph(object):
         wordMatrixDic = {}
         for wordPair in entityWordPairs:
             word = wordPair[0]
-            wordVec = wvOptObj.getWordVecfromFile(word)
-            wordMatrixDic[word] = wordVec
+            if word.split(u'/')[0] != u'':
+                wordVec = wvOptObj.getWordVecfromFile(word)
+                wordMatrixDic[word] = wordVec
+                print(u'get word vec: ' + word + u'(' + str(wordVec) + u')')
         wordClusters, wordClustResDic = cluster.clust(wordMatrixDic, canopy_t_ratio)
-        #TODO
+        print(u'finish word clust!')
         
         lexGroupNodes = []
+        for wordCluster in wordClusters:
+            if len(wordCluster) != 0:
+                lex_groupStr = ''
+                avgEnt = 0.0
+                for wordUnit in wordCluster:
+                    word = wordUnit[0]
+                    wordWeight = wordUnit[2]
+                    avgEnt += wordUnit[3]
+                    lex_groupStr += (word + ':' + str(wordWeight) + ';')
+                avgEnt /= (len(wordCluster))
+                node = neoOptObj.createNodeWithProperty('lex-group', lex_groupStr, {u'avgEnt' : avgEnt})
+                lexGroupNodes.append(node)
+                print(u'create group node [' + lex_groupStr + u']!')
+        return lexGroupNodes
 
 if __name__ == '__main__':
     pass
