@@ -72,6 +72,6 @@ if __name__ == '__main__':
     
     p = [('a', 1), ('b', 2), ('c', 3), ('d', 4), ('e', 5)]
     n = []
-    n.extend(e[0] for e in p)
+    n.extend(e[0].decode('utf-8') for e in p)
     print(n)
     
