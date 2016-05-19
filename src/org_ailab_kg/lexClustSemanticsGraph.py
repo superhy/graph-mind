@@ -49,6 +49,29 @@ class lexClustSemanticsGraph(object):
                 lexGroupNodes.append(node)
                 print(u'create group node [' + lex_groupStr + u']!')
         return lexGroupNodes
+    
+    def createLexGroupRelasBtwNodes(self, wvOptObj, neoOptObj, lexNode1, lexNode2, topN_rev, topN, edgeThreshold):
+        nodeWordList1 = []
+        nodeWordList2 = []
+        for wordPair in lexNode1[u'name'].split(u';'):
+            if wordPair != u'':
+                nodeWordList1.append(wordPair.split(u':')[0])
+        for wordPair in lexNode2[u'name'].split(u':'):
+            if wordPair != u'':
+                nodeWordList2.append(wordPair.split(u':')[0])
+        
+        
+#         revMSimilarVecList = wvOptObj.queryMSVwithPosNegFromFile([], nodeWordList2, topN=topN_rev)
+        
 
 if __name__ == '__main__':
-    pass
+    str = 'aaa;bbb;ccc;ddd;eee;'
+    for s in str.split(u';'):
+        if s != u'':
+            print(s)
+    
+    p = [('a', 1), ('b', 2), ('c', 3), ('d', 4), ('e', 5)]
+    n = []
+    n.extend(e[0] for e in p)
+    print(n)
+    
