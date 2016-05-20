@@ -29,6 +29,7 @@ def testBuildBasicSemGraph():
     basicSemanticsGraph().buildBasicSemGraph(w2vModelPath, allWordList, 20, 0.2)
     
 def testBuildLexGroupSemGraph():
+    print('test')
     pass
 
 if __name__ == '__main__':
