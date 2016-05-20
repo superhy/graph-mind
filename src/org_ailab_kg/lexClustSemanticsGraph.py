@@ -6,8 +6,8 @@ Created on 2016年5月16日
 '''
 
 from org_ailab_cluster.SOMNetWork import KohonenSOM
-from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
 from org_ailab_data.graph.neoDataGraphOpt import neoDataGraphOpt
+from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
 from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
 
 

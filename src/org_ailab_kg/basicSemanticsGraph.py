@@ -6,9 +6,6 @@ Created on 2016年4月11日
 @author: hylovedd
 '''
 
-from __builtin__ import str
-import os
-
 from org_ailab_data.graph.neoDataGraphOpt import neoDataGraphOpt
 from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
 from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
