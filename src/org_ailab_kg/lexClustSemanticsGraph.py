@@ -7,6 +7,8 @@ Created on 2016年5月16日
 
 from org_ailab_cluster.SOMNetWork import KohonenSOM
 from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
+from org_ailab_data.graph.neoDataGraphOpt import neoDataGraphOpt
+from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
 
 
 class lexClustSemanticsGraph(object):
@@ -51,6 +53,8 @@ class lexClustSemanticsGraph(object):
         return lexGroupNodes
     
     def createLexGroupRelasBtwNodes(self, wvOptObj, neoOptObj, lexNode1, lexNode2, topN_rev, topN, edgeThreshold):
+        '''
+        '''
         nodeWordList1 = []
         nodeWordList2 = []
         for wordPair in lexNode1[u'name'].split(u';'):
@@ -60,9 +64,69 @@ class lexClustSemanticsGraph(object):
             if wordPair != u'':
                 nodeWordList2.append(wordPair.split(u':')[0])
         
+        relatCopeRes = wvOptObj.copeMSVbtwWordListsFromFile(nodeWordList1, nodeWordList2, topN_rev=topN_rev, topN=topN)
+        adjWordProbList = wordTypeFilter().qualifyWordFilter(relatCopeRes)
+        relatLabel = u'lex-semantic'
+        relatLabelDic = {}
+        maxRelatProb = 0.0
+        for adjWord in adjWordProbList:
+            wordStr = adjWord[0].split(u'/')[0]
+            wordPos = adjWord[0].split(u'/')[1]
+            wordProb = adjWord[1]
+            if wordProb >= edgeThreshold and wordStr != u'':
+                relatLabelDic[wordStr] = (str(wordProb) + u'--' + wordPos)
+                if wordProb > maxRelatProb:
+                    relatLabel = wordStr
+                    maxRelatProb = wordProb
         
-#         revMSimilarVecList = wvOptObj.queryMSVwithPosNegFromFile([], nodeWordList2, topN=topN_rev)
+        if maxRelatProb > 0.0:
+            relationShip = neoOptObj.createRelationshipWithProperty(relatLabel, lexNode1, lexNode2, relatLabelDic)
+        else:
+            relationShip = neoOptObj.unionSubGraphs([lexNode1, lexNode2])
+        print(relationShip)
         
+        return relationShip
+    
+    def unionSemRelatSubGraph(self, neoOptObj, relationShips):
+        return neoOptObj.unionSubGraphs(relationShips)
+    
+    def constructSemGraphOnNeo(self, neoOptObj, subGraph):
+        neoOptObj.constructSubGraphInDB(subGraph)
+    
+    def buildLexGroupSemGraph(self, w2vModelPath, allWordList, lex_cluster=None, canopy_t_ratio=None, topN_rev=20, topN=20, edgeThreshold=0.2, unionRange=60):
+        graphOptObj = neoDataGraphOpt()
+        wvOptObj = wordVecOpt(w2vModelPath)
+        
+        print('ready to build lex-group semantic graph!')
+        
+        if canopy_t_ratio != None:
+            lexGroupNodes = self.createLexClustEmtityNodes(graphOptObj, wvOptObj, allWordList, cluster=lex_cluster, canopy_t_ratio=canopy_t_ratio)
+        else:
+            lexGroupNodes = self.createLexClustEmtityNodes(graphOptObj, wvOptObj, allWordList, cluster=lex_cluster)
+        cacheRelationShips = []
+        unionCache = 0
+        graphRelatSize = 0
+        for i in range(0, len(lexGroupNodes)):
+            for j in range(0, len(lexGroupNodes)):
+                if i != j:
+                    adjRelationShip = self.createLexGroupRelasBtwNodes(wvOptObj, graphOptObj, lexGroupNodes[i], lexGroupNodes[j], topN_rev, topN, edgeThreshold)
+                    if unionCache < unionRange:
+                        cacheRelationShips.append(adjRelationShip)
+                        print('add lex-group relat to cache pool.')
+                        unionCache += 1
+                    else:
+                        lexSemSubGraph = self.unionSemRelatSubGraph(graphOptObj, cacheRelationShips)
+                        self.constructSemGraphOnNeo(graphOptObj, lexSemSubGraph)
+                        print('construct lex-graph subgraph cache range: ' + str(unionRange) + '!')
+                        graphRelatSize += unionCache
+                        unionCache = 0
+                        cacheRelationShips = []
+        if unionCache > 0:
+            lexSemSubGraph = self.unionSemRelatSubGraph(graphOptObj, cacheRelationShips)
+            self.constructSemGraphOnNeo(graphOptObj, lexSemSubGraph)
+            print('construct lex-graph subgraph cache range: ' + str(unionRange) + '!')
+            graphRelatSize += unionCache
+        print('construct lex-graph semgraph on neo size: ' + str(graphRelatSize) + '!')
 
 if __name__ == '__main__':
     str = 'aaa;bbb;ccc;ddd;eee;'

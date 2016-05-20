@@ -232,8 +232,15 @@ class wordVecOpt:
         stSimilarPairList = self.queryMSimilarVecswithPosNeg(model, srcWordList, revWordList, topN)
         return stSimilarPairList
     
-    def copeMSVbtwWordListsFromFile(self):
-        pass
+    def copeMSVbtwWordListsFromFile(self, wordStrList1, wordStrList2, modelFilePath = None, topN_rev=20, topN=20):
+        '''
+        '''
+        extraSegOpt().reLoadEncoding()
+        
+        if modelFilePath == None:
+            modelFilePath = self.modelPath
+        model = self.loadModelfromFile(modelFilePath)
+        return self.copeMSimilarVecsbtwWordLists(model, wordStrList1, wordStrList2, topN_rev, topN)
     
 if __name__ == '__main__':
     pass
