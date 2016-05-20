@@ -27,6 +27,9 @@ def testBuildBasicSemGraph():
     
     allWordList = wordTypeFilter().collectAllWordsFromSegFile(segFilePath)
     basicSemanticsGraph().buildBasicSemGraph(w2vModelPath, allWordList, 20, 0.2)
+    
+def testBuildLexGroupSemGraph():
+    pass
 
 if __name__ == '__main__':
 #     createTestW2VModel()
