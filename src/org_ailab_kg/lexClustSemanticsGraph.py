@@ -5,6 +5,8 @@ Created on 2016年5月16日
 @author: superhy
 '''
 
+import numpy
+
 from org_ailab_cluster.SOMNetWork import KohonenSOM
 from org_ailab_data.graph.neoDataGraphOpt import neoDataGraphOpt
 from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
@@ -13,7 +15,7 @@ from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
 
 class lexClustSemanticsGraph(object):
     
-    def createLexClustEmtityNodes(self, neoOptObj, wvOptObj, wordList, cluster=None, canopy_t_ratio=3):
+    def createLexClustEmtityNodes(self, neoOptObj, wvOptObj, wordList, vec_z_ratio, canopy_t_ratio, cluster=None):
         '''
         '''
         if cluster == None:
@@ -31,6 +33,7 @@ class lexClustSemanticsGraph(object):
             word = wordPair[0]
             if word.split(u'/')[0] != u'':
                 wordVec = wvOptObj.getWordVecfromFile(word)
+                wordVec = numpy.array(wordVec) * vec_z_ratio
                 wordMatrixDic[word] = wordVec
                 print(u'get word vec: ' + word + u'(' + str(wordVec) + u')')
         wordClusters, wordClustResDic = cluster.clust(wordMatrixDic, canopy_t_ratio)
@@ -40,14 +43,24 @@ class lexClustSemanticsGraph(object):
         for wordCluster in wordClusters:
             if len(wordCluster) != 0:
                 lex_groupStr = ''
+                groupAttrDic = {}
                 avgEnt = 0.0
+                maxLexStr = wordCluster[0][0]
+                maxLexWeight = wordCluster[0][2]
                 for wordUnit in wordCluster:
                     word = wordUnit[0]
                     wordWeight = wordUnit[2]
                     avgEnt += wordUnit[3]
+                    if wordWeight > maxLexWeight:
+                        maxLexStr = word
+                        maxLexWeight = wordWeight
+                    groupAttrDic[word] = wordWeight
                     lex_groupStr += (word + ':' + str(wordWeight) + ';')
                 avgEnt /= (len(wordCluster))
-                node = neoOptObj.createNodeWithProperty('lex-group', lex_groupStr, {u'avgEnt' : avgEnt})
+                groupAttrDic[u'avgEnt'] = avgEnt
+                groupAttrDic[u'groupCnt'] = lex_groupStr
+                nameWordStr = maxLexStr + '...'
+                node = neoOptObj.createNodeWithProperty('lex-group', nameWordStr, groupAttrDic)
                 lexGroupNodes.append(node)
                 print(u'create group node [' + lex_groupStr + u']!')
         return lexGroupNodes
@@ -57,12 +70,14 @@ class lexClustSemanticsGraph(object):
         '''
         nodeWordList1 = []
         nodeWordList2 = []
-        for wordPair in lexNode1[u'name'].split(u';'):
+        for wordPair in lexNode1[u'groupCnt'].split(u';'):
             if wordPair != u'':
                 nodeWordList1.append(wordPair.split(u':')[0])
-        for wordPair in lexNode2[u'name'].split(u':'):
+        for wordPair in lexNode2[u'groupCnt'].split(u';'):
             if wordPair != u'':
                 nodeWordList2.append(wordPair.split(u':')[0])
+        
+        print(str(nodeWordList1) + ' ' + str(nodeWordList2))
         
         relatCopeRes = wvOptObj.copeMSVbtwWordListsFromFile(nodeWordList1, nodeWordList2, topN_rev=topN_rev, topN=topN)
         adjWordProbList = wordTypeFilter().qualifyWordFilter(relatCopeRes)
@@ -93,16 +108,13 @@ class lexClustSemanticsGraph(object):
     def constructSemGraphOnNeo(self, neoOptObj, subGraph):
         neoOptObj.constructSubGraphInDB(subGraph)
     
-    def buildLexGroupSemGraph(self, w2vModelPath, allWordList, lex_cluster=None, canopy_t_ratio=None, topN_rev=20, topN=20, edgeThreshold=0.2, unionRange=60):
+    def buildLexGroupSemGraph(self, w2vModelPath, allWordList, lex_cluster=None, vec_z_ratio=100, canopy_t_ratio=3, topN_rev=20, topN=20, edgeThreshold=0.2, unionRange=60):
         graphOptObj = neoDataGraphOpt()
         wvOptObj = wordVecOpt(w2vModelPath)
         
         print('ready to build lex-group semantic graph!')
         
-        if canopy_t_ratio != None:
-            lexGroupNodes = self.createLexClustEmtityNodes(graphOptObj, wvOptObj, allWordList, cluster=lex_cluster, canopy_t_ratio=canopy_t_ratio)
-        else:
-            lexGroupNodes = self.createLexClustEmtityNodes(graphOptObj, wvOptObj, allWordList, cluster=lex_cluster)
+        lexGroupNodes = self.createLexClustEmtityNodes(graphOptObj, wvOptObj, allWordList, cluster=lex_cluster, vec_z_ratio=vec_z_ratio, canopy_t_ratio=canopy_t_ratio)
         cacheRelationShips = []
         unionCache = 0
         graphRelatSize = 0

@@ -116,7 +116,7 @@ if __name__ == '__main__':
     for cluster in clusters:
         print(cluster)
     print('----------------------------------------')
-    m = som.prodMapModel(matrixDic)
+    m = som.prodMapModel(matrixDic, 2)
     m.learn([80, 90, 90])
     m.learn([100, 90, 90])
     m.learn([80, 90, 80])
