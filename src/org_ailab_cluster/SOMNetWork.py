@@ -13,7 +13,7 @@ from org_ailab_cluster.canopyAidCluster import canopyAidCluster
 
 
 class KohonenSOM(object):
-    def __init__(self, dimension, shape=None, rate=-5e-4, initial=1, final=0.1, noise_variance=0.05):
+    def __init__(self, dimension, shape=None, rate=-5e-4, initial=1, final=0.05, noise_variance=0.5):
         self._dimension = dimension
         self._shape = shape
         self._rate = rate
@@ -29,9 +29,9 @@ class KohonenSOM(object):
             
             print('canopy aid-clust res:')
             print('N: ' + str(N))
-            print('clusters:')
-            for cluster in clusters:
-                print(cluster)
+#             print('clusters:')
+#             for cluster in clusters:
+#                 print(cluster)
                 
             f = int(numpy.sqrt(N))
             while(N % f != 0):

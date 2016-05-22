@@ -62,6 +62,8 @@ class neoDataGraphOpt:
         return relationship
     
     def unionSubGraphs(self, subGraphs):
+        if len(subGraphs) <= 1:
+            return subGraphs[0]
         unionGraph = subGraphs[0] | subGraphs[1]
         print(u'union subGraphs' + str(subGraphs[0].relationships()))
         print(u'union subGraphs' + str(subGraphs[1].relationships()))

@@ -40,10 +40,11 @@ class lexClustSemanticsGraph(object):
         print(u'finish word clust!')
         
         lexGroupNodes = []
+        print('cluster num:' + str(len(wordClusters)))
         for wordCluster in wordClusters:
             if len(wordCluster) != 0:
                 lex_groupStr = ''
-                groupAttrDic = {}
+#                 groupAttrDic = {}
                 avgEnt = 0.0
                 maxLexStr = wordCluster[0][0]
                 maxLexWeight = wordCluster[0][2]
@@ -54,13 +55,13 @@ class lexClustSemanticsGraph(object):
                     if wordWeight > maxLexWeight:
                         maxLexStr = word
                         maxLexWeight = wordWeight
-                    groupAttrDic[word] = wordWeight
+#                     groupAttrDic[word] = wordWeight
                     lex_groupStr += (word + ':' + str(wordWeight) + ';')
                 avgEnt /= (len(wordCluster))
-                groupAttrDic[u'avgEnt'] = avgEnt
-                groupAttrDic[u'groupCnt'] = lex_groupStr
+#                 groupAttrDic[u'avgEnt'] = avgEnt
+#                 groupAttrDic[u'groupCnt'] = lex_groupStr
                 nameWordStr = maxLexStr + '...'
-                node = neoOptObj.createNodeWithProperty('lex-group', nameWordStr, groupAttrDic)
+                node = neoOptObj.createNodeWithProperty('lex-group', nameWordStr, {u'groupCnt' : lex_groupStr, u'avgEnt' : avgEnt})
                 lexGroupNodes.append(node)
                 print(u'create group node [' + lex_groupStr + u']!')
         return lexGroupNodes
