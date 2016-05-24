@@ -13,7 +13,7 @@ from org_ailab_cluster.canopyAidCluster import canopyAidCluster
 
 
 class KohonenSOM(object):
-    def __init__(self, dimension, shape=None, rate=-5e-4, initial=1, final=0.05, noise_variance=0.5):
+    def __init__(self, dimension, shape=None, rate=-5e-4, initial=1, final=0.02, noise_variance=0.5):
         self._dimension = dimension
         self._shape = shape
         self._rate = rate
