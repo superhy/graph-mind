@@ -12,8 +12,13 @@ To ask questions or report issues please contact superhy199148@hotmail.com.
 
 ## Main Authors
 *Qingsong Huang(KMUST)
+
 Yang Hu(SCUT superhy199148@hotmail.com)
+
 Dan Dai(SCUT daidanjune@hotmail.com)
+
 Jie Luan(KMUST)
+
 Chen Liu(KMUST)
+
 Zhaokai Wang(KMUST)
