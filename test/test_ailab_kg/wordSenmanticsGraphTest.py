@@ -34,7 +34,7 @@ def testBuildLexGroupSemGraph():
     w2vModelPath = u'NLPCC2014Liteword2vecModel.vector'
     
     allWordList = wordTypeFilter().collectAllWordsFromSegFile(segFilePath)
-    lexClustSemanticsGraph().buildLexGroupSemGraph(w2vModelPath, allWordList, vec_z_ratio=1000, canopy_t_ratio=2, topN_rev=20, topN=20, edgeThreshold=0.2)
+    lexClustSemanticsGraph().buildLexGroupSemGraph(w2vModelPath, allWordList, vec_z_ratio=1000, canopy_t_ratio=4, topN_rev=20, topN=20, edgeThreshold=0.2)
 
 if __name__ == '__main__':
 #     createTestW2VModel()
