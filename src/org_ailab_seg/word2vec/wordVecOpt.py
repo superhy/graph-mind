@@ -141,11 +141,14 @@ class wordVecOpt:
         
     def getWordVec(self, model, wordStr):
         '''
+        get the word's vector as arrayList type from w2v model
         '''
         return model[wordStr]
     
     def getWordVecfromFile(self, wordStr, modelFilePath=None):
         '''
+        load model + get word's vector
+        (with sub function getWordVec)
         '''
         extraSegOpt().reLoadEncoding()
         
@@ -220,6 +223,11 @@ class wordVecOpt:
     
     def copeMSimilarVecsbtwWordLists(self, model, wordStrList1, wordStrList2, topN_rev=20, topN=20):
         '''
+        range word vec res for two wordList from source to target
+        use wordVector to express the relationship between src-wordList and tag-wordList
+        first, use the tag-wordList as neg-wordList to get the rev-wordList,
+        then use the scr-wordList and the rev-wordList as the new src-tag-wordList
+        topN_rev is topN of rev-wordList and topN is the final topN of relationship vec
         '''
         srcWordList = []
         tagWordList = []
@@ -234,6 +242,8 @@ class wordVecOpt:
     
     def copeMSVbtwWordListsFromFile(self, wordStrList1, wordStrList2, modelFilePath = None, topN_rev=20, topN=20):
         '''
+        load model + copeMSVs between wordLists
+        (with sub function copeMSimilarVecsbtwWordLists)
         '''
         extraSegOpt().reLoadEncoding()
         

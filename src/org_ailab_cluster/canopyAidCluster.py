@@ -13,7 +13,8 @@ class canopyAidCluster(object):
         
     def aidClust(self, matrixDic, T_RATIO=2):
         '''
-        
+        canopy aid cluster, give the points' matrix
+        return the clusters' number and clusters
         '''
         if self._T2 == None:
             self._T2 = self.cntAvgThreshold(matrixDic, T_RATIO)
@@ -38,7 +39,8 @@ class canopyAidCluster(object):
     
     def cntAvgThreshold(self, matrixDic, T_RATIO):
         '''
-        
+        get the canopy algorithm's T2 threshold
+        T_RATIO is the init range threshold, the bigger T_RATIO the more clusters number
         '''
         disSum = 0.0;
         for key in matrixDic:

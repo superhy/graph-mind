@@ -5,10 +5,13 @@ Created on 2016年1月9日
 
 @author: hylovedd
 '''
-import jieba
-from jieba import posseg
 
-class wordSeg:
+from jieba import posseg
+import jieba
+import jieba.analyse
+
+
+class wordSeg(object):
     def __init__(self, segMode, paraList):
         self.segMode = segMode
         self.paraList = paraList
@@ -49,8 +52,21 @@ class wordSeg:
 
 if __name__ == '__main__':
     mainObj = wordSeg('e', [])
-    segRes = mainObj.singleSegEngine('我爱北京天安门')
-    segRes2 = mainObj.singlePosSegEngine('我爱北京天安门')
+    
+    segRes = mainObj.singleSegEngine('习近平总书记表扬小明，小明硕士毕业于中国科学院计算所，后在日本京都大学深造')
+    segRes2 = mainObj.singlePosSegEngine('习近平总书记在北京市朝阳区表扬小明，小明硕士毕业于中国科学院计算所，后在日本京都大学深造') 
+#     segRes2 = mainObj.singlePosSegEngine('西红柿炒鸡蛋')
+    
+    print(' '.join(segRes2))
+    
+    for word in segRes2:
+        print(word)
         
-    writenStr = ' '.join(segRes2)
-    print writenStr
+#     for segPair in segRes2:
+#         if segPair.split('/')[1].startswith('nr'):
+#             print('person: ' + segPair.split(u'/')[0])
+#         elif segPair.split('/')[1].startswith('ns'):
+#             print('position: ' + segPair.split(u'/')[0])
+#         elif segPair.split('/')[1].startswith('nt'):
+#             print('organization: ' + segPair.split(u'/')[0])
+    

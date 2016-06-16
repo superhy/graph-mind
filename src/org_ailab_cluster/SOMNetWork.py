@@ -13,7 +13,19 @@ from org_ailab_cluster.canopyAidCluster import canopyAidCluster
 
 
 class KohonenSOM(object):
+    '''
+    The self-organizing neural network
+    '''
     def __init__(self, dimension, shape=None, rate=-5e-4, initial=1, final=0.02, noise_variance=0.5):
+        '''
+        param note
+        dimension: cluster vector dimension
+        shape: SOM cluster map shape(shape[n][m] has n*m cluster)
+        rate: learning rate
+        initial: initial weight
+        final: convergence threshold
+        noise_variance: iteration noise weight
+        '''
         self._dimension = dimension
         self._shape = shape
         self._rate = rate
@@ -22,6 +34,11 @@ class KohonenSOM(object):
         self._noise_variance = noise_variance
         
     def prodMapModel(self, matrixDic, canopy_t_ratio):
+        '''
+        init the SOM network model
+        if shape is None, use canopy generate the SOM shape
+        '''
+        
         ET = kohonen.ExponentialTimeseries
         
         if self._shape == None:
@@ -49,11 +66,18 @@ class KohonenSOM(object):
         return self._model
     
     def resetModel(self):
+        '''
+        reset the SOM model
+        '''
         self._model.reset()
         
     def clust(self, matrixDic, canopy_t_ratio = 2):
         '''
         input matrix dic: key is id of feature element(id); value is vector of feature element(vec)
+        and canopy's t_ratio
+        return the clusters and clustResDic
+        clusters: all clusters with its members as tuple
+        clustResDic: 
         '''
         
         self.prodMapModel(matrixDic, canopy_t_ratio)
