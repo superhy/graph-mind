@@ -10,7 +10,7 @@ import re
 
 
 class ner(object):
-    def __init__(self, trainTextDir = None, NEWordToupleFilePath = None):
+    def __init__(self, trainTextDir=None, NEWordToupleFilePath=None):
         self._trainTextDir = trainTextDir
         self._NEWordDicPath = NEWordToupleFilePath
     
@@ -26,37 +26,41 @@ class ner(object):
                 trainCorpusText.replace(neWordTouple[0], replaceEntity)
                 
         tagTrainSentenceList = trainCorpusText.split(u'-\-')
-        print(u'---finish tagging name entities on text---')
+        print(u'---finish tagging name parts on text---')
         
         return tagTrainSentenceList
     
     def interceptEntityPart(self, sentence):
-        entity_parts = []
+        parts = []
         rest_sentence = sentence
         while(True):
             if rest_sentence.find(u'<START') == -1:
                 break
-            entity_parts.append(rest_sentence[rest_sentence.find(u'>') + 1 : rest_sentence.find(u'<END>')])
+            # fetch the none part
+            none_part = rest_sentence[ : rest_sentence.find(u'<START')]
+            parts.append((u'none', none_part))
+            # fetch the named part part
+            entity_part = rest_sentence[rest_sentence.find(u'>') + 1 : rest_sentence.find(u'<END>')]
+            entity_tag = rest_sentence[rest_sentence.find(u':') + 1 : rest_sentence.find(u'>')]
+            parts.append((entity_tag, entity_part))
             rest_sentence = rest_sentence[rest_sentence.find(u'<END>') + 5 : ]
+        # the last part
+        if(len(rest_sentence)):
+            parts.append((u'none', rest_sentence))
         
-        return entity_parts
+        return parts
     
     def transTagSentencesIntoRole(self, tagTrainSentenceList, preWinSize, latWinSize):
         '''
         '''
-        reg_p = re.compile(u'<START[^ \t\n\r\f\v]*END>') #需要改，暂时不用正则表达式
         for sentence in tagTrainSentenceList:
             if type(sentence).__name__ != "unicode":
                 sentence = sentence.decode('utf-8')
-            regmat = reg_p.findall(sentence)
-            if len(regmat) > 0:
-                sentence_part = []
-                rest_sentence = sentence
-                for i in range(0, len(regmat)):
-                    pre_part = rest_sentence[:rest_sentence.find(u'<START') - 1]
-                    entity_part = regmat[i]
-                    sentence_part.append(('none', pre_part))
-
+            if sentence.find(u'<START') != -1:
+                sentence_part = self.interceptEntityPart(sentence)
+                for i in range(0, len(sentence_part)):
+                    pass
+                
 if __name__ == '__main__':
     s = '习近平总书记表扬小明，小明硕士毕业于<START:pos>中国科学院计算所<END>，后在<START:pos>日本京都大学<END>深造'
 #     s = '习近平总书记表扬小明，小明硕士毕业于中国科学院计算所，后在日本京都大学深造'
@@ -70,6 +74,6 @@ if __name__ == '__main__':
     print(len('习近平'.decode('utf-8')))
 #     print(s[p - 1])
     
-    entities = ner().interceptEntityPart(s)
-    for entity in entities:
-        print(entity)
+    parts = ner().interceptEntityPart(s)
+    for part in parts:
+        print(part[0] + u' ' + part[1])
