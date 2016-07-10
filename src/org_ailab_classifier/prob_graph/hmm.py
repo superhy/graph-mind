@@ -15,7 +15,7 @@ class hmm(object):
         
     def viterbi(self, obs, hiddens):
         '''
-        input the obvious states sequence and the hidden states dictionary list
+        input the obvious states sequence and the possible hidden states dictionary list
         return the forest result(a dictionary list)
         the dictionary's key is the most likely hidden state and the value is the probability
         '''

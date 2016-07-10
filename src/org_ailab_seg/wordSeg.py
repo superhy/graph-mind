@@ -54,8 +54,8 @@ if __name__ == '__main__':
     mainObj = wordSeg('e', [])
     
     segRes = mainObj.singleSegEngine('习近平总书记表扬小明，小明硕士毕业于中国科学院计算所，后在日本京都大学深造')
-    segRes2 = mainObj.singlePosSegEngine('习近平总书记在北京市朝阳区表扬小明，小明硕士毕业于中国科学院计算所，后在日本京都大学深造') 
-#     segRes2 = mainObj.singlePosSegEngine('西红柿炒鸡蛋')
+#     segRes2 = mainObj.singlePosSegEngine('习近平总书记在北京市朝阳区表扬小明，小明硕士毕业于中国科学院计算所，后在日本京都大学深造') 
+    segRes2 = mainObj.singlePosSegEngine('我最近参加了高校主办的北清大数据联合会中文的一系列活动')
     
     print(' '.join(segRes2))
     

@@ -71,7 +71,7 @@ class KohonenSOM(object):
         '''
         self._model.reset()
         
-    def clust(self, matrixDic, canopy_t_ratio = 2):
+    def clust(self, matrixDic, canopy_t_ratio = 3):
         '''
         input matrix dic: key is id of feature element(id); value is vector of feature element(vec)
         and canopy's t_ratio

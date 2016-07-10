@@ -13,7 +13,7 @@ from py2neo.database.auth import authenticate
 _user = "neo4j"
 _password = "qdhy199148"
 
-class neoDataGraphOpt:
+class neoDataGraphOpt(object):
     def __init__(self, user=_user, password=_password):
         self.user = user;
         self.password = password
@@ -101,7 +101,7 @@ if __name__ == '__main__':
 #     print(relat)
     
     dic1 = {}
-    dic1[u'post'] = [u'yuanzhang', u'jaoshou']
+    dic1[u'post'] = [u'yuanzhang', u'jiaoshou']
     dic1[u'age'] = 56
     node1 = neoObj.createNodeWithProperty("teacher", "huangqingsong", dic1)
     

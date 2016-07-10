@@ -11,7 +11,7 @@ class canopyAidCluster(object):
         self._T1 = T1
         self._T2 = T2
         
-    def aidClust(self, matrixDic, T_RATIO=2):
+    def aidClust(self, matrixDic, T_RATIO=3):
         '''
         canopy aid cluster, give the points' matrix
         return the clusters' number and clusters
