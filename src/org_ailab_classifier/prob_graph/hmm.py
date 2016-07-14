@@ -7,7 +7,7 @@ Created on 2016年6月2日
 '''
 from numpy import multiply, argmax
 
-class hmm(object):
+class hiddenMarkov(object):
     def __init__(self, startP, transP, emitP):
         self._startP = startP
         self._transP = transP

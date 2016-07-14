@@ -8,6 +8,8 @@ Created on 2016年6月21日
 from org_ailab_tools.math.statisticsCountOpt import countElePorbInList
 
 def cptStartP(tagMatrix):
+    '''
+    '''
     tagList = []
     allList = []
     
@@ -16,11 +18,13 @@ def cptStartP(tagMatrix):
             if ele[1] not in tagList:
                 tagList.append(ele[1])
             allList.append(ele[1])
-    start_p = countElePorbInList(tagList, allList)
+    start_p_vec = countElePorbInList(tagList, allList)
     
-    return start_p
+    return start_p_vec
 
 def cptEmitP(tagMatrix):
+    '''
+    '''
     tagList = []
     POSList = []
     allList = []
@@ -33,7 +37,7 @@ def cptEmitP(tagMatrix):
                 POSList.append(POS)
             allList.append(ele[1])
     
-    emit_p = {}
+    emit_p_mat = {}
     for tag in tagList:
         tagPref = tag[:tag.rfind(u'_')]
         occ_POS = []
@@ -41,12 +45,29 @@ def cptEmitP(tagMatrix):
             if occ_tag.startswith(tagPref):
                 occ_POS.append(occ_tag[occ_tag.rfind(u'_') + 1 :])
         emitProbDic = countElePorbInList(POSList, occ_POS)
-        emit_p[tag] = emitProbDic
+        emit_p_mat[tag] = emitProbDic
     
-    return emit_p
+    return emit_p_mat
 
-def cptTransP():
-    pass
+def cptTags_TransP(tagMatrix):
+    '''
+    '''
+    tag2tagTransMat = {}
+    for vec in tagMatrix:
+        for i in range(len(vec) - 1):
+            if vec[i][1] not in tag2tagTransMat.keys():
+                tag2tagTransMat[vec[i][1]] = []
+            if vec[i + 1][1] not in tag2tagTransMat.keys():
+                tag2tagTransMat[vec[i + 1][1]] = []
+            tag2tagTransMat[vec[i][1]].append(vec[i + 1][1])
+    
+    trans_p_mat = {}
+    tagList = tag2tagTransMat.keys()
+    for tag in tagList:
+        transProbDic = countElePorbInList(tagList, tag2tagTransMat[tag])
+        trans_p_mat[tag] = transProbDic
+    
+    return tagList, trans_p_mat
 
 if __name__ == '__main__':
     p = []

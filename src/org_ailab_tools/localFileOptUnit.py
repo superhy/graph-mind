@@ -9,6 +9,8 @@ Created on 2015年10月25日
 import os
 import types
 
+from gensim.models.word2vec import LineSentence
+
 
 def checkFileState(filePath):
     '''
@@ -39,6 +41,15 @@ def listAllFileInDirectory(dirPath, io=u'r'):
         print file
         loadedFiles.append(open(file, io))
     return loadedFiles
+
+def loadSetencesFromFiles(self, files):
+    '''
+    load all sentences list from files
+    '''
+    sentences = []
+    for file in files:
+        sentences.extend(LineSentence(file))
+    return sentences
 
 if __name__ == '__main__':
     files = listAllFileInDirectory(u'../org_ailab_tools')

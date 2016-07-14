@@ -31,15 +31,6 @@ class wordVecOpt:
         '''
         return Word2Vec.load(modelFilePath)
     
-    def loadSetencesFromFiles(self, files):
-        '''
-        load all sentences list from files
-        '''
-        sentences = []
-        for file in files:
-            sentences.extend(LineSentence(file))
-        return sentences
-    
     def initTrainWord2VecModel(self, corpusFilePath, safe_model=False):
         '''
         init and train a new w2v model
@@ -73,7 +64,7 @@ class wordVecOpt:
                     for file in corpusFiles[1:len(corpusFiles)]:
                         model = self.updateW2VModelUnit(model, file)
                 else:
-                    sentences = self.loadSetencesFromFiles(corpusFiles)
+                    sentences = localFileOptUnit.loadSetencesFromFiles(corpusFiles)
                     model = Word2Vec(sentences, size=self._size, window=self._window, min_count=self._minCount, workers=self._workers)
             elif fileType == u'other':
                 # TODO add sentences list directly
