@@ -9,6 +9,8 @@ Created on 2016年7月21日
 class auxiliaryFunction(object):
     
     def createC1(self, dataSet):
+        '''
+        '''
         C1 = []
         for transaction in dataSet:
             for item in transaction:
