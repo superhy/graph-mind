@@ -11,7 +11,7 @@ from org_ailab_tools.cache import ROOT_PATH
 def countWordPos():
     extraSegOpt().reLoadEncoding()
     
-    segFile = open(ROOT_PATH.root + 'weibo_seg\\segNLPCC2014.txt', 'r')
+    segFile = open(ROOT_PATH.root_win64 + 'weibo_seg\\segNLPCC2014.txt', 'r')
     segLines = segFile.readlines()
     dic = {}
     for line in segLines:
