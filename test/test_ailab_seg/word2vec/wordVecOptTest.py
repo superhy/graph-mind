@@ -8,10 +8,11 @@ Created on 2016年3月17日
 
 from org_ailab_seg.extraSegOpt import extraSegOpt
 from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
+from org_ailab_tools.cache import ROOT_PATH
 
 def testTrainWord2VecModel():
-    corpusFilePath = u'../segNLPCC2014.txt'
-    modelPath = u'NLPCC2014word2vecModel.vector'
+    corpusFilePath = ROOT_PATH.root + 'weibo_seg\\segNLPCC2014.txt'
+    modelPath = ROOT_PATH.root + 'word2vec\\NLPCC2014word2vecModel.vector'
     wordVecOptObj = wordVecOpt(modelPath)
     model = wordVecOptObj.initTrainWord2VecModel(corpusFilePath)
     print(u'process corpus num :' + str(model.corpus_count))
@@ -22,7 +23,7 @@ def testTrainWord2VecModel():
         print e[0], e[1]
     
 def testQueryWordVec():
-    modelPath = u'NLPCC2014word2vecModel.vector'
+    modelPath = ROOT_PATH.root + 'word2vec\\NLPCC2014word2vecModel.vector'
     wordVecOptObj = wordVecOpt(modelPath)
     wordStr = u'韩寒/nr'
     print(u'Load model then word vec object: ' + wordStr)
@@ -43,9 +44,9 @@ def testQueryWordVec():
     queryPNSimList = wordVecOptObj.queryMSimilarVecswithPosNeg(model, wordList1, wordList2, 30)
     print(u'\r\nPos: ' + u';'.join(wordList1) + u' Neg: ' + u';'.join(wordList2) + u'\'word vecs:')
     for e in queryPNSimList:
-        #print type(e)
+        # print type(e)
         print e[0], e[1]
     
 if __name__ == '__main__':
     testTrainWord2VecModel()
-    #testQueryWordVec()
+    # testQueryWordVec()

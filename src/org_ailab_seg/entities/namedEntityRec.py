@@ -157,6 +157,10 @@ class ner(object):
                         tagMatrix.append(tagVector)
         
         return tagMatrix
+    
+    def prodSeqModel(self):
+        '''
+        '''
                 
 if __name__ == '__main__':  
     nerObj = ner()
