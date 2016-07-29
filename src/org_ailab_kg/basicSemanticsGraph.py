@@ -12,6 +12,10 @@ from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
 
 
 class basicSemanticsGraph(object):
+    '''
+    TODO
+    设置基类，继承，统一管理共享参数，如：是否直接传入实体词列表等等
+    '''
     
     def createBasicEmtityNodes(self, neoOptObj, wordList):
         # transform wordList into wordPairs

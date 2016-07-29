@@ -9,3 +9,5 @@ Created on 2016年7月21日
 root_win64 = 'D:\\graph-mind-file\\'
 
 root_macos = ''
+
+seg_dictwin64 = 'D:\\graph-mind-file\\seg_dict\\'

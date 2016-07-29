@@ -48,5 +48,5 @@ def testQueryWordVec():
         print e[0], e[1]
     
 if __name__ == '__main__':
-    testTrainWord2VecModel()
-    # testQueryWordVec()
+#     testTrainWord2VecModel()
+    testQueryWordVec()

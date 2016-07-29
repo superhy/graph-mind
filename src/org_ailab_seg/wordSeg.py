@@ -8,19 +8,24 @@ Created on 2016年1月9日
 
 from jieba import posseg
 import jieba
-import jieba.analyse
 
 
 class wordSeg(object):
-    def __init__(self, segMode, paraList):
-        self.segMode = segMode
-        self.paraList = paraList
+    '''
+    add user diy words dict
+    '''
+    def __init__(self, segMode, userDictPath = None):
+        self._segMode = segMode
+        self._userDictPath = userDictPath
         
     def singleSegEngine(self, segStr):
+        if not self._userDictPath == None:
+            jieba.load_userdict(self._userDictPath)
+        
         wordGenList = []
-        if self.segMode == 'a':
+        if self._segMode == 'a':
             wordGenList = jieba.cut(segStr, cut_all=True)
-        elif self.segMode == 's':
+        elif self._segMode == 's':
             wordGenList = jieba.cut_for_search(segStr)
         else:
             wordGenList = jieba.cut(segStr, cut_all=False)
@@ -31,6 +36,9 @@ class wordSeg(object):
         return wordList
     
     def singlePosSegEngine(self, segStr):
+        if not self._userDictPath == None:
+            jieba.load_userdict(self._userDictPath)
+        
         wordPosGenList = posseg.cut(segStr, HMM=True)
         
         wordPosList = []
@@ -39,14 +47,31 @@ class wordSeg(object):
         
         return wordPosList
     
-    def serialSeger(self, posNeedFlag=False):
+    def linesSeger(self, segLines, posNeedFlag=False):
+        '''
+        for one multi-line corpus text(best in one file)
+        '''
         segParaList = []
         if posNeedFlag == True:
-            for para in self.paraList:
-                segParaList.append(self.singlePosSegEngine(para))
+            for line in segLines:
+                segParaList.extend(self.singlePosSegEngine(line))
         else:
-            for para in self.paraList:
-                segParaList.append(self.singleSegEngine(para))
+            for line in segLines:
+                segParaList.extend(self.singleSegEngine(line))
+        
+        return segParaList
+    
+    def serialSeger(self, segStrList, posNeedFlag=False):
+        '''
+        for multi one-line short text(best in one file)
+        '''
+        segParaList = []
+        if posNeedFlag == True:
+            for str in segStrList:
+                segParaList.append(self.singlePosSegEngine(str))
+        else:
+            for str in segStrList:
+                segParaList.append(self.singleSegEngine(str))
         
         return segParaList
 

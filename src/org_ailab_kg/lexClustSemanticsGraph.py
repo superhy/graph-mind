@@ -14,6 +14,10 @@ from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
 
 
 class lexClustSemanticsGraph(object):
+    '''
+    TODO
+    设置基类，继承，统一管理共享参数，如：是否直接传入实体词列表等等
+    '''
     
     def createLexClustEmtityNodes(self, neoOptObj, wvOptObj, wordList, vec_z_ratio, canopy_t_ratio, cluster=None):
         '''

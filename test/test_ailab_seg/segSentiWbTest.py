@@ -5,7 +5,6 @@ Created on 2016年1月9日
 
 @author: hylovedd
 '''
-import xml
 from xml.etree import ElementTree
 
 from bs4 import BeautifulSoup
@@ -63,14 +62,6 @@ class segSentiWbTest:
         
         
         return posSentences, negSentences
-    
-    def segParaText(self, segMode):
-        paraTextList = self.fetchParaText()
-        testSeger = wordSeg(segMode, paraTextList)
-        
-        segParaList = testSeger.serialSeger()
-        
-        return segParaList
 
 if __name__ == '__main__':
     filePath = u"NLPCC2014.xml"
