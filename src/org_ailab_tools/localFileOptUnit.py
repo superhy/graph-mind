@@ -46,7 +46,7 @@ def listAllFilePathInDirectory(dirPath):
     # TODO need improve code to one line
     for file in files:
         filePath = dirPath + file
-        print(filePath)
+#         print(filePath)
         
         loadedFilesPath.append(filePath)
 

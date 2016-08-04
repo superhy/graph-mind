@@ -27,12 +27,14 @@ class auxiliaryFunction(object):
         probSum = 0.0
         for tid in dataSet.keys():
             prob = dataSet[tid]
+#             probSum = prob if prob > probSum else probSum
             probSum += prob
             for can in Ck:
                 if can.issubset(tid):
                     if not ssCnt.has_key(can): 
                         ssCnt[can] = prob
                     else: 
+#                         ssCnt[can] = prob if prob > ssCnt[can] else ssCnt[can]
                         ssCnt[can] += prob
         retList = []
         supportData = {}
@@ -159,11 +161,3 @@ if __name__ == '__main__':
     p2pRules = aprioriObj.findAssFromFreqSet(dataSet)
     for rules in p2pRules:
         print(rules)
-    
-#     r = ()
-#     print(len(r))
-#     r = (1,)
-#     r += (2,)
-#     r += (3,)
-#     print(r)
-#     print(len(r))
