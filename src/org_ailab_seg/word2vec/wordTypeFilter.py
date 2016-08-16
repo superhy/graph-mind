@@ -17,7 +17,7 @@ _qualifyPosTags = WORD_POS.place + WORD_POS.verb + WORD_POS.adj + WORD_POS.dist 
 
 class wordTypeFilter(object):
     
-    def entityWordFilter(self, wordProbPairList, entityPosTags=_entityPosTags):
+    def entityWordFilter(self, wordProbPairList, entityPosTags=_entityPosTags, scanRange=None):
         '''
         (using Chinese notes)
         找出分词结果形成的词库中所有的名词性词汇（准备作为实体，图中的节点）
@@ -36,7 +36,10 @@ class wordTypeFilter(object):
                     hitFlag = True
                     break
             if hitFlag == True:
-                entityWordPairs.append(wordPair)    
+                entityWordPairs.append(wordPair)
+            
+            if scanRange != None and len(entityWordPairs) >= scanRange:
+                break
             
         return entityWordPairs
     
@@ -62,6 +65,46 @@ class wordTypeFilter(object):
                 qualifyWordPairs.append(wordPair)
         
         return qualifyWordPairs
+    
+    def diyWordFilter(self, wordProbPairList, filterPosTags):
+        '''
+        (using Chinese notes)
+        自定义词过滤器，自我传入想保留的词性标签
+        '''
+        filterWordPairs = []
+        for wordPair in wordProbPairList:
+            word = wordPair[0]
+            wordPos = word.split(u'/')[1]
+            
+            hitFlag = False
+            for tagPos in filterPosTags:
+                if wordPos.startswith(tagPos):
+                    hitFlag = True
+                    break
+            if hitFlag ==True:
+                filterWordPairs.append(wordPair)
+        
+        return filterWordPairs
+    
+    def ditInOutWordFilter(self, wordProbPairList, inOutEntities, filterType):
+        '''
+        get the word in or out entity dit from wordPairList
+        filterType is the string of 'in' or 'out'
+        '''
+        
+        filtWordPairs = []
+        if filterType == 'in':
+            for wordPair in wordProbPairList:
+                word = wordPair[0]
+                if word in inOutEntities:
+                    filtWordPairs.append(wordPair)
+        elif filterType == 'out':
+            for wordPair in wordProbPairList:
+                word = wordPair[0]
+                if word not in inOutEntities:
+                    filtWordPairs.append(wordPair)
+            
+        return filtWordPairs
     
     def collectAllWordsFromSegSentences(self, segSetences):
         allWordList = []

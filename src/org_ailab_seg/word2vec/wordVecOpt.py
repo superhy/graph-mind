@@ -17,7 +17,7 @@ from org_ailab_tools import localFileOptUnit
 from org_ailab_tools.cache import ROOT_PATH
 
 
-class wordVecOpt:
+class wordVecOpt(object):
     def __init__(self, modelPath, size=100, window=5, minCount=1, workers=multiprocessing.cpu_count()):
         self.modelPath = modelPath
         self._size = size

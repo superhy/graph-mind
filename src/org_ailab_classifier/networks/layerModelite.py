@@ -17,6 +17,10 @@ def generateData(size, dim, lab_num):
     return data, labels
 
 def multilayerPerceptron(data, labels):
+    '''
+    use for test
+    '''
+    
     # 初始化层次模型
     model = Sequential()
     
