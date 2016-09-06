@@ -24,9 +24,6 @@ def shannonEnt(probList, datum):
 def euclideanMetric(vec1, vec2):
     return linalg.norm(numpy.array(vec1) - numpy.array(vec2))
 
-def average(iterable):
-    pass
-
 if __name__ == '__main__':
 #     p = numpy.max(x)
 #     print(p)

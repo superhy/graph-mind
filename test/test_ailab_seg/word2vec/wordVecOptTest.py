@@ -6,14 +6,14 @@ Created on 2016年3月17日
 @author: superhy
 '''
 
-from org_ailab_seg.extraSegOpt import extraSegOpt
-from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
+from org_ailab_seg.extraSegOpt import ExtraSegOpt
+from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 from org_ailab_tools.cache import ROOT_PATH
 
 def testTrainWord2VecModel():
     corpusFilePath = ROOT_PATH.root_win64 + 'weibo_seg\\segNLPCC2014.txt'
     modelPath = ROOT_PATH.root_win64 + 'word2vec\\NLPCC2014word2vecModel.vector'
-    wordVecOptObj = wordVecOpt(modelPath)
+    wordVecOptObj = WordVecOpt(modelPath)
     model = wordVecOptObj.initTrainWord2VecModel(corpusFilePath)
     print(u'process corpus num :' + str(model.corpus_count))
     wordStr = u'韩寒/nr'
@@ -24,7 +24,7 @@ def testTrainWord2VecModel():
     
 def testQueryWordVec():
     modelPath = ROOT_PATH.root_win64 + 'word2vec\\NLPCC2014word2vecModel.vector'
-    wordVecOptObj = wordVecOpt(modelPath)
+    wordVecOptObj = WordVecOpt(modelPath)
     wordStr = u'韩寒/nr'
     print(u'Load model then word vec object: ' + wordStr)
     queryList = wordVecOptObj.queryMsimilarWVfromFile(wordStr)

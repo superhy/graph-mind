@@ -8,8 +8,7 @@ Created on 2016年7月29日
 from org_ailab_cluster.association.apriori import aprioriAss
 from org_ailab_kg import freqAssGraphSupOpt
 from org_ailab_tools.cache import ROOT_PATH
-from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
-
+from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 
 def testLoadEntitiesFromDict():
     dict_path = ROOT_PATH.seg_dictwin64 + u'jieba_shicai.txt'
@@ -47,7 +46,7 @@ def testRelationBtwEntities():
     
     modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
     
-    sim = wordVecOpt(modelStoragePath).culSimBtwWVfromFile(entity1, entity2, modelStoragePath)
+    sim = WordVecOpt(modelStoragePath).culSimBtwWVfromFile(entity1, entity2, modelStoragePath)
     print(sim)
     
     relationWordTuples = freqAssGraphSupOpt.relationBtwEntities(modelStoragePath, entity1, entity2, 500, pureFilterTopN=2)

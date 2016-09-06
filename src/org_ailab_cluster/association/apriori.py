@@ -6,7 +6,7 @@ Created on 2016年7月21日
 @author: hylovedd
 '''
 
-class auxiliaryFunction(object):
+class AuxiliaryFunction(object):
     '''
     input dataSet looks like {(e1, e2, ..., eN): prob<0~1>, ...}
     '''
@@ -46,7 +46,7 @@ class auxiliaryFunction(object):
         
         return retList, supportData
 
-class aprioriAss(auxiliaryFunction):
+class aprioriAss(AuxiliaryFunction):
     def __init__(self, minSupport=0.5, minConf=0.7):
         self._minSupport = minSupport
         self._minConf = minConf
@@ -136,7 +136,7 @@ if __name__ == '__main__':
     
 #     print(map(set, dataSet.keys()))
     
-    auxObj = auxiliaryFunction()
+    auxObj = AuxiliaryFunction()
     C1 = auxObj.createC1(dataSet)
     print(C1)
     for c in C1:

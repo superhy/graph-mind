@@ -6,18 +6,18 @@ Created on 2016年3月17日
 @author: superhy
 '''
 
+import multiprocessing
 import os
 import warnings
 
-from Cython.Build.Cythonize import multiprocessing
 from gensim.models.word2vec import Word2Vec, LineSentence
 
-from org_ailab_seg.extraSegOpt import extraSegOpt
+from org_ailab_seg.extraSegOpt import ExtraSegOpt
 from org_ailab_tools import localFileOptUnit
 from org_ailab_tools.cache import ROOT_PATH
 
 
-class wordVecOpt(object):
+class WordVecOpt(object):
     def __init__(self, modelPath, size=100, window=5, minCount=1, workers=multiprocessing.cpu_count()):
         self.modelPath = modelPath
         self._size = size
@@ -42,7 +42,7 @@ class wordVecOpt(object):
             and if safe_model is false, the process of training uses the way that load all
         corpus lines into a sentences list and train them one time.)
         '''
-        extraSegOpt().reLoadEncoding()
+        ExtraSegOpt().reLoadEncoding()
         
         fileType = localFileOptUnit.checkFileState(corpusFilePath)
         if fileType == u'error':
@@ -57,6 +57,7 @@ class wordVecOpt(object):
                 corpusFile = open(corpusFilePath, u'r')
                 print('training model from singleFile!')
                 model = Word2Vec(LineSentence(corpusFile), size=self._size, window=self._window, min_count=self._minCount, workers=self._workers)
+                corpusFile.close()
             elif fileType == u'directory':
                 corpusFiles = localFileOptUnit.listAllFilePathInDirectory(corpusFilePath)
                 print('training model from listFiles of directory!')
@@ -88,6 +89,7 @@ class wordVecOpt(object):
         elif fileType == u'file':
             corpusSingleFile = open(corpusSingleFilePath, u'r')
             trainedWordCount = model.train(LineSentence(corpusSingleFile))
+            corpusSingleFile.close()
             print('update model, update words num is: ' + str(trainedWordCount))
         else:
             # TODO add sentences list directly (same as last function)
@@ -100,7 +102,7 @@ class wordVecOpt(object):
         (about corpusFilePath and safe_model is same as function initTrainWord2VecModel
         default set safe_model == True)
         '''
-        extraSegOpt().reLoadEncoding()
+        ExtraSegOpt().reLoadEncoding()
         
         fileType = localFileOptUnit.checkFileState(corpusFilePath)
         if fileType == u'error':
@@ -131,7 +133,7 @@ class wordVecOpt(object):
         '''
         get the word's vector as arrayList type from w2v model
         '''
-        extraSegOpt().reLoadEncoding()
+        ExtraSegOpt().reLoadEncoding()
         
         return model[wordStr]
     
@@ -151,7 +153,7 @@ class wordVecOpt(object):
         MSimilar words basic query function
         return 2-dim List [0] is word [1] is double-prob
         '''
-        extraSegOpt().reLoadEncoding()
+        ExtraSegOpt().reLoadEncoding()
         
         similarPairList = model.most_similar(wordStr.decode('utf-8'), topn=topN)
         return similarPairList
@@ -172,7 +174,7 @@ class wordVecOpt(object):
         two words similar basic query function
         return double-prob
         '''
-        extraSegOpt().reLoadEncoding()
+        ExtraSegOpt().reLoadEncoding()
         
         similarValue = model.similarity(wordStr1.decode('utf-8'), wordStr2.decode('utf-8'))
         return similarValue
@@ -192,7 +194,7 @@ class wordVecOpt(object):
         pos-neg MSimilar words basic query function
         return 2-dim List [0] is word [1] is double-prob
         '''
-        extraSegOpt().reLoadEncoding()
+        ExtraSegOpt().reLoadEncoding()
         
         posWordList = []
         negWordList = []
@@ -221,7 +223,7 @@ class wordVecOpt(object):
         then use the scr-wordList and the rev-wordList as the new src-tag-wordList
         topN_rev is topN of rev-wordList and topN is the final topN of relationship vec
         '''
-        extraSegOpt().reLoadEncoding()
+        ExtraSegOpt().reLoadEncoding()
         
         srcWordList = []
         tagWordList = []
@@ -246,8 +248,9 @@ class wordVecOpt(object):
         return self.copeMSimilarVecsbtwWordLists(model, wordStrList1, wordStrList2, topN_rev, topN)
     
 if __name__ == '__main__':
-    first_path = ROOT_PATH.root_win64 + u'med_seg\\食材百科\\阿胶(seg).txt'
-    second_path = ROOT_PATH.root_win64 + u'med_seg\\食材百科\\艾叶(seg).txt'
+    
+    first_path = ROOT_PATH.root_win64 + u'med_seg\\2食材百科\\阿胶(seg).txt'
+    second_path = ROOT_PATH.root_win64 + u'med_seg\\2食材百科\\艾叶(seg).txt'
     model_path = ROOT_PATH.root_win64 + u'word2vec\\test_model.vector'
     
     model = Word2Vec(LineSentence(first_path), size=100, window=5, min_count=1, workers=multiprocessing.cpu_count())

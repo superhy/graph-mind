@@ -6,19 +6,19 @@ Created on 2016年8月8日
 @author: hylovedd
 '''
 
-from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
-from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
+from org_ailab_seg.word2vec.wordTypeFilter import WordTypeFilter
+from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 from gensim.models.word2vec import Word2Vec
 
 
 def prodFieldW2VModel(modelStoragePath, corpusFilePath, dimension_size=100):
-    wordVecOptObj = wordVecOpt(modelStoragePath, size=dimension_size)
+    wordVecOptObj = WordVecOpt(modelStoragePath, size=dimension_size)
     model = wordVecOptObj.initTrainWord2VecModel(corpusFilePath)
     
     return model
 
 def loadW2VModelFromDisk(modelStoragePath):
-    wordVecOptObj = wordVecOpt(modelStoragePath)
+    wordVecOptObj = WordVecOpt(modelStoragePath)
     model = wordVecOptObj.loadModelfromFile(modelStoragePath)
     
     return wordVecOptObj, model
@@ -27,6 +27,7 @@ def loadEntitiesFromDict(dictPath):
     fr = open(dictPath, 'r')
     entities = []
     entities.extend(line[:line.find('\n')].replace(' ', '/').decode('utf-8') for line in fr)  # clean the newline character
+    fr.close()
     
     return entities
 
@@ -68,7 +69,7 @@ def findLinkedWords(modelStoragePath, entityStr, domainEntities, scanRange):
     if len(simTuples) == 0: # cut short save time
         return simTuples
     
-    simTuples = wordTypeFilter().ditInOutWordFilter(simTuples, domainEntities, 'in')
+    simTuples = WordTypeFilter().ditInOutWordFilter(simTuples, domainEntities, 'in')
     
     return simTuples
 
@@ -84,8 +85,8 @@ def findCrossLinkedWords(modelStoragePath, entityStr, srcEntities, tagEntities, 
     if len(sourceTuples) == 0: # cut short save time
         return sourceTuples
     
-    supTuples = wordTypeFilter().ditInOutWordFilter(sourceTuples, srcEntities, 'out')
-    cleanTuples = wordTypeFilter().ditInOutWordFilter(sourceTuples, srcEntities, 'in')
+    supTuples = WordTypeFilter().ditInOutWordFilter(sourceTuples, srcEntities, 'out')
+    cleanTuples = WordTypeFilter().ditInOutWordFilter(sourceTuples, srcEntities, 'in')
     pureSupWords = [entityStr]
     pureSupWords.extend(e[0] for e in supTuples)
     pureCleanWords = []
@@ -97,7 +98,7 @@ def findCrossLinkedWords(modelStoragePath, entityStr, srcEntities, tagEntities, 
     if len(midTuples) == 0 : # cut short save time
         return midTuples
     
-    mid_tagTuples = wordTypeFilter().ditInOutWordFilter(midTuples, tagEntities, 'in')
+    mid_tagTuples = WordTypeFilter().ditInOutWordFilter(midTuples, tagEntities, 'in')
     midWords = []
     midWords.extend(e[0] for e in midTuples)
     # get the tag scan tuples from mid words
@@ -107,7 +108,7 @@ def findCrossLinkedWords(modelStoragePath, entityStr, srcEntities, tagEntities, 
     if len(tagTuples) == 0: # cut short save time
         return tagTuples
     
-    tagTuples = wordTypeFilter().ditInOutWordFilter(tagTuples, tagEntities, 'in')
+    tagTuples = WordTypeFilter().ditInOutWordFilter(tagTuples, tagEntities, 'in')
     tagTuples.extend(mid_tagTuples)
     
     return tagTuples
@@ -118,7 +119,7 @@ def repInDomainLinks(modelStoragePath, sEntityStr, tEntityStr, domainEntities, r
     wordVecOptObj, model = loadW2VModelFromDisk(modelStoragePath)
     
     linkTuples = wordVecOptObj.queryMSimilarVecswithPosNeg(model, [sEntityStr, tEntityStr], [], repRange)
-    linkTuples = wordTypeFilter().ditInOutWordFilter(linkTuples, domainEntities, 'out')
+    linkTuples = WordTypeFilter().ditInOutWordFilter(linkTuples, domainEntities, 'out')
     
     return linkTuples
 

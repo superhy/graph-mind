@@ -4,14 +4,22 @@ Created on 2016年4月10日
 
 @author: hylovedd, jj_ma
 '''
-from org_ailab_data.graph.neoDataGraphOpt import neoDataGraphOpt
+from org_ailab_data.graph.neoDataGraphOpt import NeoDataGraphOpt, _user, \
+    _password, _service_ip
 
-class neoDataAdvanceOpt(neoDataGraphOpt):
+class NeoDataAdvanceOpt(NeoDataGraphOpt):
     
-    def GetConnectBzByName(self, inqLabel, adjLabel, inqNodeName):
+    global _user
+    global _password
+    global _service_ip
+    
+    def __init__(self, user=_user, password=_password, service_ip=_service_ip):
+        NeoDataGraphOpt.__init__(self, user, password, service_ip)
+    
+    def getConnectNodesByName(self, inqLabel, adjLabel, inqNodeName):
         '''
         #输入查询节点的标签和名字，返回向外，向内，全部关联的节点列表
-        2016.8.16 adjLabel = 'bz'
+        2016.8.16 inqLabel = 'bz', adjLabel = 'bz'
         '''
         pro = {}
         pro['name'] = inqNodeName
@@ -19,9 +27,11 @@ class neoDataAdvanceOpt(neoDataGraphOpt):
         inEntities = []
         allEntities = []
         
-        nodes = super.selectNodeElementsFromDB(labels=[inqLabel], properties=pro)
-        outRelation = super.graph.match(nodes[0], None, None, False, None)
-        inRelation = super.graph.match(None, None, nodes[0], False, None)
+        nodes = NeoDataGraphOpt.selectNodeElementsFromDB(self, labels=(inqLabel), properties=pro)
+        outRelation = self.graph.match(nodes[0], None, None, False, None)
+        inRelation = self.graph.match(None, None, nodes[0], False, None)
+#         outRelation = NeoDataGraphOpt.graph.match(nodes[0], None, None, False, None)
+#         inRelation = NeoDataGraphOpt.graph.match(None, None, nodes[0], False, None)
         for rel in outRelation:
             if rel.end_node().has_label(adjLabel):
                 outEntities.append(rel.end_node())
@@ -34,18 +44,18 @@ class neoDataAdvanceOpt(neoDataGraphOpt):
         
         return outEntities, inEntities, allEntities
             
-    def GetNodeNameByNode(self, nodes):
-        nodeNames = []
-        nodeNames.extend(node['name'] for node in nodes)
-        return nodeNames   
+    def getEntityNameByNodes(self, nodes):
+        entityNames = []
+        entityNames.extend(node['name'] for node in nodes)
+        return entityNames   
 
 if __name__ == '__main__':
     
-    neoObj = neoDataAdvanceOpt('neo4j','qdhy199148')
+    neoObj = NeoDataAdvanceOpt('neo4j', 'b3432')
     
-    Out,In,All=neoObj.GetConnectBzByName('bz','伤寒/n')
-    print 'out:',Out
-    print 'in:',In
-    print 'all:',All
-    for i in All:
-        print neoObj.GetNodeNameByNode(i)
+    Out, In, All = neoObj.getConnectNodesByName('bz', 'bz', '伤寒/n')
+    print 'out:', Out
+    print 'in:', In
+    print 'all:', All
+    for bz_name in neoObj.getEntityNameByNodes(All):
+        print(bz_name)

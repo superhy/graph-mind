@@ -6,12 +6,11 @@ Created on 2016年4月11日
 @author: hylovedd
 '''
 
-from org_ailab_data.graph.neoDataGraphOpt import neoDataGraphOpt
-from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
-from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
+from org_ailab_data.graph.neoDataGraphOpt import NeoDataGraphOpt
+from org_ailab_seg.word2vec.wordTypeFilter import WordTypeFilter
+from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 
-
-class basicSemanticsGraph(object):
+class BasicSemanticsGraph(object):
     '''
     TODO
     设置基类，继承，统一管理共享参数，如：是否直接传入实体词列表等等
@@ -23,7 +22,7 @@ class basicSemanticsGraph(object):
         for word in wordList:
             wordPair = [word, 0.0]
             wordPairs.append(wordPair)
-        entityWordPairs = wordTypeFilter().entityWordFilter(wordPairs)
+        entityWordPairs = WordTypeFilter().enWordTypeFilter(wordPairs)
         
         nounNodes = []
         for wordPair in entityWordPairs:
@@ -43,7 +42,7 @@ class basicSemanticsGraph(object):
         negWordList = []
         
         relatQueryRes = wvOptObj.queryMSVwithPosNegFromFile(posWordList, negWordList, topN=topN)
-        adjWordProbList = wordTypeFilter().qualifyWordFilter(relatQueryRes)
+        adjWordProbList = WordTypeFilter().quWordTypeFilterr(relatQueryRes)
         relatLabel = u'semantic'
         relatLabelDic = {}
         maxRelatProb = 0.0
@@ -73,9 +72,8 @@ class basicSemanticsGraph(object):
         neoOptObj.constructSubGraphInDB(subGraph)
     
     def buildBasicSemGraph(self, w2vModelPath, allWordList, topN=20, edgeThreshold=0.2, unionRange=60):
-        graphOptObj = neoDataGraphOpt()
-        wvOptObj = wordVecOpt(w2vModelPath)
-        
+        graphOptObj = NeoDataGraphOpt()
+        w2vOptObj = WordVecOpt(w2vModelPath)     
         print('ready to build semantic graph!')
         
         nounNodes = self.createBasicEmtityNodes(graphOptObj, allWordList)
@@ -85,7 +83,7 @@ class basicSemanticsGraph(object):
         for i in range(0, len(nounNodes)):
             for j in range(0, len(nounNodes)):
                 if i != j:
-                    adjRelationShip = self.createBasicRelasBtwNodes(wvOptObj, graphOptObj, nounNodes[i], nounNodes[j], topN, edgeThreshold)
+                    adjRelationShip = self.createBasicRelasBtwNodes(w2vOptObj, graphOptObj, nounNodes[i], nounNodes[j], topN, edgeThreshold)
                     if unionCache < unionRange:
                         cacheRelationShips.append(adjRelationShip)
                         print('add relat to cache pool.')

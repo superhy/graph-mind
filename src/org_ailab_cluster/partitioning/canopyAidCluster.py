@@ -6,7 +6,7 @@ Created on 2016年5月13日
 '''
 from org_ailab_tools.math import statisticsMathOpt
 
-class canopyAidCluster(object):
+class CanopyAidCluster(object):
     def __init__(self, T1=None, T2=None):
         self._T1 = T1
         self._T2 = T2

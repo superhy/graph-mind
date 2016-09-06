@@ -8,7 +8,7 @@ Created on 2016年5月9日
 from kohonen import kohonen
 import numpy
 
-from org_ailab_cluster.partitioning.canopyAidCluster import canopyAidCluster
+from org_ailab_cluster.partitioning.canopyAidCluster import CanopyAidCluster
 from org_ailab_tools.math import statisticsMathOpt
 
 
@@ -42,7 +42,7 @@ class KohonenSOM(object):
         ET = kohonen.ExponentialTimeseries
         
         if self._shape == None:
-            N, clusters = canopyAidCluster().aidClust(matrixDic, canopy_t_ratio)
+            N, clusters = CanopyAidCluster().aidClust(matrixDic, canopy_t_ratio)
             
             print('canopy aid-clust res:')
             print('N: ' + str(N))

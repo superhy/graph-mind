@@ -13,13 +13,17 @@ from py2neo.database.auth import authenticate
 from tables.tests.test_basics import NoNodeCacheOpenFile
 
 
-_user = "neo4j"
-_password = "qdhy199148"
+_user = 'neo4j'
+# _password = 'qdhy199148'
+_password = 'b3432'
+# _service_ip = 'localhost:7474'
+_service_ip = '222.201.145.229:7474'
 
-class neoDataGraphOpt(object):
-    def __init__(self, user=_user, password=_password):
+class NeoDataGraphOpt(object):
+    def __init__(self, user=_user, password=_password, service_ip = _service_ip):
         self.user = user;
         self.password = password
+        self.service_ip = service_ip
         self.graph = self.connectGraph()
         self.selector = NodeSelector(self.graph)
                 
@@ -29,8 +33,10 @@ class neoDataGraphOpt(object):
     
     def connectGraph(self):
         # graph = Graph(user = self.user, password = self.password)
-        authenticate("localhost:7474", self.user, self.password)
-        graph = Graph("http://localhost:7474/db/data/")
+        authenticate(self.service_ip, self.user, self.password)
+        graph = Graph('http://%s/db/data/' % self.service_ip)
+#         authenticate("localhost:7474", self.user, self.password)
+#         graph = Graph("http://localhost:7474/db/data/")
         
         return graph
         
@@ -420,7 +426,7 @@ if __name__ == '__main__':
     
  
     #初始化,输入数据库帐号密码
-    neoObj = neoDataGraphOpt("neo4j","qdhy199148")
+    neoObj = NeoDataGraphOpt("neo4j","qdhy199148")
 #     #创建节点,返回节点
 #     node1=neoObj.createNode([u"Person"], {u'name':u'Jerr'})
 #     #把节点、关系、子图加入数据库，自动过滤掉已存在的，无返回值
@@ -447,8 +453,7 @@ if __name__ == '__main__':
 #     neoObj.addLabelsInNode(node1,*['star'])
 #     
 #     #删除关系，无返回
-#     #neoObj.deleteRelationshipsFromDB(rel)
-#     
+#     #neoObj.deleteRelationshipsFroNeoDataGraphOpt 
 #     #删除节点，无返回
 #     #neoObj.deleteNodeFromDB(node1)
     #输入文件地址，开始节点名，终止节点名，两者之间的关系名

@@ -10,7 +10,7 @@ from jieba import posseg
 import jieba
 
 
-class wordSeg(object):
+class WordSeg(object):
     '''
     add user diy words dict
     '''
@@ -76,7 +76,7 @@ class wordSeg(object):
         return segParaList
 
 if __name__ == '__main__':
-    mainObj = wordSeg('e', [])
+    mainObj = WordSeg('e')
     
     segRes = mainObj.singleSegEngine('习近平总书记表扬小明，小明硕士毕业于中国科学院计算所，后在日本京都大学深造')
 #     segRes2 = mainObj.singlePosSegEngine('习近平总书记在北京市朝阳区表扬小明，小明硕士毕业于中国科学院计算所，后在日本京都大学深造') 

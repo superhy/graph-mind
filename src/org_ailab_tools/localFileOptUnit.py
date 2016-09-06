@@ -12,7 +12,7 @@ import types
 from gensim.models.word2vec import LineSentence
 from jieba import posseg
 
-from org_ailab_seg.extraSegOpt import extraSegOpt
+from org_ailab_seg.extraSegOpt import ExtraSegOpt
 from org_ailab_tools.cache import ROOT_PATH
 
 
@@ -39,7 +39,7 @@ def listAllFilePathInDirectory(dirPath):
     '''
     list all file_path in a directory from dir folder
     '''
-    extraSegOpt().reLoadEncoding()
+    ExtraSegOpt().reLoadEncoding()
     
     loadedFilesPath = []
     files = os.listdir(dirPath)
@@ -66,7 +66,7 @@ def folderFilesNameEntities(corpusDirPath, userDictPath=None, dictRewrite=False)
     get entities from folder files' names
     write these entities into user_dict for jieba analyser(chose)
     '''
-    extraSegOpt().reLoadEncoding()
+    ExtraSegOpt().reLoadEncoding()
     
     entities = []
     files = os.listdir(corpusDirPath)

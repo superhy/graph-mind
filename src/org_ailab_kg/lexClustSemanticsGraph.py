@@ -7,13 +7,12 @@ Created on 2016年5月16日
 
 import numpy
 
-from orgorg_ailab_cluster.networksMNetWork import KohonenSOM
-from org_ailab_data.graph.neoDataGraphOpt import neoDataGraphOpt
-from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
-from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
+from org_ailab_cluster.networks.SOMNetWork import KohonenSOM
+from org_ailab_data.graph.neoDataGraphOpt import NeoDataGraphOpt
+from org_ailab_seg.word2vec.wordTypeFilter import WordTypeFilter
+from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 
-
-class lexClustSemanticsGraph(object):
+class LexClustSemanticsGraph(object):
     '''
     TODO
     设置基类，继承，统一管理共享参数，如：是否直接传入实体词列表等等
@@ -29,7 +28,7 @@ class lexClustSemanticsGraph(object):
         for word in wordList:
             wordPair = [word, 0.0]
             wordPairs.append(wordPair)
-        entityWordPairs = wordTypeFilter().entityWordFilter(wordPairs)
+        entityWordPairs = WordTypeFilter().enWordTypeFilter(wordPairs)
         
         # run the word cluster
         wordMatrixDic = {}
@@ -85,7 +84,7 @@ class lexClustSemanticsGraph(object):
         print(str(nodeWordList1) + ' ' + str(nodeWordList2))
         
         relatCopeRes = wvOptObj.copeMSVbtwWordListsFromFile(nodeWordList1, nodeWordList2, topN_rev=topN_rev, topN=topN)
-        adjWordProbList = wordTypeFilter().qualifyWordFilter(relatCopeRes)
+        adjWordProbList = WordTypeFilter().quWordTypeFilterr(relatCopeRes)
         relatLabel = u'lex-semantic'
         relatLabelDic = {}
         maxRelatProb = 0.0
@@ -114,19 +113,18 @@ class lexClustSemanticsGraph(object):
         neoOptObj.constructSubGraphInDB(subGraph)
     
     def buildLexGroupSemGraph(self, w2vModelPath, allWordList, lex_cluster=None, vec_z_ratio=100, canopy_t_ratio=3, topN_rev=20, topN=20, edgeThreshold=0.2, unionRange=60):
-        graphOptObj = neoDataGraphOpt()
-        wvOptObj = wordVecOpt(w2vModelPath)
-        
+        graphOptObj = NeoDataGraphOpt()
+        w2vOptObj = WordVecOpt(w2vModelPath)    
         print('ready to build lex-group semantic graph!')
         
-        lexGroupNodes = self.createLexClustEmtityNodes(graphOptObj, wvOptObj, allWordList, cluster=lex_cluster, vec_z_ratio=vec_z_ratio, canopy_t_ratio=canopy_t_ratio)
+        lexGroupNodes = self.createLexClustEmtityNodes(graphOptObj, w2vOptObj, allWordList, cluster=lex_cluster, vec_z_ratio=vec_z_ratio, canopy_t_ratio=canopy_t_ratio)
         cacheRelationShips = []
         unionCache = 0
         graphRelatSize = 0
         for i in range(0, len(lexGroupNodes)):
             for j in range(0, len(lexGroupNodes)):
                 if i != j:
-                    adjRelationShip = self.createLexGroupRelasBtwNodes(wvOptObj, graphOptObj, lexGroupNodes[i], lexGroupNodes[j], topN_rev, topN, edgeThreshold)
+                    adjRelationShip = self.createLexGroupRelasBtwNodes(w2vOptObj, graphOptObj, lexGroupNodes[i], lexGroupNodes[j], topN_rev, topN, edgeThreshold)
                     if unionCache < unionRange:
                         cacheRelationShips.append(adjRelationShip)
                         print('add lex-group relat to cache pool.')

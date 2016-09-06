@@ -13,7 +13,7 @@ from py2neo.database.auth import authenticate
 _user = "neo4j"
 _password = "qdhy199148"
 
-class neoDataGraphOpt(object):
+class NeoDataGraphOpt(object):
     def __init__(self, user=_user, password=_password):
         self.user = user;
         self.password = password
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     
     # all test
     
-    neoObj = neoDataGraphOpt()
+    neoObj = NeoDataGraphOpt()
 #     relat = neoObj.combNodeAndRelats("teacher", "huangqingsong", "student", "huyang", "teach")
 #     print(relat)
     

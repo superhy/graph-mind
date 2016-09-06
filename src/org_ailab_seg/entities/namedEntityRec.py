@@ -6,13 +6,14 @@ Created on 2016年6月5日
 @author: hylovedd
 '''
 
-from org_ailab_seg.wordSeg import wordSeg
+from org_ailab_seg.wordSeg import WordSeg
 from org_ailab_seg.entities import nerStatisticalOpt
-from org_ailab_classifier.prob_graph.hmm import hiddenMarkov
+from org_ailab_classifier.prob_graph.hmm import HiddenMarkov
+
 from json.encoder import JSONEncoder
 from json.decoder import JSONDecoder
 
-class tagPOSSeqModel(object):
+class TagPOSSeqModel(object):
     def __init__(self, tagStartP, tagPOSEmitP, tagHiddens, tag2tagTransP):
         self._tagStartP = tagStartP
         self._tagPOSEmitP = tagPOSEmitP
@@ -33,8 +34,8 @@ class tagPOSSeqModel(object):
                 modelWriteObj = open(modelDiskPath, 'w')
                 
                 modelLines = []
-                start_p_line = 'start_p@' + JSONEncoder().encode(tagPOSSeqModel._tagStartP)
-                emit_p_line = 'emit_p@' + JSONEncoder().encode(tagPOSSeqModel._tagPOSEmitP)
+                start_p_line = 'start_p@' + JSONEncoder().encode(model._tagStartP)
+                emit_p_line = 'emit_p@' + JSONEncoder().encode(model._tagPOSEmitP)
                 tag_states = 'tag_states@' + JSONEncoder().encode(model._tagHiddens)
                 trans_p = 'trans_p@' + JSONEncoder().encode(model._tag2tagTransP)
                 modelLines.append(start_p_line)
@@ -63,12 +64,13 @@ class tagPOSSeqModel(object):
         if None in modelCntDic.values():
             print('model with some errors, please check!')
             return None
+        modelReadObj.close()
         
         model = self.__init__(modelCntDic['start_p'], modelCntDic['emit_p'], modelCntDic['tag_states'], modelCntDic['trans_p'])
         
         return model
 
-class ner(object):
+class Ner(object):
     def __init__(self, trainTextDir=None, NEWordToupleFilePath=None):
         self._trainTextDir = trainTextDir
         self._NEWordDicPath = NEWordToupleFilePath
@@ -114,7 +116,7 @@ class ner(object):
     def transTagSentencesIntoRole(self, tagTrainSentenceList, preWinSize=2, latWinSize=2):
         '''
         '''
-        wordSegObj = wordSeg('e', [])
+        wordSegObj = WordSeg('e', [])
         
         tagMatrix = []
         for sentence in tagTrainSentenceList:
@@ -163,7 +165,7 @@ class ner(object):
         '''
                 
 if __name__ == '__main__':  
-    nerObj = ner()
+    nerObj = Ner()
     
     s = '习近平总书记表扬小明，小明硕士毕业于<START:pos>中国科学院计算所<END>，后在<START:pos>日本京都大学<END>深造'
     s2 = '<START:pos>肯尼亚政府<END>表示支持<START:pos>中国<END>在<START:pos>南海问题<END>上的立场'
@@ -179,7 +181,7 @@ if __name__ == '__main__':
 #     print(len('习近平'.decode('utf-8')))
 #     print(u's1_len: ' + str(len(s1)))
 #     
-#     parts = ner().interceptEntityPart(s)
+#     parts = Ner().interceptEntityPart(s)
 #     for part in parts:
 #         print(part[0] + u' ' + part[1])
     
@@ -192,7 +194,7 @@ if __name__ == '__main__':
         print(part[0] + u':' + part[1] + u' '),
     print(u'')
     
-    tagM = ner().transTagSentencesIntoRole(sentences)
+    tagM = Ner().transTagSentencesIntoRole(sentences)
     for vec in tagM:
         for element in vec:
             print(element[0] + u': '),

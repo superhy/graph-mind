@@ -4,12 +4,12 @@ Created on 2016年4月20日
 
 @author: superhy
 '''
-from org_ailab_seg.extraSegOpt import extraSegOpt
+from org_ailab_seg.extraSegOpt import ExtraSegOpt
 from org_ailab_tools.cache import ROOT_PATH
 
 
 def countWordPos():
-    extraSegOpt().reLoadEncoding()
+    ExtraSegOpt().reLoadEncoding()
     
     segFile = open(ROOT_PATH.root_win64 + 'weibo_seg\\segNLPCC2014.txt', 'r')
     segLines = segFile.readlines()

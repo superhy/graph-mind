@@ -6,7 +6,7 @@ Created on 2016年8月8日
 @author: hylovedd
 '''
 from org_ailab_kg import medGraphSupOpt
-from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
+from org_ailab_seg.word2vec.wordTypeFilter import WordTypeFilter
 from org_ailab_tools.cache import ROOT_PATH
 
 
@@ -20,8 +20,8 @@ def testCrossLinkedWordsPrecess():
     # get the source scan tuples result, to pure the mid scan result
 #     pureTuples = findLinkedWords(modelStoragePath, entityStr, sourceEntities, pureScanRange)
     sourceTuples = medGraphSupOpt.seekSimWords(modelStoragePath, entities=[entityStr], pureCleanWords=[], scanRange=10)
-    supTuples = wordTypeFilter().ditInOutWordFilter(sourceTuples, sourceEntities, 'out')
-    cleanTuples = wordTypeFilter().ditInOutWordFilter(sourceTuples, sourceEntities, 'in')
+    supTuples = WordTypeFilter().ditInOutWordFilter(sourceTuples, sourceEntities, 'out')
+    cleanTuples = WordTypeFilter().ditInOutWordFilter(sourceTuples, sourceEntities, 'in')
     pureSupWords = [entityStr]
     pureSupWords.extend(e[0] for e in supTuples)
     pureCleanWords = []

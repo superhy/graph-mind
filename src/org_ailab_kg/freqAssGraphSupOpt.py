@@ -7,19 +7,18 @@ Created on 2016年7月26日
 '''
 
 from org_ailab_cluster.association.apriori import aprioriAss
-from org_ailab_seg.word2vec.wordVecOpt import wordVecOpt
+from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 from org_ailab_tools.cache import ROOT_PATH
-from org_ailab_seg.word2vec.wordTypeFilter import wordTypeFilter
-
+from org_ailab_seg.word2vec.wordTypeFilter import WordTypeFilter
 
 def prodFieldW2VModel(modelStoragePath, corpusFilePath, dimension_size=100):
-    wordVecOptObj = wordVecOpt(modelStoragePath, size=dimension_size)
+    wordVecOptObj = WordVecOpt(modelStoragePath, size=dimension_size)
     model = wordVecOptObj.initTrainWord2VecModel(corpusFilePath)
     
     return wordVecOptObj, model
 
 def loadW2VModelFromDisk(modelStoragePath):
-    wordVecOptObj = wordVecOpt(modelStoragePath)
+    wordVecOptObj = WordVecOpt(modelStoragePath)
     model = wordVecOptObj.loadModelfromFile(modelStoragePath)
     
     return wordVecOptObj, model
@@ -28,6 +27,7 @@ def loadEntitiesFromDict(dictPath):
     fr = open(dictPath, 'r')
     entities = []
     entities.extend(line[:line.find('\n')].replace(' ', '/').decode('utf-8') for line in fr)  # clean the newline character
+    fr.close()
     
     return entities
 
@@ -67,7 +67,7 @@ def freqDataSetFromW2V(modelStoragePath, entities, scanTopN):
             print(entity + ' not in vocab!')
             continue
         entMSimList = wordVecOptObj.queryMostSimilarWordVec(w2vModel, entity, topN=scanTopN*5)
-        entMSimList = wordTypeFilter().entityWordFilter(entMSimList, scanRange=scanTopN)
+        entMSimList = WordTypeFilter().entityWordFilter(entMSimList, scanRange=scanTopN)
         
         freqTuple = (entity,)
         freqProbScoreSum = 0.0
@@ -104,9 +104,9 @@ if __name__ == '__main__':
     modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
     corpusFilePath = ROOT_PATH.root_win64 + u'med_seg\\5医学综合\\'
     
-    wordVecOptObj, w2vModel = prodFieldW2VModel(modelStoragePath, corpusFilePath, dimension_size=150)
+#     wordVecOptObj, w2vModel = prodFieldW2VModel(modelStoragePath, corpusFilePath, dimension_size=150)
 
-#     wordVecOptObj, w2vModel = loadW2VModelFromDisk(modelStoragePath)
+    wordVecOptObj, w2vModel = loadW2VModelFromDisk(modelStoragePath)
     
     print(u'train time: ' + str(w2vModel.total_train_time))
     print(u'model dimensionality size: ' + str(w2vModel.vector_size))

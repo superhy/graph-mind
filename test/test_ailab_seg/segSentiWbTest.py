@@ -9,9 +9,8 @@ from xml.etree import ElementTree
 
 from bs4 import BeautifulSoup
 
-from org_ailab_seg.extraSegOpt import extraSegOpt
-from org_ailab_seg.wordSeg import wordSeg
-
+from org_ailab_seg.extraSegOpt import ExtraSegOpt
+from org_ailab_seg.wordSeg import WordSeg
 
 class segSentiWbTest:
     # analysis nlpcc2014 dateset
@@ -70,9 +69,9 @@ if __name__ == '__main__':
     posSentences, negSentences = segObj.fetchXMLText()
     allSentences = posSentences
     allSentences.extend(negSentences)
-    wordSegObj = wordSeg('a', allSentences)
+    wordSegObj = WordSeg('a', allSentences)
     segParaList = wordSegObj.serialSeger(True)
-    extraSegOptObj = extraSegOpt()
+    extraSegOptObj = ExtraSegOpt()
     avgWordsNum = extraSegOptObj.conutAvgWordsNum(segParaList)
     
     print(avgWordsNum)

@@ -9,21 +9,20 @@ Created on 2016年3月30日
 from gensim.models.word2vec import LineSentence
 
 from org_ailab_tools.cache import WORD_POS
-from test_ailab_seg.segSentiWbTest import segSentiWbTest
 
 
 _entityPosTags = WORD_POS.noun
 _qualifyPosTags = WORD_POS.place + WORD_POS.verb + WORD_POS.adj + WORD_POS.dist + WORD_POS.adv
 
-class wordTypeFilter(object):
+class WordTypeFilter(object):
     
     def entityWordFilter(self, wordProbPairList, entityPosTags=_entityPosTags, scanRange=None):
         '''
         (using Chinese notes)
-        找出分词结果形成的词库中所有的名词性词汇（准备作为实体，图中的节点）
-        传入所有的分词结果以及生成概率对，以列表数组的方式传入
-        返回的是一个数组，数组中是过滤得到的名词
-        每个过滤结果的形式为：词/词性
+        # 找出分词结果形成的词库中所有的名词性词汇（准备作为实体，图中的节点）
+        # 传入所有的分词结果以及生成概率对，以列表数组的方式传入
+        # 返回的是一个数组，数组中是过滤得到的名词
+        # 每个过滤结果的形式为：词/词性
         '''
         entityWordPairs = []
         for wordPair in wordProbPairList:
@@ -46,10 +45,10 @@ class wordTypeFilter(object):
     def qualifyWordFilter(self, wordProbPairList, qualifyPosTags=_qualifyPosTags):
         '''
         (using Chinese notes)
-        找出词向量关联映射对中所有的非名词性词汇（准备作为修饰性关系词，图中的边元素）
-        传入词向量关联映射对，以二维列表数组的方式传入
-        返回的同样是字典数组，数组中是过滤得到的 修饰词:概率 映射对
-        修饰词的形式是 词/词性 组合
+        # 找出词向量关联映射对中所有的非名词性词汇（准备作为修饰性关系词，图中的边元素）
+        # 传入词向量关联映射对，以二维列表数组的方式传入
+        # 返回的同样是字典数组，数组中是过滤得到的 修饰词:概率 映射对
+        # 修饰词的形式是 词/词性 组合
         '''
         qualifyWordPairs = []
         for wordPair in wordProbPairList:
@@ -69,7 +68,7 @@ class wordTypeFilter(object):
     def diyWordFilter(self, wordProbPairList, filterPosTags):
         '''
         (using Chinese notes)
-        自定义词过滤器，自我传入想保留的词性标签
+        # 自定义词过滤器，自我传入想保留的词性标签
         '''
         filterWordPairs = []
         for wordPair in wordProbPairList:
@@ -117,6 +116,8 @@ class wordTypeFilter(object):
     def collectAllWordsFromSegFile(self, segFilePath):
         segFile = open(segFilePath, u'r')
         segSetences = LineSentence(segFile)
+        segFile.close()
+        
         return self.collectAllWordsFromSegSentences(segSetences)
 
 if __name__ == '__main__':
