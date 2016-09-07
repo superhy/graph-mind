@@ -8,7 +8,7 @@ Created on 2016年8月19日
 from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 import numpy
 
-from keras.models import Sequential
+from keras.models import Sequential, model_from_json
 from keras.layers.convolutional import Convolution1D, MaxPooling1D
 from keras.layers.recurrent import LSTM, GRU
 from keras.layers.core import Dropout, Dense, Activation, Flatten
@@ -22,7 +22,7 @@ class NeuralLayerClassifier(object):
         # load gensim word vector model from file
         wordVecObj = WordVecOpt(modelPath=gensimModelPath)
         w2vModel = wordVecObj.loadModelfromFile(gensimModelPath)
-        w2vVocab = w2vModel.vocab # pre-load the vocabulary in w2v-model
+        w2vVocab = w2vModel.vocab  # pre-load the vocabulary in w2v-model
         
         # produce train texts' 2D-matrix numpy-array
         trainMatList = []
@@ -40,7 +40,7 @@ class NeuralLayerClassifier(object):
                     textMatrix[i] = numpy.asarray(wordGensimVector, dtype='float32')
             trainMatList.append(textMatrix)
         
-        del w2vVocab # delete vocabulary to save the memory space
+        del w2vVocab  # delete vocabulary to save the memory space
         
         x_data = numpy.asarray(trainMatList)
         # produce train labels' 1D-vector numpy-array
@@ -152,6 +152,17 @@ class NeuralLayerClassifier(object):
         
         return model
     
+    def layerClassifyRecompile(self, model):
+        '''
+        '''
+        loss = 'binary_crossentropy'
+        optimizer = 'adam' 
+        metrics = ['accuracy']
+        
+        model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
+        
+        return model
+    
     def layerClassifyPredict(self, model, x_test):
         '''
         '''
@@ -166,22 +177,59 @@ class NeuralLayerClassifier(object):
         '''
         '''
         batch_size = 32
-        score = model.evaluate(x_test, y_test, batch_size = batch_size)
+        score = model.evaluate(x_test, y_test, batch_size=batch_size)
 #         print('\nmodel score params： ' + str(model.metrics_names))
         
         return score
     
     def modelPersistentStorage(self, model, storeFilePath):
         '''
-        use yaml file to store the model's framework (.yml)
+        use json file to store the model's framework (.json)
         use hdf5 file to store the model's data (.h5)
-        storeFilePath must be with .yml or nothing(just filename)
+        storeFilePath must be with .json or nothing(just filename)
         
-        when store the .yml framework to storeFilePath, also create/store 
+        when store the .json framework to storeFilePath, also create/store 
         the .h5 file on same path automatically
-        .yml and .h5 file have same filename
+        .json and .h5 file have same filename
         '''
+        storeFileName = storeFilePath
+        if storeFilePath.find('.json') != -1:
+            storeFileName = storeFilePath[:storeFilePath.find('.json')]
+        storeDataPath = storeFileName + '.h5'
+        storeFramePath = storeFileName + '.json'
         
+        frameFile = open(storeFramePath, 'w')
+        json_str = model.to_json()
+        frameFile.write(json_str)  # save model's framework file
+        frameFile.close()
+        model.save_weights(storeDataPath, overwrite=True)  # save model's data file
+        
+        return storeFramePath, storeDataPath
+    
+    def loadStoredModel(self, storeFilePath, recompile=False):
+        '''
+        note same as previous function
+        if u just use the model to predict, you need not to recompile the model
+        if u want to evaluate the model, u should set the parameter: recompile as True
+        '''
+        storeFileName = storeFilePath
+        if storeFilePath.find('.json') != -1:
+            storeFileName = storeFilePath[:storeFilePath.find('.json')]
+        storeDataPath = storeFileName + '.h5'
+        storeFramePath = storeFileName + '.json'
+        
+        frameFile = open(storeFramePath, 'r')
+#         yaml_str = frameFile.readline()
+        json_str = frameFile.readline()
+#         print(json_str)
+        model = model_from_json(json_str)
+        if recompile == True:
+            model = self.layerClassifyRecompile(model) # if need to recompile
+#         print(model.to_json())
+        model.load_weights(storeDataPath)
+        frameFile.close()
+        
+        return model
 
 if __name__ == '__main__':
     

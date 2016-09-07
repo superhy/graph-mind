@@ -101,7 +101,7 @@ def aprioriAssFromEntities(entFreqSetDic, MinSupport, MinConf, rulesStorePath=No
     return assRules
     
 if __name__ == '__main__':
-    modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    modelStoragePath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     corpusFilePath = ROOT_PATH.root_win64 + u'med_seg\\5医学综合\\'
     
 #     wordVecOptObj, w2vModel = prodFieldW2VModel(modelStoragePath, corpusFilePath, dimension_size=150)

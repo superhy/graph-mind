@@ -9,7 +9,7 @@ Created on 2016年8月18日
 import time
 
 from org_ailab_classifier.networks.layerClassifier import NeuralLayerClassifier
-from org_ailab_kg.medGraphMining import MedGraphMining
+from org_ailab_kg.medGraphMiningOpt import MedGraphMining
 from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 from org_ailab_seg.wordSeg import WordSeg
 from org_ailab_tools.cache import ROOT_PATH
@@ -65,7 +65,7 @@ def testLinksRepsToEmbeddingData():
     trainLinksFilePath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_train_links1-1200.txt'
     textWordsList, maxTextLength, labelList = medMiningObj.loadLinksReps(trainLinksFilePath)
     
-    gensimModelPath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    gensimModelPath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     x_data, y_data = layerObj.preTextEmbeddingProcess(gensimModelPath, textWordsList, maxTextLength, labelList)
     
     load_end = time.clock()
@@ -78,7 +78,7 @@ def testLinksRepsToEmbeddingData():
 
 def testClassifyLinks():
     medMiningObj = MedGraphMining()
-    gensimModelPath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    gensimModelPath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     trainLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_test_links1201-1500.txt'
     
@@ -91,7 +91,7 @@ def testClassifyLinks():
     return classes, proba
         
 def printLinksClassifyRes(testLinksDataPath, classes, proba):
-    testDataFile = open(testLinksDataPath)
+    testDataFile = open(testLinksDataPath, 'r')
     links = []
     links.extend(line[:line.find('{')] for line in testDataFile.readlines())
     
@@ -102,7 +102,7 @@ def printLinksClassifyRes(testLinksDataPath, classes, proba):
         
 def testEvaluateLinksClassify():
     medMiningObj = MedGraphMining()
-    gensimModelPath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    gensimModelPath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     trainLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_test_links1201-1500.txt'
     
@@ -110,22 +110,75 @@ def testEvaluateLinksClassify():
     score = medMiningObj.evaluateLinksClassifier_file(layerModel, gensimModelPath, testLinksDataPath)
     
     print(score)
+    
+def testSaveLinksClassifier():
+    medMiningObj = MedGraphMining()
+    layerObj = NeuralLayerClassifier()
+    gensimModelPath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
+    trainLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_train_links1-1200.txt'
+    testLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_test_links1201-1500.txt'
+    
+    storeFilePath = ROOT_PATH.root_win64 + u'model\\keras\\links(sc2bz)_classifier_cnnlstm2'
+    
+    medMiningObj.trainLinksClassifier_file(gensimModelPath,
+                                           trainLinksDataPath,
+                                           validation_ratio=0.15,
+                                           storeFilePath=storeFilePath)
+    
+def testLoadLinksClassifier():
+    medMiningObj = MedGraphMining()
+    layerObj = NeuralLayerClassifier()
+    gensimModelPath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
+    trainLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_train_links1-1200.txt'
+    testLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_test_links1201-1500.txt'
+    
+    storeFilePath = ROOT_PATH.root_win64 + u'model\\keras\\links(sc2bz)_classifier_cnnlstm2'
+    
+    layerModel = layerObj.loadStoredModel(storeFilePath, recompile=True)
+#     print(layerModel.to_json())
+    #===========================================================================
+    # classes, proba = medMiningObj.testLinksClasses_file(layerModel, gensimModelPath, testLinksDataPath)
+    # 
+    # return classes, proba
+    #===========================================================================
+    
+    score = medMiningObj.evaluateLinksClassifier_file(layerModel, gensimModelPath, testLinksDataPath)
+    print(score)
 
 if __name__ == '__main__':
+    '''
+    test find related bingzheng from patient's text
+    '''
 #     testFindRelatBzFromPatient()
 #     compMaxTextLength()
 #     testLoadLinksReps()
 #     testLinksRepsToEmbeddingData()
     
     # load gensim word vector model from file
-#     gensimModelPath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+#     gensimModelPath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
 #     wordVecObj = WordVecOpt(modelPath=gensimModelPath)
 #     w2vModel = wordVecObj.loadModelfromFile(gensimModelPath)
 
+    '''
+    test relation classify from shicai to bingzheng
+    give the classify result
+    '''
 #     classes, proba = testClassifyLinks()
 #     
 #     testLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_test_links1000-1500.txt'
 #     printLinksClassifyRes(testLinksDataPath, classes, proba)
     
-    testEvaluateLinksClassify()
+    '''
+    test evaluate the relation classify result from shicai to bingzheng
+    '''
+#     testEvaluateLinksClassify()
     
+    '''
+    test save model on disk
+    then load it from disk and use it to classify
+    '''
+    testSaveLinksClassifier()
+#     classes, proba = testLoadLinksClassifier()
+    testLoadLinksClassifier()
+#     testLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_test_links1201-1500.txt'
+#     printLinksClassifyRes(testLinksDataPath, classes, proba)    

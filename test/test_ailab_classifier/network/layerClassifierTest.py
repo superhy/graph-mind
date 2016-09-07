@@ -7,6 +7,7 @@ Created on 2016年8月26日
 '''
 import numpy
 from org_ailab_classifier.networks.layerClassifier import NeuralLayerClassifier
+from org_ailab_tools.cache import ROOT_PATH
 
 
 def generateTrainMatData(size, length, dim, lab_num):
@@ -36,6 +37,25 @@ def testCNNClassify(x_train, y_train, input_shape, x_test, x_evaluate=None, y_ev
     
     print(classes)
     print(proba)
+    
+def testStorageModel(x_train, y_train, input_shape, x_evaluate=None, y_evaluate=None):
+    layerObj = NeuralLayerClassifier()
+    
+    storeFilePath = ROOT_PATH.root_win64 + u'model\\keras\\testCNNLSTM'
+    model = layerObj.CNNPoolingLSTMClassify(x_train, y_train, input_shape, x_evaluate, y_evaluate)
+    layerObj.modelPersistentStorage(model, storeFilePath)
+    
+def testLoadStoredModel(x_test):
+    layerObj = NeuralLayerClassifier()
+    
+    storeFilePath = ROOT_PATH.root_win64 + u'model\\keras\\testCNNLSTM'
+    model = layerObj.loadStoredModel(storeFilePath)
+    classes, proba = layerObj.layerClassifyPredict(model, x_test)
+    
+    print(model.to_json())
+    
+    print(classes)
+    print(proba)
 
 if __name__ == '__main__':
     
@@ -49,6 +69,9 @@ if __name__ == '__main__':
 #     print(x_test)
 
 #     testCNNPoolingLSTMClassify(x_train, y_train, input_shape, x_test, x_evaluate=x_evaluate, y_evaluate=y_evaluate)
-    testCNNPoolingLSTMClassify(x_train, y_train, input_shape, x_test)
+#     testCNNPoolingLSTMClassify(x_train, y_train, input_shape, x_test)
 #     testCNNClassify(x_train, y_train, input_shape, x_test, x_evaluate=x_evaluate, y_evaluate=y_evaluate)
 #     testCNNClassify(x_train, y_train, input_shape, x_test)
+
+    testStorageModel(x_train, y_train, input_shape, x_evaluate, y_evaluate)
+    testLoadStoredModel(x_test)

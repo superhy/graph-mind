@@ -114,7 +114,7 @@ class WordTypeFilter(object):
         return allWordList
     
     def collectAllWordsFromSegFile(self, segFilePath):
-        segFile = open(segFilePath, u'r')
+        segFile = open(segFilePath, 'r')
         segSetences = LineSentence(segFile)
         segFile.close()
         

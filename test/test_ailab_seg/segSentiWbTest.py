@@ -18,7 +18,7 @@ class segSentiWbTest:
         self.filePath = filePath
     
     def fetchParaText(self):
-        fileObj = open(self.filePath)
+        fileObj = open(self.filePath, 'r')
         paraTextList = []
         try:
             fileAllText = fileObj.read()

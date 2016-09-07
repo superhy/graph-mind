@@ -12,7 +12,7 @@ from org_ailab_tools.cache import ROOT_PATH
 
 def testTrainWord2VecModel():
     corpusFilePath = ROOT_PATH.root_win64 + 'weibo_seg\\segNLPCC2014.txt'
-    modelPath = ROOT_PATH.root_win64 + 'word2vec\\NLPCC2014word2vecModel.vector'
+    modelPath = ROOT_PATH.root_win64 + 'model\\word2vec\\NLPCC2014word2vecModel.vector'
     wordVecOptObj = WordVecOpt(modelPath)
     model = wordVecOptObj.initTrainWord2VecModel(corpusFilePath)
     print(u'process corpus num :' + str(model.corpus_count))
@@ -23,7 +23,7 @@ def testTrainWord2VecModel():
         print e[0], e[1]
     
 def testQueryWordVec():
-    modelPath = ROOT_PATH.root_win64 + 'word2vec\\NLPCC2014word2vecModel.vector'
+    modelPath = ROOT_PATH.root_win64 + 'model\\word2vec\\NLPCC2014word2vecModel.vector'
     wordVecOptObj = WordVecOpt(modelPath)
     wordStr = u'韩寒/nr'
     print(u'Load model then word vec object: ' + wordStr)

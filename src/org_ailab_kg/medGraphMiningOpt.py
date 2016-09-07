@@ -17,7 +17,7 @@ from org_ailab_tools.cache import ROOT_PATH
 
 
 
-_medW2VModelPath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+_medW2VModelPath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
 # _scDictPath = ROOT_PATH.seg_dictwin64 + u'jieba_shicai.txt'
 # _bzDictPath = ROOT_PATH.seg_dictwin64 + u'jieba_yixuebaike.txt'
 _medBZEntities = []
@@ -101,7 +101,7 @@ class MedGraphMining(object):
         '''
         loadType is 'test' or 'train'
         '''
-        linksFile = open(linksDataPath)
+        linksFile = open(linksDataPath, 'r')
         
         textWordsList = []
         labelList = []
@@ -130,7 +130,7 @@ class MedGraphMining(object):
         
         return textWordsList, maxTextLength, labelList
     
-    def trainLinksClassifier_file(self, gensimModelPath, trainLinksDataPath, validation_ratio=0.15):
+    def trainLinksClassifier_file(self, gensimModelPath, trainLinksDataPath, validation_ratio=0.15, storeFilePath = None):
         '''
         '''
         layerObj = NeuralLayerClassifier()
@@ -156,6 +156,9 @@ class MedGraphMining(object):
         
         train_end = time.clock()
         print('train model runtime %f s' % (train_end - train_start))
+        # save the model's framework and data on disk
+        if storeFilePath != None:
+            layerObj.modelPersistentStorage(model, storeFilePath)
         
         return model
     

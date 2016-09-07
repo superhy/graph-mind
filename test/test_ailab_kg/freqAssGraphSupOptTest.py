@@ -22,7 +22,7 @@ def testFreqDataSetFromW2V():
     dict_path = ROOT_PATH.seg_dictwin64 + u'jieba_shicai.txt'
     entities = freqAssGraphSupOpt.loadEntitiesFromDict(dict_path)
     
-    modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    modelStoragePath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     entFreqSetDic = freqAssGraphSupOpt.freqDataSetFromW2V(modelStoragePath, entities, scanTopN=5)
     
     for key in entFreqSetDic:
@@ -32,7 +32,7 @@ def testAprioriAssFromEntities():
     dict_path = ROOT_PATH.seg_dictwin64 + u'jieba_shicai2.txt'
     entities = freqAssGraphSupOpt.loadEntitiesFromDict(dict_path)
     
-    modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    modelStoragePath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     entFreqSetDic = freqAssGraphSupOpt.freqDataSetFromW2V(modelStoragePath, entities, scanTopN=10)
     
     rulesCachePath = ROOT_PATH.root_win64 + 'model_cache\\shicai_freqrules.txt=w'
@@ -44,7 +44,7 @@ def testRelationBtwEntities():
     entity1 = u'红枣/n'
     entity2 = u'雪梨/n'
     
-    modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    modelStoragePath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     
     sim = WordVecOpt(modelStoragePath).culSimBtwWVfromFile(entity1, entity2, modelStoragePath)
     print(sim)

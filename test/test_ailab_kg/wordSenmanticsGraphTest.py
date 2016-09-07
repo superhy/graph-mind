@@ -17,7 +17,7 @@ from org_ailab_tools.cache import ROOT_PATH
 
 def createTestW2VModel():
     segFilePath = ROOT_PATH.root_win64 + 'weibo_seg\\segNLPCC2014Lite.txt'
-    w2vModelPath = ROOT_PATH.root_win64 + 'word2vec\\NLPCC2014Liteword2vecModel.vector'
+    w2vModelPath = ROOT_PATH.root_win64 + 'model\\word2vec\\NLPCC2014Liteword2vecModel.vector'
     
     wordVecOptObj = WordVecOpt(w2vModelPath)
     model = wordVecOptObj.initTrainWord2VecModel(segFilePath)
@@ -25,14 +25,14 @@ def createTestW2VModel():
 
 def testBuildBasicSemGraph():
     segFilePath = ROOT_PATH.root_win64 + 'weibo_seg\\segNLPCC2014Lite.txt'
-    w2vModelPath = ROOT_PATH.root_win64 + 'word2vec\\NLPCC2014Liteword2vecModel.vector'
+    w2vModelPath = ROOT_PATH.root_win64 + 'model\\word2vec\\NLPCC2014Liteword2vecModel.vector'
     
     allWordList = WordTypeFilter().collectAllWordsFromSegFile(segFilePath)
     BasicSemanticsGraph().buildBasicSemGraph(w2vModelPath, allWordList, 20, 0.2)
     
 def testBuildLexGroupSemGraph():
     segFilePath = ROOT_PATH.root_win64 + 'weibo_seg\\segNLPCC2014Lite.txt'
-    w2vModelPath = ROOT_PATH.root_win64 + 'word2vec\\NLPCC2014Liteword2vecModel.vector'
+    w2vModelPath = ROOT_PATH.root_win64 + 'model\\word2vec\\NLPCC2014Liteword2vecModel.vector'
     
     allWordList = WordTypeFilter().collectAllWordsFromSegFile(segFilePath)
     LexClustSemanticsGraph().buildLexGroupSemGraph(w2vModelPath, allWordList, vec_z_ratio=1000, canopy_t_ratio=2.05, topN_rev=20, topN=20, edgeThreshold=0.2)

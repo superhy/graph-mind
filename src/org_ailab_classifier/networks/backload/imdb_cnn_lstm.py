@@ -66,15 +66,13 @@ model.add(LSTM(lstm_output_size))
 model.add(Dense(1))
 model.add(Activation('sigmoid'))
 
-#===============================================================================
-# model.compile(loss='binary_crossentropy',
-#               optimizer='adam',
-#               metrics=['accuracy'])
-# 
-# print('Train...')
-# model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch,
-#           validation_data=(X_test, y_test))
-# score, acc = model.evaluate(X_test, y_test, batch_size=batch_size)
-# print('Test score:', score)
-# print('Test accuracy:', acc)
-#===============================================================================
+model.compile(loss='binary_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+ 
+print('Train...')
+model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch,
+          validation_data=(X_test, y_test))
+score, acc = model.evaluate(X_test, y_test, batch_size=batch_size)
+print('Test score:', score)
+print('Test accuracy:', acc)

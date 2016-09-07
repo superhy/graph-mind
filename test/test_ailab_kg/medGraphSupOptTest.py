@@ -14,7 +14,7 @@ def testCrossLinkedWordsPrecess():
     dict_path = ROOT_PATH.seg_dictwin64 + u'jieba_shicai.txt'
     sourceEntities = medGraphSupOpt.loadEntitiesFromDict(dict_path)
     
-    modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    modelStoragePath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     
     entityStr = u'党参/n'
     # get the source scan tuples result, to pure the mid scan result
@@ -38,7 +38,7 @@ def testFindLinkedWords():
     dict_path = ROOT_PATH.seg_dictwin64 + u'jieba_yixuebaike.txt'
     domainEntities = medGraphSupOpt.loadEntitiesFromDict(dict_path)
     
-    modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    modelStoragePath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     
     entityStr = u'肺炎/n'
     simTuples = medGraphSupOpt.findLinkedWords(modelStoragePath, entityStr, domainEntities, scanRange=10)
@@ -52,7 +52,7 @@ def testFindCrossLinkedWords():
     shicai_Entities = medGraphSupOpt.loadEntitiesFromDict(shicai_dict_path)
     yixuebaike_Entities = medGraphSupOpt.loadEntitiesFromDict(yixuebaike_dict_path)
     
-    modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    modelStoragePath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     
     shicaiEntityStr = u'莲子/n'
     tagTuples = medGraphSupOpt.findCrossLinkedWords(modelStoragePath, shicaiEntityStr, shicai_Entities, yixuebaike_Entities, [10, 50, 500])
@@ -67,7 +67,7 @@ def testCollectInDomainLinks():
     shicai_Entities = medGraphSupOpt.loadEntitiesFromDict(shicai_dict_path)
     yixuebaike_Entities = medGraphSupOpt.loadEntitiesFromDict(yixuebaike_dict_path)
     
-    modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    modelStoragePath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     
     linkWriteFileInfo = ROOT_PATH.root_win64 + u'model_cache\\yixuebaike_links.txt=a'
     
@@ -82,7 +82,7 @@ def testCollectCrossDomainLinks():
     shicai_Entities = medGraphSupOpt.loadEntitiesFromDict(shicai_dict_path)
     yixuebaike_Entities = medGraphSupOpt.loadEntitiesFromDict(yixuebaike_dict_path)
     
-    modelStoragePath = ROOT_PATH.root_win64 + u'word2vec\\zongheword2vecModel.vector'
+    modelStoragePath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
     
     linkWriteFileInfo = ROOT_PATH.root_win64 + u'model_cache\\shicai2bingzheng_links.txt=a'
     
