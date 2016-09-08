@@ -99,7 +99,10 @@ class NeuralLayerClassifier(object):
         if x_test is not None and y_test is not None:
             validation_data = (x_test, y_test)
         model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-        model.fit(x=x_train, y=y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_data=validation_data)
+        model.fit(x=x_train, y=y_train,
+                  batch_size=batch_size,
+                  nb_epoch=nb_epoch,
+                  validation_data=validation_data)
         
         return model
     
@@ -148,7 +151,10 @@ class NeuralLayerClassifier(object):
         if x_test is not None and y_test is not None:
             validation_data = (x_test, y_test)
         model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-        model.fit(x=x_train, y=y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_data=validation_data)
+        model.fit(x=x_train, y=y_train,
+                  batch_size=batch_size,
+                  nb_epoch=nb_epoch,
+                  validation_data=validation_data)
         
         return model
     
