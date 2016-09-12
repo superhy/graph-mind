@@ -12,6 +12,7 @@ from keras.models import Sequential, model_from_json
 from keras.layers.convolutional import Convolution1D, MaxPooling1D
 from keras.layers.recurrent import LSTM, GRU
 from keras.layers.core import Dropout, Dense, Activation, Flatten
+from keras.callbacks import EarlyStopping
 
 class NeuralLayerClassifier(object):
     
@@ -50,7 +51,9 @@ class NeuralLayerClassifier(object):
             
         return x_data, y_data
     
-    def CNNClassify(self, x_train, y_train, input_shape, x_test=None, y_test=None):
+    def CNNClassify(self, x_train, y_train,
+                    input_shape,
+                    validation_split=0.15):
         '''
         input_shape is tuple as (cnt_size, word_vec_size)
         '''
@@ -95,18 +98,21 @@ class NeuralLayerClassifier(object):
         model.add(Activation(activation=final_activation))
         
         # complie and train the model
-        validation_data = None
-        if x_test is not None and y_test is not None:
-            validation_data = (x_test, y_test)
+#         validation_data = None
+#         if x_test is not None and y_test is not None:
+#             validation_data = (x_test, y_test)
         model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
         model.fit(x=x_train, y=y_train,
                   batch_size=batch_size,
                   nb_epoch=nb_epoch,
-                  validation_data=validation_data)
+                  validation_split=validation_split)
         
         return model
     
-    def CNNPoolingLSTMClassify(self, x_train, y_train, input_shape, x_test=None, y_test=None):
+    def CNNPoolingLSTMClassify(self, x_train, y_train,
+                               input_shape,
+                               validation_split=0.15,
+                               auto_stop=False):
         '''
         input_shape is tuple as (cnt_size, word_vec_size)
         '''
@@ -120,7 +126,7 @@ class NeuralLayerClassifier(object):
         # set some fixed parameter in MaxPooling layer
         pool_length = 2
         # set some fixed parameter in LSTM layer
-        lstm_output_size = 70
+        lstm_output_size = 64
         # set some fixed parameter in Dropout layer
         dropout_rate = 0.25
         # set some fixed parameter in Activation layer
@@ -128,6 +134,20 @@ class NeuralLayerClassifier(object):
         # set some fixed parameter in training
         batch_size = 32
         nb_epoch = 2
+        
+        #=======================================================================
+        # set callbacks function for auto early stopping
+        # by monitor the loss or val_loss if not change any more
+        #=======================================================================
+        callbacks = []
+        if auto_stop == True:
+            monitor = 'val_loss' if validation_split > 0.0 else 'loss'
+            patience = 2
+            mode = 'min'
+            early_stopping = EarlyStopping(monitor=monitor,
+                                           patience=patience,
+                                           mode=mode)
+            callbacks = [early_stopping]
         
         # produce deep layer model
         model = Sequential()
@@ -147,14 +167,15 @@ class NeuralLayerClassifier(object):
         model.add(Activation(activation=final_activation))
         
         # complie and train the model
-        validation_data = None
-        if x_test is not None and y_test is not None:
-            validation_data = (x_test, y_test)
+#         validation_data = None
+#         if x_test is not None and y_test is not None:
+#             validation_data = (x_test, y_test)
         model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
         model.fit(x=x_train, y=y_train,
                   batch_size=batch_size,
                   nb_epoch=nb_epoch,
-                  validation_data=validation_data)
+                  validation_split=validation_split,
+                  callbacks=callbacks)
         
         return model
     
@@ -230,7 +251,7 @@ class NeuralLayerClassifier(object):
 #         print(json_str)
         model = model_from_json(json_str)
         if recompile == True:
-            model = self.layerClassifyRecompile(model) # if need to recompile
+            model = self.layerClassifyRecompile(model)  # if need to recompile
 #         print(model.to_json())
         model.load_weights(storeDataPath)
         frameFile.close()

@@ -106,7 +106,7 @@ def testEvaluateLinksClassify():
     trainLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_test_links1201-1500.txt'
     
-    layerModel = medMiningObj.trainLinksClassifier_file(gensimModelPath, trainLinksDataPath, validation_ratio=0.15)
+    layerModel = medMiningObj.trainLinksClassifier_file(gensimModelPath, trainLinksDataPath, v_ratio=0.15)
     score = medMiningObj.evaluateLinksClassifier_file(layerModel, gensimModelPath, testLinksDataPath)
     
     print(score)
@@ -118,11 +118,11 @@ def testSaveLinksClassifier():
     trainLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_test_links1201-1500.txt'
     
-    storeFilePath = ROOT_PATH.root_win64 + u'model\\keras\\links(sc2bz)_classifier_cnnlstm2'
+    storeFilePath = ROOT_PATH.root_win64 + u'model\\keras\\links(sc2bz)_classifier_cnnlstmT'
     
     medMiningObj.trainLinksClassifier_file(gensimModelPath,
                                            trainLinksDataPath,
-                                           validation_ratio=0.15,
+                                           v_ratio=0.15,
                                            storeFilePath=storeFilePath)
     
 def testLoadLinksClassifier():
@@ -132,7 +132,7 @@ def testLoadLinksClassifier():
     trainLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_test_links1201-1500.txt'
     
-    storeFilePath = ROOT_PATH.root_win64 + u'model\\keras\\links(sc2bz)_classifier_cnnlstm2'
+    storeFilePath = ROOT_PATH.root_win64 + u'model\\keras\\links(sc2bz)_classifier_cnnlstmE'
     
     layerModel = layerObj.loadStoredModel(storeFilePath, recompile=True)
 #     print(layerModel.to_json())
@@ -177,7 +177,7 @@ if __name__ == '__main__':
     test save model on disk
     then load it from disk and use it to classify
     '''
-    testSaveLinksClassifier()
+#     testSaveLinksClassifier()
 #     classes, proba = testLoadLinksClassifier()
     testLoadLinksClassifier()
 #     testLinksDataPath = ROOT_PATH.root_win64 + u'model_cache\\relation_learning\\shicai2bingzheng_test_links1201-1500.txt'

@@ -130,7 +130,7 @@ class MedGraphMining(object):
         
         return textWordsList, maxTextLength, labelList
     
-    def trainLinksClassifier_file(self, gensimModelPath, trainLinksDataPath, validation_ratio=0.15, storeFilePath = None):
+    def trainLinksClassifier_file(self, gensimModelPath, trainLinksDataPath, v_ratio=0.15, storeFilePath=None):
         '''
         '''
         layerObj = NeuralLayerClassifier()
@@ -138,21 +138,21 @@ class MedGraphMining(object):
         load_start = time.clock()
         
         textWordsList, maxTextLength, labelList = self.loadLinksReps(trainLinksDataPath, loadType='train')
-        x_train, y_train = layerObj.preTextEmbeddingProcess(gensimModelPath, textWordsList, maxTextLength, labelList)
+        x_train, y_train = layerObj.preTextEmbeddingProcess(gensimModelPath,
+                                                            textWordsList,
+                                                            maxTextLength,
+                                                            labelList)
         input_shape = (x_train.shape[1], x_train.shape[2])
-        # split the validation set from x_train
-        valid_b = int(len(x_train) * (1 - validation_ratio))
-        x_validation = x_train[valid_b:]
-        y_validation = y_train[valid_b:]
-        x_train = x_train[:valid_b]
-        y_train = y_train[:valid_b]
         
         load_end = time.clock()
         print('load data runtime %f s' % (load_end - load_start))
         
         train_start = time.clock()
         
-        model = layerObj.CNNPoolingLSTMClassify(x_train, y_train, input_shape, x_test=x_validation, y_test=y_validation)
+        model = layerObj.CNNPoolingLSTMClassify(x_train, y_train,
+                                                input_shape,
+                                                validation_split=v_ratio,
+                                                auto_stop=False)
         
         train_end = time.clock()
         print('train model runtime %f s' % (train_end - train_start))
@@ -170,7 +170,9 @@ class MedGraphMining(object):
         load_start = time.clock()
         
         textWordsList, maxTextLength, labelList = self.loadLinksReps(testLinksDataPath, loadType='test')
-        x_test, y_test = layerObj.preTextEmbeddingProcess(gensimModelPath, textWordsList, maxTextLength)
+        x_test, y_test = layerObj.preTextEmbeddingProcess(gensimModelPath,
+                                                          textWordsList,
+                                                          maxTextLength)
 #         print(x_test)
         
         load_end = time.clock()
@@ -188,7 +190,10 @@ class MedGraphMining(object):
         
         print('loading evaluate data...')
         textWordsList, maxTextLength, labelList = self.loadLinksReps(testLinksDataPath, loadType='train')
-        x_test, y_test = layerObj.preTextEmbeddingProcess(gensimModelPath, textWordsList, maxTextLength, labelList=labelList)
+        x_test, y_test = layerObj.preTextEmbeddingProcess(gensimModelPath,
+                                                          textWordsList,
+                                                          maxTextLength,
+                                                          labelList=labelList)
         
         score = layerObj.layerClassifiyEvaluate(layerModel, x_test, y_test)
         
