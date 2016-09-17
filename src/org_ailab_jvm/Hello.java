@@ -7,6 +7,6 @@ class Hello {
 	}
 	
 	public void printHello(){
-		System.out.println("hello!");
+		System.out.println("hello! Jpype!");
 	}
 }
