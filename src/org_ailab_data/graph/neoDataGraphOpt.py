@@ -10,7 +10,6 @@ Update on 2016年8月10日
 from py2neo import Node, Relationship, NodeSelector, Walkable
 from py2neo.database import Graph, cypher
 from py2neo.database.auth import authenticate
-from tables.tests.test_basics import NoNodeCacheOpenFile
 
 
 _user = 'neo4j'

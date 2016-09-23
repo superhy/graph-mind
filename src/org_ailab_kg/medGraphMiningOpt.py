@@ -16,8 +16,7 @@ from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 from org_ailab_tools.cache import ROOT_PATH
 
 
-
-_medW2VModelPath = ROOT_PATH.root_win64 + u'model\\word2vec\\zongheword2vecModel.vector'
+_medW2VModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'
 # _scDictPath = ROOT_PATH.seg_dictwin64 + u'jieba_shicai.txt'
 # _bzDictPath = ROOT_PATH.seg_dictwin64 + u'jieba_yixuebaike.txt'
 _medBZEntities = []
@@ -152,7 +151,7 @@ class MedGraphMining(object):
         model = layerObj.CNNPoolingLSTMClassify(x_train, y_train,
                                                 input_shape,
                                                 validation_split=v_ratio,
-                                                auto_stop=False)
+                                                auto_stop=True)
         
         train_end = time.clock()
         print('train model runtime %f s' % (train_end - train_start))
