@@ -11,7 +11,9 @@ graph-mind is supported by AI403-lab from Kunming University of Science and Tech
 To ask questions or report issues please contact superhy199148@hotmail.com.
 
 ## Main Authors
-*Qingsong Huang(KMUST)
+Guihua Wen(SCUT)
+
+Qingsong Huang(KMUST)
 
 Yang Hu(SCUT superhy199148@hotmail.com)
 
