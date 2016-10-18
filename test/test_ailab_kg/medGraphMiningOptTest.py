@@ -129,7 +129,7 @@ def testLoadLinksReps():
     medMiningObj = MedGraphMining()
     
     trainLinksFilePath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1000.txt'
-    textWordsList, maxTextLength, labelList = medMiningObj.loadLinksReps(trainLinksFilePath)
+    textWordsList, maxTextLength, labelList = medMiningObj.loadSingleLinksReps(trainLinksFilePath)
     
     for textWords in textWordsList:
         print(' '.join(textWords))
@@ -145,7 +145,7 @@ def testLinksRepsToEmbeddingData():
     load_start = time.clock()
     
     trainLinksFilePath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
-    textWordsList, maxTextLength, labelList = medMiningObj.loadLinksReps(trainLinksFilePath)
+    textWordsList, maxTextLength, labelList = medMiningObj.loadSingleLinksReps(trainLinksFilePath)
     
     gensimModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'
     x_data, y_data = layerObj.preTextEmbeddingProcess(gensimModelPath, textWordsList, maxTextLength, labelList)

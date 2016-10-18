@@ -13,9 +13,73 @@ from keras.layers.convolutional import Convolution1D, MaxPooling1D
 from keras.layers.recurrent import LSTM, GRU
 from keras.layers.core import Dropout, Dense, Activation, Flatten
 from keras.callbacks import EarlyStopping
+from keras.preprocessing.sequence import pad_sequences
 
 class NeuralLayerClassifier(object):
     
+    def prodPreWordEmbedingMat(self, gensimModelPath, wordSequencesList):
+        '''
+        load the pred word embedding matrix
+        '''
+        
+        # load gensim wordvec model
+        wordVecObj = WordVecOpt(modelPath=gensimModelPath)
+        w2vModel = wordVecObj.loadModelfromFile(gensimModelPath)
+        
+        # some fixed parameter
+        EMBEDDING_DIM = w2vModel.vector_size
+        # count all words in word sequence list
+        allWords = []
+        for sequence in wordSequencesList:
+            for word in sequence:
+                if word not in allWords:
+                    allWords.append(word)
+        
+        nb_words = len(allWords)
+        embedding_matrix = numpy.zeros((nb_words + 1, EMBEDDING_DIM))
+        for word, i in allWords:
+            embedding_vector = wordVecObj.getWordVec(w2vModel, word)
+            embedding_matrix[i] = embedding_vector
+            
+        return nb_words, EMBEDDING_DIM, embedding_matrix
+    
+    def prodPadData(self, wordSequencesList, nb_words):
+        '''
+        the order of total word sequence must corresponding to embedding matrix
+        (in this function: wordSequencesList must same as another one in function
+        prodPreWordEmbedingMat)
+        '''
+        
+        MAX_SEQUENCE_LENGTH = int(nb_words / 1000) * 1000
+        pad_data = pad_sequences(wordSequencesList, maxlen=MAX_SEQUENCE_LENGTH)
+        
+        return MAX_SEQUENCE_LENGTH, pad_data
+    
+    def prodTrainTestData(self, pad_data, interBoundary, labelList=[]):
+        '''
+        if interBoundary > 0, intercept the first len_boundary elements from
+        pad_data as x_data, if interBoundary < 0, intercept the last len_boundary
+        elements from pad_data as x_data
+        
+        interBoundary can not be 0
+        '''
+        
+        x_data = None
+        y_data = None
+        
+        if interBoundary == 0:
+            print('interBoundary can not be zero!')
+            return x_data, y_data
+        
+        if interBoundary > 0:
+            x_data = pad_data[:interBoundary]
+        elif interBoundary < 0:
+            x_data = pad_data[len(pad_data) - interBoundary:]
+        if len(labelList) != 0:
+            y_data = numpy.asarray(labelList)
+            
+        return x_data, y_data
+            
     def preTextEmbeddingProcess(self, gensimModelPath, textWordsList, maxTextLength, labelList=[]):
         '''
         '''

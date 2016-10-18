@@ -96,7 +96,7 @@ class MedGraphMining(object):
         
         return confBZResDic
     
-    def loadLinksReps(self, linksDataPath, loadType='test'):
+    def loadSingleLinksReps(self, linksDataPath, loadType='test'):
         '''
         loadType is 'test' or 'train'
         '''
@@ -104,7 +104,7 @@ class MedGraphMining(object):
         
         textWordsList = []
         labelList = []
-        maxTextLength = 0
+        maxTextLength = 0 #TODO: need to delete
         linkDataLines = linksFile.readlines()
         for line in linkDataLines:
             wordReps = line[line.find('{') + 1 : line.find('}')]
@@ -129,6 +129,27 @@ class MedGraphMining(object):
         
         return textWordsList, maxTextLength, labelList
     
+    def loadDetachedLinksReps(self, linksDataPathTuple, testWithLabel=False):
+        '''
+        linkDataPathTuple has 2 elements: (1, 2)
+        1: train data Links path, with labelList
+        2: test data links path, without labelList
+        
+        return: testWordsList, interBoundary, labelListTuple(1,2)
+        '''
+        
+        #TODO: need to delete element maxTextLength
+        
+        trainWordsList, maxTextLength1, trainLabelList = self.loadSingleLinksReps(linksDataPathTuple(0), loadType='train')
+        testLoadType = 'test' if testWithLabel == False else 'train'
+        testWordsList, maxTextLength2, testLabelList = self.loadSingleLinksReps(linksDataPathTuple(1), loadType=testLoadType)
+        
+        textWordsList = trainWordsList + testWordsList
+        interBoundary = len(trainWordsList)
+        labelListTuple = (trainLabelList, testLabelList)
+        
+        return textWordsList, interBoundary, labelListTuple
+    
     def trainLinksClassifier_file(self, gensimModelPath, trainLinksDataPath, v_ratio=0.15, storeFilePath=None):
         '''
         '''
@@ -136,7 +157,7 @@ class MedGraphMining(object):
         
         load_start = time.clock()
         
-        textWordsList, maxTextLength, labelList = self.loadLinksReps(trainLinksDataPath, loadType='train')
+        textWordsList, maxTextLength, labelList = self.loadSingleLinksReps(trainLinksDataPath, loadType='train')
         x_train, y_train = layerObj.preTextEmbeddingProcess(gensimModelPath,
                                                             textWordsList,
                                                             maxTextLength,
@@ -168,7 +189,7 @@ class MedGraphMining(object):
         
         load_start = time.clock()
         
-        textWordsList, maxTextLength, labelList = self.loadLinksReps(testLinksDataPath, loadType='test')
+        textWordsList, maxTextLength, labelList = self.loadSingleLinksReps(testLinksDataPath, loadType='test')
         x_test, y_test = layerObj.preTextEmbeddingProcess(gensimModelPath,
                                                           textWordsList,
                                                           maxTextLength)
@@ -188,7 +209,7 @@ class MedGraphMining(object):
         layerObj = NeuralLayerClassifier()
         
         print('loading evaluate data...')
-        textWordsList, maxTextLength, labelList = self.loadLinksReps(testLinksDataPath, loadType='train')
+        textWordsList, maxTextLength, labelList = self.loadSingleLinksReps(testLinksDataPath, loadType='train')
         x_test, y_test = layerObj.preTextEmbeddingProcess(gensimModelPath,
                                                           textWordsList,
                                                           maxTextLength,
