@@ -264,6 +264,29 @@ def writePredictResIntoFile(classes):
     resFile = open(predictResFilePath, 'w')
     resFile.write(newLines)
     resFile.close()
+    
+#============================================================================================#
+
+def testLoadPreEmbedingMat():
+    medMiningObj = MedGraphMining()
+    layerObj = NeuralLayerClassifier()
+    gensimModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'
+    trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
+    testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
+    
+    linksDataPathTuple = (trainLinksDataPath, testLinksDataPath)
+    
+    textWordsList, interBoundary, labelListTuple = medMiningObj.loadDetachedLinksReps(linksDataPathTuple, testWithLabel=True)
+    
+    nb_words, EMBEDDING_DIM, embedding_matrix = layerObj.prodPreWordEmbedingMat(gensimModelPath, textWordsList)
+    MAX_SEQUENCE_LENGTH, pad_data = layerObj.prodPadData(textWordsList, nb_words)
+    x_train, y_train = layerObj.prodTrainTestData(pad_data, interBoundary, labelListTuple[0])
+    x_test, y_test = layerObj.prodTrainTestData(pad_data, interBoundary-len(textWordsList), labelListTuple[1])
+    
+    print('x_train:---------------------------')
+    print(x_train)
+    print('x_test:----------------------------')
+    print(x_test)
 
 if __name__ == '__main__':
     '''
@@ -300,10 +323,12 @@ if __name__ == '__main__':
     test save model on disk
     then load it from disk and use it to classify
     '''
-#     print ROOT_PATH.auto_config_root()
-    testSaveLinksClassifier()
-#     classes, proba = testLoadLinksClassifier()
-    testLoadLinksClassifier()
+#===============================================================================
+# #     print ROOT_PATH.auto_config_root()
+#     testSaveLinksClassifier()
+# #     classes, proba = testLoadLinksClassifier()
+#     testLoadLinksClassifier()
+#===============================================================================
     
 #     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
 #     printLinksClassifyRes(testLinksDataPath, classes, proba)
@@ -332,3 +357,9 @@ if __name__ == '__main__':
     # bzList = confBZRes.keys()
     # testGetBasicRecForbResFromBZ(bzList)
     #===========================================================================
+    
+    '''
+    test load pad words sequences
+    load pre-trained word embedding matrix
+    '''
+    testLoadPreEmbedingMat()

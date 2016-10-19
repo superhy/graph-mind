@@ -25,21 +25,25 @@ class NeuralLayerClassifier(object):
         # load gensim wordvec model
         wordVecObj = WordVecOpt(modelPath=gensimModelPath)
         w2vModel = wordVecObj.loadModelfromFile(gensimModelPath)
+        w2vVocab = w2vModel.vocab  # pre-load the vocabulary in w2v-model
         
         # some fixed parameter
         EMBEDDING_DIM = w2vModel.vector_size
         # count all words in word sequence list
         allWords = []
         for sequence in wordSequencesList:
-            for word in sequence:
-                if word not in allWords:
-                    allWords.append(word)
-        
+            allWords.extend(sequence)
+        allWords = list(set(allWords))
         nb_words = len(allWords)
+        print('nb_words: ' + str(nb_words))
+        
         embedding_matrix = numpy.zeros((nb_words + 1, EMBEDDING_DIM))
-        for word, i in allWords:
-            embedding_vector = wordVecObj.getWordVec(w2vModel, word)
-            embedding_matrix[i] = embedding_vector
+        for i in range(len(allWords)):
+            if allWords[i] in w2vVocab:
+                embedding_vector = wordVecObj.getWordVec(w2vModel, allWords[i])
+                embedding_matrix[i] = embedding_vector
+                print('scan sequence word: ' + allWords[i]),
+                print('vector: ' + str(embedding_vector))
             
         return nb_words, EMBEDDING_DIM, embedding_matrix
     

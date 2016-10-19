@@ -109,7 +109,7 @@ class MedGraphMining(object):
         for line in linkDataLines:
             wordReps = line[line.find('{') + 1 : line.find('}')]
             words = []
-            words.extend(pair.split(':')[0] for pair in wordReps.split(','))
+            words.extend(pair.split(':')[0].decode('utf-8') for pair in wordReps.split(','))
             textWordsList.append(words)
             
             if maxTextLength < len(words):
@@ -140,9 +140,9 @@ class MedGraphMining(object):
         
         #TODO: need to delete element maxTextLength
         
-        trainWordsList, maxTextLength1, trainLabelList = self.loadSingleLinksReps(linksDataPathTuple(0), loadType='train')
+        trainWordsList, maxTextLength1, trainLabelList = self.loadSingleLinksReps(linksDataPathTuple[0], loadType='train')
         testLoadType = 'test' if testWithLabel == False else 'train'
-        testWordsList, maxTextLength2, testLabelList = self.loadSingleLinksReps(linksDataPathTuple(1), loadType=testLoadType)
+        testWordsList, maxTextLength2, testLabelList = self.loadSingleLinksReps(linksDataPathTuple[1], loadType=testLoadType)
         
         textWordsList = trainWordsList + testWordsList
         interBoundary = len(trainWordsList)
