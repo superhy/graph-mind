@@ -96,25 +96,40 @@ class MedGraphMining(object):
         
         return confBZResDic
     
+    def loadLinksRepsSequences(self, linksDataPathList):
+        '''
+        count the number of words in all links-reps of data path links
+        warning: linksDataPathList is a list, not a tuple
+        almost situation, this list is [0, 1] for train and test data
+        '''
+        totalWordsList = []
+        for linksDataPath in linksDataPathList:
+            linksFile = open(linksDataPath, 'r')
+            linkDataLines = linksFile.readlines()
+            for line in linkDataLines:
+                wordReps = line[line.find('{') + 1 : line.find('}')]
+                words = []
+                words.extend(pair.split(':')[0] for pair in wordReps.split(','))
+                totalWordsList.extend(words)
+            linksFile.close()
+            
+        totalWordsList = list(set(totalWordsList))
+        nb_words = len(totalWordsList)
+        
+        return nb_words
+    
     def loadSingleLinksReps(self, linksDataPath, loadType='test'):
         '''
         loadType is 'test' or 'train'
         '''
         linksFile = open(linksDataPath, 'r')
         
-        textWordsList = []
         labelList = []
-        maxTextLength = 0 #TODO: need to delete
         linkDataLines = linksFile.readlines()
+        textList = []
         for line in linkDataLines:
-            wordReps = line[line.find('{') + 1 : line.find('}')]
-            words = []
-            words.extend(pair.split(':')[0].decode('utf-8') for pair in wordReps.split(','))
-            textWordsList.append(words)
+            textList.append(line.decode('utf-8'))
             
-            if maxTextLength < len(words):
-                maxTextLength = len(words)
-                        
         if linksFile.name.find('train') != -1 or loadType == 'train':
             for i in range(len(linkDataLines)):
                 line = linkDataLines[i]
@@ -123,26 +138,26 @@ class MedGraphMining(object):
                     labelList.append(int(label))
                 else:
                     labelList.append(0)
-                    print(i + 1)
+                    print('no label:' + (i + 1))
                     
         linksFile.close()
         
-        return textWordsList, maxTextLength, labelList
+        return textList, labelList
     
-    def loadDetachedLinksReps(self, linksDataPathTuple, testWithLabel=False):
+    def loadDetachedLinksReps(self, linksDataPathList, testWithLabel=False):
         '''
-        linkDataPathTuple has 2 elements: (1, 2)
+        linkDataPathTuple has 2 elements: [0, 1]
         1: train data Links path, with labelList
         2: test data links path, without labelList
         
         return: testWordsList, interBoundary, labelListTuple(1,2)
         '''
         
-        #TODO: need to delete element maxTextLength
+        # TODO: need to delete element maxTextLength
         
-        trainWordsList, maxTextLength1, trainLabelList = self.loadSingleLinksReps(linksDataPathTuple[0], loadType='train')
+        trainWordsList, trainLabelList = self.loadSingleLinksReps(linksDataPathList[0], loadType='train')
         testLoadType = 'test' if testWithLabel == False else 'train'
-        testWordsList, maxTextLength2, testLabelList = self.loadSingleLinksReps(linksDataPathTuple[1], loadType=testLoadType)
+        testWordsList, testLabelList = self.loadSingleLinksReps(linksDataPathList[1], loadType=testLoadType)
         
         textWordsList = trainWordsList + testWordsList
         interBoundary = len(trainWordsList)

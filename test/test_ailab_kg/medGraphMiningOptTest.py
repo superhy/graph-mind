@@ -274,7 +274,7 @@ def testLoadPreEmbedingMat():
     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
     
-    linksDataPathTuple = (trainLinksDataPath, testLinksDataPath)
+    linksDataPathTuple = [trainLinksDataPath, testLinksDataPath]
     
     textWordsList, interBoundary, labelListTuple = medMiningObj.loadDetachedLinksReps(linksDataPathTuple, testWithLabel=True)
     
