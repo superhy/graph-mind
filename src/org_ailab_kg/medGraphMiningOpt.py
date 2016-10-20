@@ -110,8 +110,10 @@ class MedGraphMining(object):
             wordReps = line[line.find('{') + 1 : line.find('}')]
             words = []
             words.extend(pair.split(':')[0] for pair in wordReps.split(','))
+            # words for embedding matrix loading need decode to utf-8
             textWordSequences.append(word.decode('utf-8') for word in words)
             
+            # words for pad sequence need keep unicode string
             textStr = ' '.join(words)
             textList.append(textStr)
             
