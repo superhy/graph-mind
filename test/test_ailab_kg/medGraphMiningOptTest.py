@@ -95,7 +95,7 @@ def testGetBasicRecForbResFromBZ(bzList):
         if bz in bzRecForbDics.keys():
             recSCList.extend(bzRecForbDics[bz]['0'])
             forbSCList.extend(bzRecForbDics[bz]['1'])
-    recSCList = list(set(recSCList)) # de-duplication, same below
+    recSCList = list(set(recSCList))  # de-duplication, same below
     forbSCList = list(set(forbSCList))
     
     recommend_end = time.clock()
@@ -274,14 +274,14 @@ def testLoadPreEmbedingMat():
     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
     
-    linksDataPathTuple = [trainLinksDataPath, testLinksDataPath]
+    linksDataPathList = [trainLinksDataPath, testLinksDataPath]
     
-    textWordsList, interBoundary, labelListTuple = medMiningObj.loadDetachedLinksReps(linksDataPathTuple, testWithLabel=True)
+    totalSequenceList, totalTextList, interBoundary, labelLists = medMiningObj.loadDetachedLinksReps(linksDataPathList, testWithLabel=True)
     
-    nb_words, EMBEDDING_DIM, embedding_matrix = layerObj.prodPreWordEmbedingMat(gensimModelPath, textWordsList)
-    MAX_SEQUENCE_LENGTH, pad_data = layerObj.prodPadData(textWordsList, nb_words)
-    x_train, y_train = layerObj.prodTrainTestData(pad_data, interBoundary, labelListTuple[0])
-    x_test, y_test = layerObj.prodTrainTestData(pad_data, interBoundary-len(textWordsList), labelListTuple[1])
+    nb_words, EMBEDDING_DIM, embedding_matrix = layerObj.prodPreWordEmbedingMat(gensimModelPath, totalSequenceList)
+    MAX_SEQUENCE_LENGTH, pad_data = layerObj.prodPadData(totalTextList, nb_words)
+    x_train, y_train = layerObj.prodTrainTestData(pad_data, interBoundary, labelLists[0])
+    x_test, y_test = layerObj.prodTrainTestData(pad_data, interBoundary - len(totalSequenceList), labelLists[1])
     
     print('x_train:---------------------------')
     print(x_train)

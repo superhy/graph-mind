@@ -14,6 +14,7 @@ from keras.layers.recurrent import LSTM, GRU
 from keras.layers.core import Dropout, Dense, Activation, Flatten
 from keras.callbacks import EarlyStopping
 from keras.preprocessing.sequence import pad_sequences
+from keras.preprocessing.text import Tokenizer
 
 class NeuralLayerClassifier(object):
     
@@ -42,20 +43,29 @@ class NeuralLayerClassifier(object):
             if allWords[i] in w2vVocab:
                 embedding_vector = wordVecObj.getWordVec(w2vModel, allWords[i])
                 embedding_matrix[i] = embedding_vector
-                print('scan sequence word: ' + allWords[i]),
-                print('vector: ' + str(embedding_vector))
+#                 print('scan sequence word: ' + allWords[i]),
+#                 print('vector: ' + str(embedding_vector))
             
         return nb_words, EMBEDDING_DIM, embedding_matrix
     
-    def prodPadData(self, wordSequencesList, nb_words):
+    def prodPadData(self, totalTextList, nb_words):
         '''
         the order of total word sequence must corresponding to embedding matrix
-        (in this function: wordSequencesList must same as another one in function
+        (in this function: totalTextList must same as another one in function
         prodPreWordEmbedingMat)
         '''
         
-        MAX_SEQUENCE_LENGTH = int(nb_words / 1000) * 1000
-        pad_data = pad_sequences(wordSequencesList, maxlen=MAX_SEQUENCE_LENGTH)
+        MAX_NB_WORDS = int(nb_words / 1000) * 1000
+        MAX_SEQUENCE_LENGTH = 20
+        print('MAX_NB_WORDS: ' + str(MAX_NB_WORDS) + ' MAX_SEQUENCE_LENGTH: ' + str(MAX_SEQUENCE_LENGTH))
+        
+        # vectorize the text samples into a 2D integer tensor
+        tokenizer = Tokenizer(nb_words=MAX_NB_WORDS, lower=False)
+#         for text in totalTextList:
+#             print(text)
+        tokenizer.fit_on_texts(totalTextList)
+        totalSequences = tokenizer.texts_to_sequences(totalTextList)
+        pad_data = pad_sequences(totalSequences, maxlen=MAX_SEQUENCE_LENGTH)
         
         return MAX_SEQUENCE_LENGTH, pad_data
     
@@ -71,6 +81,8 @@ class NeuralLayerClassifier(object):
         x_data = None
         y_data = None
         
+        print('total size: ' + str(len(pad_data))),
+        
         if interBoundary == 0:
             print('interBoundary can not be zero!')
             return x_data, y_data
@@ -78,9 +90,11 @@ class NeuralLayerClassifier(object):
         if interBoundary > 0:
             x_data = pad_data[:interBoundary]
         elif interBoundary < 0:
-            x_data = pad_data[len(pad_data) - interBoundary:]
+            x_data = pad_data[len(pad_data) + interBoundary:] # add a negative value equalled  subtract
         if len(labelList) != 0:
             y_data = numpy.asarray(labelList)
+            
+        print('treated size: ' + str(len(x_data)))
             
         return x_data, y_data
             

@@ -96,28 +96,6 @@ class MedGraphMining(object):
         
         return confBZResDic
     
-    def loadLinksRepsSequences(self, linksDataPathList):
-        '''
-        count the number of words in all links-reps of data path links
-        warning: linksDataPathList is a list, not a tuple
-        almost situation, this list is [0, 1] for train and test data
-        '''
-        totalWordsList = []
-        for linksDataPath in linksDataPathList:
-            linksFile = open(linksDataPath, 'r')
-            linkDataLines = linksFile.readlines()
-            for line in linkDataLines:
-                wordReps = line[line.find('{') + 1 : line.find('}')]
-                words = []
-                words.extend(pair.split(':')[0] for pair in wordReps.split(','))
-                totalWordsList.extend(words)
-            linksFile.close()
-            
-        totalWordsList = list(set(totalWordsList))
-        nb_words = len(totalWordsList)
-        
-        return nb_words
-    
     def loadSingleLinksReps(self, linksDataPath, loadType='test'):
         '''
         loadType is 'test' or 'train'
@@ -126,9 +104,16 @@ class MedGraphMining(object):
         
         labelList = []
         linkDataLines = linksFile.readlines()
+        textWordSequences = []
         textList = []
         for line in linkDataLines:
-            textList.append(line.decode('utf-8'))
+            wordReps = line[line.find('{') + 1 : line.find('}')]
+            words = []
+            words.extend(pair.split(':')[0] for pair in wordReps.split(','))
+            textWordSequences.append(word.decode('utf-8') for word in words)
+            
+            textStr = ' '.join(words)
+            textList.append(textStr)
             
         if linksFile.name.find('train') != -1 or loadType == 'train':
             for i in range(len(linkDataLines)):
@@ -142,7 +127,7 @@ class MedGraphMining(object):
                     
         linksFile.close()
         
-        return textList, labelList
+        return textWordSequences, textList, labelList
     
     def loadDetachedLinksReps(self, linksDataPathList, testWithLabel=False):
         '''
@@ -150,20 +135,22 @@ class MedGraphMining(object):
         1: train data Links path, with labelList
         2: test data links path, without labelList
         
-        return: testWordsList, interBoundary, labelListTuple(1,2)
+        return: testSequenceList, interBoundary, labelLists(1,2)
         '''
         
         # TODO: need to delete element maxTextLength
         
-        trainWordsList, trainLabelList = self.loadSingleLinksReps(linksDataPathList[0], loadType='train')
+        trainSequenceList, trainTextList, trainLabelList = self.loadSingleLinksReps(linksDataPathList[0], loadType='train')
         testLoadType = 'test' if testWithLabel == False else 'train'
-        testWordsList, testLabelList = self.loadSingleLinksReps(linksDataPathList[1], loadType=testLoadType)
+        testSequenceList, testTextList, testLabelList = self.loadSingleLinksReps(linksDataPathList[1], loadType=testLoadType)
         
-        textWordsList = trainWordsList + testWordsList
-        interBoundary = len(trainWordsList)
-        labelListTuple = (trainLabelList, testLabelList)
+        totalSequenceList = trainSequenceList + testSequenceList # totalSequenceList contain train and test text list
+        totalTextList = trainTextList + testTextList
         
-        return textWordsList, interBoundary, labelListTuple
+        interBoundary = len(trainSequenceList)
+        labelLists = [trainLabelList, testLabelList]
+        
+        return totalSequenceList, totalTextList, interBoundary, labelLists
     
     def trainLinksClassifier_file(self, gensimModelPath, trainLinksDataPath, v_ratio=0.15, storeFilePath=None):
         '''
