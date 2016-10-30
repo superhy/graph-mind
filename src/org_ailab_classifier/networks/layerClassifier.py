@@ -50,6 +50,8 @@ class NeuralLayerClassifier(object):
     
     def prodPadData(self, totalTextList, nb_words):
         '''
+        prod word sequence padding data
+        
         the order of total word sequence must corresponding to embedding matrix
         (in this function: totalTextList must same as another one in function
         prodPreWordEmbedingMat)
@@ -71,6 +73,8 @@ class NeuralLayerClassifier(object):
     
     def prodTrainTestData(self, pad_data, interBoundary, labelList=[]):
         '''
+        prod sequence padding train & test data
+        
         if interBoundary > 0, intercept the first len_boundary elements from
         pad_data as x_data, if interBoundary < 0, intercept the last len_boundary
         elements from pad_data as x_data
@@ -90,16 +94,17 @@ class NeuralLayerClassifier(object):
         if interBoundary > 0:
             x_data = pad_data[:interBoundary]
         elif interBoundary < 0:
-            x_data = pad_data[len(pad_data) + interBoundary:] # add a negative value equalled  subtract
+            x_data = pad_data[len(pad_data) + interBoundary:]  # add a negative value equalled  subtract
         if len(labelList) != 0:
             y_data = numpy.asarray(labelList)
             
         print('treated size: ' + str(len(x_data)))
             
         return x_data, y_data
-            
+    
     def preTextEmbeddingProcess(self, gensimModelPath, textWordsList, maxTextLength, labelList=[]):
         '''
+        @deprecated: embedding matrix is not normalized
         '''
         
         # load gensim word vector model from file
