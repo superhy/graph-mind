@@ -146,7 +146,7 @@ class MedGraphMining(object):
         testLoadType = 'test' if testWithLabel == False else 'train'
         testSequenceList, testTextList, testLabelList = self.loadSingleLinksReps(linksDataPathList[1], loadType=testLoadType)
         
-        totalSequenceList = trainSequenceList + testSequenceList # totalSequenceList contain train and test text list
+        totalSequenceList = trainSequenceList + testSequenceList  # totalSequenceList contain train and test text list
         totalTextList = trainTextList + testTextList
         
         interBoundary = len(trainSequenceList)
@@ -154,22 +154,45 @@ class MedGraphMining(object):
         
         return totalSequenceList, totalTextList, interBoundary, labelLists
     
-    def trainLinksClassifier_file(self, gensimModelPath,
-                                  trainLinksDataPath, testLinksDataPath,
-                                  # TODO: pad_data and interBoundary
-                                  v_ratio=0.15, storeFilePath=None):
+    def trainLinksClassifier_file(self, trainLinksDataPath, testLinksDataPath,
+                                  v_ratio=0.15, storeFilePath=None,
+                                  gensimModelPath=None,
+                                  pad_data=None):
         '''
+        input parameters has three parts
+        part1: 1.trainLinksDataPath; 2.testLinksDataPath
+        part2: 1.v_ratio; 2.storeFilePath
+        part3: 1.gensimModelPath
+        part4: 1.pad_data
+        
+        we recommend to give the part4, if can't give the part4, part3 is necessary
         '''
+        
         layerObj = NeuralLayerClassifier()
+        x_train = None
+        y_train = None
+        linksDataPathList = [trainLinksDataPath, testLinksDataPath]
         
         load_start = time.clock()
         
-        textWordsList, maxTextLength, labelList = self.loadSingleLinksReps(trainLinksDataPath, loadType='train')
-        x_train, y_train = layerObj.preTextEmbeddingProcess(gensimModelPath,
-                                                            textWordsList,
-                                                            maxTextLength,
-                                                            labelList)
-        input_shape = (x_train.shape[1], x_train.shape[2])
+#         textWordsList, maxTextLength, labelList = self.loadSingleLinksReps(trainLinksDataPath, loadType='train')
+#         x_train, y_train = layerObj.preTextEmbeddingProcess(gensimModelPath,
+#                                                             textWordsList,
+#                                                             maxTextLength,
+#                                                             labelList)
+#         input_shape = (x_train.shape[1], x_train.shape[2])
+
+        totalSequenceList, totalTextList, interBoundary, labelLists = self.loadDetachedLinksReps(linksDataPathList, testWithLabel=True)
+        
+        if pad_data != None:
+            x_train, y_train = layerObj.prodTrainTestData(pad_data, interBoundary, labelLists[0])
+        elif gensimModelPath != None:
+            nb_words, EMBEDDING_DIM, embedding_matrix = layerObj.prodPreWordEmbedingMat(gensimModelPath, totalSequenceList)
+            MAX_SEQUENCE_LENGTH, pad_data = layerObj.prodPadData(totalTextList, nb_words)
+            x_train, y_train = layerObj.prodTrainTestData(pad_data, interBoundary, labelLists[0])
+        else:
+            print('loss parameters: part3 or part4 must has one!')
+            return None
         
         load_end = time.clock()
         print('load data runtime %f s' % (load_end - load_start))
