@@ -154,7 +154,10 @@ class MedGraphMining(object):
         
         return totalSequenceList, totalTextList, interBoundary, labelLists
     
-    def trainLinksClassifier_file(self, gensimModelPath, trainLinksDataPath, v_ratio=0.15, storeFilePath=None):
+    def trainLinksClassifier_file(self, gensimModelPath,
+                                  trainLinksDataPath, testLinksDataPath,
+                                  # TODO: pad_data and interBoundary
+                                  v_ratio=0.15, storeFilePath=None):
         '''
         '''
         layerObj = NeuralLayerClassifier()
