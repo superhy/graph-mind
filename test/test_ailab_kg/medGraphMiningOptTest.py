@@ -138,34 +138,14 @@ def testLoadLinksReps():
     print(maxTextLength)
     print(labelList)
 
-def testLinksRepsToEmbeddingData():
-    medMiningObj = MedGraphMining()
-    layerObj = NeuralLayerClassifier()
-    
-    load_start = time.clock()
-    
-    trainLinksFilePath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
-    textWordsList, maxTextLength, labelList = medMiningObj.loadSingleLinksReps(trainLinksFilePath)
-    
-    gensimModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'
-    x_data, y_data = layerObj.preTextEmbeddingProcess(gensimModelPath, textWordsList, maxTextLength, labelList)
-    
-    load_end = time.clock()
-    
-    print('load data run time: %f s' % (load_end - load_start))
-    print('x_data shape: ', x_data.shape)
-    print(x_data)
-    print('y_data shape: ', y_data.shape)
-    print(y_data)
-
 def testClassifyLinks():
     medMiningObj = MedGraphMining()
     gensimModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'
     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
     
-    layerModel = medMiningObj.trainLinksClassifier_file(gensimModelPath, trainLinksDataPath)
-    classes, proba = medMiningObj.testLinksClasses_file(layerModel, gensimModelPath, testLinksDataPath)
+    layerModel = medMiningObj.trainLinksClassifier_file(gensimModelPath, trainLinksDataPath, testLinksDataPath)
+    classes, proba = medMiningObj.testLinksClasses_file(layerModel, gensimModelPath, trainLinksDataPath, testLinksDataPath)
     
 #     for i in range(len(classes)):
 #         print(str(classes[i]) + ': ' + str(proba[i]))
@@ -188,8 +168,9 @@ def testEvaluateLinksClassify():
     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
     
-    layerModel = medMiningObj.trainLinksClassifier_file(gensimModelPath, trainLinksDataPath, v_ratio=0.15)
-    score = medMiningObj.evaluateLinksClassifier_file(layerModel, gensimModelPath, testLinksDataPath)
+    layerModel = medMiningObj.trainLinksClassifier_file(gensimModelPath, trainLinksDataPath, testLinksDataPath,
+                                                        testWithLabel=True, v_ratio=0.15)
+    score = medMiningObj.evaluateLinksClassifier_file(layerModel, gensimModelPath, trainLinksDataPath, testLinksDataPath)
     
     print(score)
     
@@ -210,6 +191,7 @@ def testSaveLinksClassifier():
     
     medMiningObj.trainLinksClassifier_file(gensimModelPath,
                                            trainLinksDataPath,
+                                           testLinksDataPath,
                                            v_ratio=0.15,
                                            storeFilePath=storeFilePath)
     
@@ -230,7 +212,8 @@ def testLoadLinksClassifier():
     # return classes, proba
     #===========================================================================
     
-    score = medMiningObj.evaluateLinksClassifier_file(layerModel, gensimModelPath, testLinksDataPath)
+    score = medMiningObj.evaluateLinksClassifier_file(layerModel, gensimModelPath,
+                                                      trainLinksDataPath, testLinksDataPath)
     print(score)
     
 '''
@@ -247,7 +230,9 @@ def testPredictNewLinks():
     storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifier_cnnlstm'
     
     layerModel = layerObj.loadStoredModel(storeFilePath, recompile=False)
-    classes, proba = medMiningObj.testLinksClasses_file(layerModel, gensimModelPath, predictLinksDataPath)
+    classes, proba = medMiningObj.testLinksClasses_file(layerModel, gensimModelPath,
+                                                        trainLinksDataPath, predictLinksDataPath,
+                                                        testWithLabel=False)
      
     return classes, proba
 
@@ -323,12 +308,10 @@ if __name__ == '__main__':
     test save model on disk
     then load it from disk and use it to classify
     '''
-#===============================================================================
-# #     print ROOT_PATH.auto_config_root()
-#     testSaveLinksClassifier()
-# #     classes, proba = testLoadLinksClassifier()
-#     testLoadLinksClassifier()
-#===============================================================================
+#     print ROOT_PATH.auto_config_root()
+    testSaveLinksClassifier()
+#     classes, proba = testLoadLinksClassifier()
+    testLoadLinksClassifier()
     
 #     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
 #     printLinksClassifyRes(testLinksDataPath, classes, proba)
@@ -362,4 +345,6 @@ if __name__ == '__main__':
     test load pad words sequences
     load pre-trained word embedding matrix
     '''
-    testLoadPreEmbedingMat()
+    #===========================================================================
+    # testLoadPreEmbedingMat()
+    #===========================================================================

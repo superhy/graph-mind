@@ -104,42 +104,6 @@ class NeuralLayerClassifier(object):
             
         return x_data, y_data
     
-    def preTextEmbeddingProcess(self, gensimModelPath, textWordsList, maxTextLength, labelList=[]):
-        '''
-        @deprecated: embedding matrix is not normalized
-        '''
-        
-        # load gensim word vector model from file
-        wordVecObj = WordVecOpt(modelPath=gensimModelPath)
-        w2vModel = wordVecObj.loadModelfromFile(gensimModelPath)
-        w2vVocab = w2vModel.vocab  # pre-load the vocabulary in w2v-model
-        
-        # produce train texts' 2D-matrix numpy-array
-        trainMatList = []
-        
-        mat_rows = maxTextLength
-        mat_cols = w2vModel.vector_size
-        for textWords in textWordsList:
-            textMatrix = numpy.zeros([mat_rows, mat_cols])
-            for i in range(len(textWords)):
-#                 print(textWords[i])
-#                 print(type(textWords[i].decode('utf-8')))
-                textWord = textWords[i].decode('utf-8')
-                if textWord in w2vVocab:
-                    wordGensimVector = wordVecObj.getWordVec(w2vModel, textWord)
-                    textMatrix[i] = numpy.asarray(wordGensimVector, dtype='float32')
-            trainMatList.append(textMatrix)
-        
-        del w2vVocab  # delete vocabulary to save the memory space
-        
-        x_data = numpy.asarray(trainMatList)
-        # produce train labels' 1D-vector numpy-array
-        y_data = None
-        if len(labelList) != 0:
-            y_data = numpy.asarray(labelList)
-            
-        return x_data, y_data
-    
     def CNNClassify(self, x_train, y_train,
                     input_shape,
                     validation_split=0.15):
@@ -227,7 +191,7 @@ class NeuralLayerClassifier(object):
         final_activation = 'sigmoid'
         # set some fixed parameter in training
         batch_size = 32
-        nb_epoch = 10
+        nb_epoch = 2
         
         #=======================================================================
         # set callbacks function for auto early stopping
@@ -249,7 +213,7 @@ class NeuralLayerClassifier(object):
         # note that we set trainable = False so as to keep the embeddings fixed
         model.add(Embedding(embeddingParamsDic['nb_words'] + 1,
                             embeddingParamsDic['EMBEDDING_DIM'],
-                            weights=embeddingParamsDic['embedding_matrix'],
+                            weights=[embeddingParamsDic['embedding_matrix']],
                             input_length=embeddingParamsDic['MAX_SEQUENCE_LENGTH'],
                             trainable=False))
         model.add(Convolution1D(nb_filter=nb_filter,
