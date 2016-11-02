@@ -291,6 +291,23 @@ if __name__ == '__main__':
 #     w2vModel = wordVecObj.loadModelfromFile(gensimModelPath)
 
     '''
+    consistent test: find bz from patient firstly
+    then find the rec-foods and forb-foods secondly
+    
+    test 1: test load the sc for bz dic into file
+    test 2: test find rec and forb foods by bzResList
+    '''
+    #===========================================================================
+    # loadSCforBZDicIntoFile()
+    #===========================================================================
+    
+    #===========================================================================
+    # confBZRes = testFindRelatBzFromPatient()
+    # bzList = confBZRes.keys()
+    # testGetBasicRecForbResFromBZ(bzList)
+    #===========================================================================
+
+    '''
     test relation classify from shicai to bingzheng
     give the classify result
     '''
@@ -322,23 +339,6 @@ if __name__ == '__main__':
     #===========================================================================
     # classes, proba = testPredictNewLinks()
     # writePredictResIntoFile(classes)
-    #===========================================================================
-    
-    '''
-    consistent test: find bz from patient firstly
-    then find the rec-foods and forb-foods secondly
-    
-    test 1: test load the sc for bz dic into file
-    test 2: test find rec and forb foods by bzResList
-    '''
-    #===========================================================================
-    # loadSCforBZDicIntoFile()
-    #===========================================================================
-    
-    #===========================================================================
-    # confBZRes = testFindRelatBzFromPatient()
-    # bzList = confBZRes.keys()
-    # testGetBasicRecForbResFromBZ(bzList)
     #===========================================================================
     
     '''
