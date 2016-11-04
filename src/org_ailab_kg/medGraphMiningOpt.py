@@ -154,12 +154,55 @@ class MedGraphMining(object):
         
         return totalSequenceList, totalTextList, interBoundary, labelLists
     
-    def trainLinksClassifier_file(self, gensimModelPath,
+    def trainCNNsLinksClassifier_file(self, gensimModelPath,
+                                      trainLinksDataPath,
+                                      testLinksDataPath,
+                                      testWithLabel=False,
+                                      v_ratio=0.15, storeFilePath=None):
+        '''
+        Only CNNs
+        '''
+        
+        layerObj = NeuralLayerClassifier()
+        
+        load_start = time.clock()
+        
+        linksDataPathList = [trainLinksDataPath, testLinksDataPath]
+        totalSequenceList, totalTextList, interBoundary, labelLists = self.loadDetachedLinksReps(linksDataPathList, testWithLabel=testWithLabel)
+        
+        nb_words, EMBEDDING_DIM, embedding_matrix = layerObj.prodPreWordEmbedingMat(gensimModelPath, totalSequenceList)
+        MAX_SEQUENCE_LENGTH, pad_data = layerObj.prodPadData(totalTextList, nb_words)
+        x_train, y_train = layerObj.prodTrainTestData(pad_data, interBoundary, labelLists[0])
+        
+        embeddingParamsDic = {'nb_words':nb_words,
+                              'EMBEDDING_DIM':EMBEDDING_DIM,
+                              'embedding_matrix':embedding_matrix,
+                              'MAX_SEQUENCE_LENGTH':MAX_SEQUENCE_LENGTH}
+        
+        load_end = time.clock()
+        print('load data runtime %f s' % (load_end - load_start))
+        
+        train_start = time.clock()
+        
+        model = layerObj.CNNClassify(embeddingParamsDic,
+                                     x_train, y_train,
+                                     validation_split=v_ratio)
+        
+        train_end = time.clock()
+        print('train model runtime %f s' % (train_end - train_start))
+        # save the model's framework and data on disk
+        if storeFilePath != None:
+            layerObj.modelPersistentStorage(model, storeFilePath)
+        
+        return model
+    
+    def trainHybirdLinksClassifier_file(self, gensimModelPath,
                                   trainLinksDataPath,
                                   testLinksDataPath,
                                   testWithLabel=False,
                                   v_ratio=0.15, storeFilePath=None):
         '''
+        Hybird by CNNs and LSTM
         '''
         
         layerObj = NeuralLayerClassifier()

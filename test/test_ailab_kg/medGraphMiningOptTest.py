@@ -144,7 +144,7 @@ def testClassifyLinks():
     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
     
-    layerModel = medMiningObj.trainLinksClassifier_file(gensimModelPath, trainLinksDataPath, testLinksDataPath)
+    layerModel = medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath, trainLinksDataPath, testLinksDataPath)
     classes, proba = medMiningObj.testLinksClasses_file(layerModel, gensimModelPath, trainLinksDataPath, testLinksDataPath)
     
 #     for i in range(len(classes)):
@@ -168,7 +168,7 @@ def testEvaluateLinksClassify():
     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
     
-    layerModel = medMiningObj.trainLinksClassifier_file(gensimModelPath, trainLinksDataPath, testLinksDataPath,
+    layerModel = medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath, trainLinksDataPath, testLinksDataPath,
                                                         testWithLabel=True, v_ratio=0.15)
     score = medMiningObj.evaluateLinksClassifier_file(layerModel, gensimModelPath, trainLinksDataPath, testLinksDataPath)
     
@@ -179,7 +179,7 @@ test save the layer model into file
 and load it from file(sometimes need to recompile)
 then evaluate the loaded model
 '''
-    
+     
 def testSaveLinksClassifier():
     medMiningObj = MedGraphMining()
     layerObj = NeuralLayerClassifier()
@@ -187,9 +187,17 @@ def testSaveLinksClassifier():
     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
     
-    storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifier_cnnlstmT'
+#     storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifiecr_cnnlstmT'
+    storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifiecr_cnnsT' 
     
-    medMiningObj.trainLinksClassifier_file(gensimModelPath,
+    '''cnns + lstm part'''
+#     medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath,
+#                                            trainLinksDataPath,
+#                                            testLinksDataPath,
+#                                            v_ratio=0.15,
+#                                            storeFilePath=storeFilePath)
+    '''cnns part'''
+    medMiningObj.trainCNNsLinksClassifier_file(gensimModelPath,
                                            trainLinksDataPath,
                                            testLinksDataPath,
                                            v_ratio=0.15,
@@ -202,7 +210,8 @@ def testLoadLinksClassifier():
     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
     
-    storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifier_cnnlstmT'
+#     storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifiecr_cnnlstmT'
+    storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifiecr_cnnsT' 
     
     layerModel = layerObj.loadStoredModel(storeFilePath, recompile=True)
 #     print(layerModel.to_json())

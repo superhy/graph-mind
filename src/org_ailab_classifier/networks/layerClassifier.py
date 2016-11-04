@@ -104,11 +104,16 @@ class NeuralLayerClassifier(object):
             
         return x_data, y_data
     
-    def CNNClassify(self, x_train, y_train,
-                    input_shape,
+    def CNNClassify(self, embeddingParamsDic,
+                    x_train, y_train,
                     validation_split=0.15):
         '''
-        input_shape is tuple as (cnt_size, word_vec_size)
+        embeddingParamDic contains {
+            nb_words: number of all words in text sequences,
+            EMBEDDING_DIM: embedding dim of wordvec model for all texts,
+            embedding_matrix: pre-trained wordvec embedding mapping matrix,
+            MAX_SEQUENCE_LENGTH: max sequence length of each text line,
+                it is also the input_length of Embedding layer}
         '''
         
         # set some fixed parameter in Convolution layer
@@ -131,12 +136,16 @@ class NeuralLayerClassifier(object):
         
         # produce deep layer model
         model = Sequential()
+        model.add(Embedding(embeddingParamsDic['nb_words'] + 1,
+                            embeddingParamsDic['EMBEDDING_DIM'],
+                            weights=[embeddingParamsDic['embedding_matrix']],
+                            input_length=embeddingParamsDic['MAX_SEQUENCE_LENGTH'],
+                            trainable=False))
         model.add(Convolution1D(nb_filter=nb_filter,
                                 filter_length=filter_length,
                                 border_mode=border_mode,
                                 activation=cnn_activation,
-                                subsample_length=subsample_length,
-                                input_shape=input_shape))
+                                subsample_length=subsample_length))
         if pool_length == None:
             pool_length = model.output_shape[1]
         model.add(MaxPooling1D(pool_length=pool_length))
