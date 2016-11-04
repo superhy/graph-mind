@@ -191,7 +191,7 @@ class NeuralLayerClassifier(object):
         final_activation = 'sigmoid'
         # set some fixed parameter in training
         batch_size = 32
-        nb_epoch = 2
+        nb_epoch = 10
         
         #=======================================================================
         # set callbacks function for auto early stopping
