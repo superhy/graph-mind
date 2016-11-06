@@ -186,7 +186,8 @@ class MedGraphMining(object):
         
         model = layerObj.CNNClassify(embeddingParamsDic,
                                      x_train, y_train,
-                                     validation_split=v_ratio)
+                                     validation_split=v_ratio,
+                                     auto_stop=False)
         
         train_end = time.clock()
         print('train model runtime %f s' % (train_end - train_start))

@@ -106,7 +106,8 @@ class NeuralLayerClassifier(object):
     
     def CNNClassify(self, embeddingParamsDic,
                     x_train, y_train,
-                    validation_split=0.15):
+                    validation_split=0.15,
+                    auto_stop = False):
         '''
         embeddingParamDic contains {
             nb_words: number of all words in text sequences,
@@ -133,6 +134,20 @@ class NeuralLayerClassifier(object):
         # set some fixed parameter in training
         batch_size = 32
         nb_epoch = 2
+        
+        #=======================================================================
+        # set callbacks function for auto early stopping
+        # by monitor the loss or val_loss if not change any more
+        #=======================================================================
+        callbacks = []
+        if auto_stop == True:
+            monitor = 'val_loss' if validation_split > 0.0 else 'loss'
+            patience = 2
+            mode = 'min'
+            early_stopping = EarlyStopping(monitor=monitor,
+                                           patience=patience,
+                                           mode=mode)
+            callbacks = [early_stopping]
         
         # produce deep layer model
         model = Sequential()
@@ -167,7 +182,8 @@ class NeuralLayerClassifier(object):
         model.fit(x=x_train, y=y_train,
                   batch_size=batch_size,
                   nb_epoch=nb_epoch,
-                  validation_split=validation_split)
+                  validation_split=validation_split,
+                  callbacks=callbacks)
         
         return model
     
