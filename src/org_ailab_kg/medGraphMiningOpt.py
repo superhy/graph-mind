@@ -184,7 +184,7 @@ class MedGraphMining(object):
         
         train_start = time.clock()
         
-        model = layerObj.CNNClassify(embeddingParamsDic,
+        model = layerObj.CNNsClassify(embeddingParamsDic,
                                      x_train, y_train,
                                      validation_split=v_ratio,
                                      auto_stop=False)

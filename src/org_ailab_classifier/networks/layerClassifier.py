@@ -104,7 +104,7 @@ class NeuralLayerClassifier(object):
             
         return x_data, y_data
     
-    def CNNClassify(self, embeddingParamsDic,
+    def CNNsClassify(self, embeddingParamsDic,
                     x_train, y_train,
                     validation_split=0.15,
                     auto_stop = False):
