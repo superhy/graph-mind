@@ -12,6 +12,10 @@ from sklearn.svm.classes import SVC
 
 class SupportVectorMachine(object):
     
+    def prodWeightsVecPadData(self, wordWeightSeqList):
+        '''
+        '''
+    
     def prodWordRepTrainTestData(self):
         '''
         '''

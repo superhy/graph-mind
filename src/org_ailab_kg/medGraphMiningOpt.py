@@ -98,6 +98,8 @@ class MedGraphMining(object):
     
     def loadSingleLinksReps(self, linksDataPath, loadType='test'):
         '''
+        load train or test reps links without weights
+        
         loadType is 'test' or 'train'
         return: 
             textWordSequences -list, every element own a list like [word1, word2, ...]
@@ -135,30 +137,27 @@ class MedGraphMining(object):
         
         return textWordSequences, textList, labelList
     
-    def loadSingleLinksRepsWithWeights(self, linksDataPath, loadType='test'):
+    def loadSingleLinksWeightReps(self, linksDataPath, loadType='test'):
         '''
+        load train or test reps links with *weights
+        
         loadType is 'test' or 'train'
         return: 
-            textWordSequences -list, every element own a list like [word1, word2, ...]
+            wordWeightSequences -list, every element own a list like [(word1, weight1), (word2, weight2), ...]
             labelList -list, every element is a single number donate the label of each sequence
         '''
         linksFile = open(linksDataPath, 'r')
         
         labelList = []
         linkDataLines = linksFile.readlines()
-        textWordSequences = []
-#         textList = []
+        wordWeightSequences = []
         for line in linkDataLines:
             wordReps = line[line.find('{') + 1 : line.find('}')]
             words = []
-            # TODO:
-            words.extend(pair.split(':')[0] for pair in wordReps.split(','))
             # words for embedding matrix loading need decode to utf-8
-            textWordSequences.append(word.decode('utf-8') for word in words)
-            
-            # words for pad sequence need keep unicode string
-#             textStr = ' '.join(words)
-#             textList.append(textStr)
+            words.extend((pair.split(':')[0].decode('utf-8'), float(pair.split(':')[1])) for pair in wordReps.split(','))
+            wordWeightSequences.append(words)
+#             wordWeightSequences.append(word.decode('utf-8') for word in words)
             
         if linksFile.name.find('train') != -1 or loadType == 'train':
             for i in range(len(linkDataLines)):
@@ -172,19 +171,18 @@ class MedGraphMining(object):
                     
         linksFile.close()
         
-        return textWordSequences, labelList
+        return wordWeightSequences, labelList
     
     def loadDetachedLinksReps(self, linksDataPathList, testWithLabel=False):
         '''
-        linkDataPathTuple has 2 elements: [0, 1]
+        load train & test reps links without weights
+        
+        linkDataPathList has 2 elements: [0, 1]
         1: train data Links path, with labelList
         2: test data links path, without labelList
         
         return: testSequenceList, interBoundary, labelLists(1,2)
         '''
-        
-        # TODO: need to delete element maxTextLength
-        
         trainSequenceList, trainTextList, trainLabelList = self.loadSingleLinksReps(linksDataPathList[0], loadType='train')
         testLoadType = 'test' if testWithLabel == False else 'train'
         testSequenceList, testTextList, testLabelList = self.loadSingleLinksReps(linksDataPathList[1], loadType=testLoadType)
@@ -196,6 +194,27 @@ class MedGraphMining(object):
         labelLists = [trainLabelList, testLabelList]
         
         return totalSequenceList, totalTextList, interBoundary, labelLists
+    
+    def loadDetachedLinksWeightReps(self, linksDataPathList, testWithLabel=False):
+        '''
+        load train & test reps links with weights
+        
+        linkDataPathList has 2 elements: [0, 1]
+        1: train data Links path, with labelList
+        2: test data links path, without labelList
+        
+        return: testWeightSequenceList, interBoundary, labelLists(1,2)
+        '''
+        trainWeightSequenceList, trainLabelList = self.loadSingleLinksWeightReps(linksDataPathList[0], loadType='train')
+        testLoadType = 'test' if testWithLabel == False else 'train'
+        testWeightSequenceList, testLabelList = self.loadSingleLinksWeightReps(linksDataPathList[1], loadType=testLoadType)
+        
+        totalWeightSequenceList = trainWeightSequenceList + testWeightSequenceList  # totalWeightSequenceList contain train and test text list
+        
+        interBoundary = len(trainWeightSequenceList)
+        labelLists = [trainLabelList, testLabelList]
+        
+        return totalWeightSequenceList, interBoundary, labelLists
     
     def trainCNNsLinksClassifier_file(self, gensimModelPath,
                                       trainLinksDataPath,
