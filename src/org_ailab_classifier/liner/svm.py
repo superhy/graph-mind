@@ -12,6 +12,10 @@ from sklearn.svm.classes import SVC
 
 class SupportVectorMachine(object):
     
+    def prodWordRepTrainTestData(self):
+        '''
+        '''
+    
     def SVCClassify(self, x_train, y_train):
         '''
         Basic Support Vector Machine Classifier

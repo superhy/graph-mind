@@ -99,6 +99,10 @@ class MedGraphMining(object):
     def loadSingleLinksReps(self, linksDataPath, loadType='test'):
         '''
         loadType is 'test' or 'train'
+        return: 
+            textWordSequences -list, every element own a list like [word1, word2, ...]
+            textList -list, every element with all words in one string(split by space)
+            labelList -list, every element is a single number donate the label of each sequence
         '''
         linksFile = open(linksDataPath, 'r')
         
@@ -130,6 +134,45 @@ class MedGraphMining(object):
         linksFile.close()
         
         return textWordSequences, textList, labelList
+    
+    def loadSingleLinksRepsWithWeights(self, linksDataPath, loadType='test'):
+        '''
+        loadType is 'test' or 'train'
+        return: 
+            textWordSequences -list, every element own a list like [word1, word2, ...]
+            labelList -list, every element is a single number donate the label of each sequence
+        '''
+        linksFile = open(linksDataPath, 'r')
+        
+        labelList = []
+        linkDataLines = linksFile.readlines()
+        textWordSequences = []
+#         textList = []
+        for line in linkDataLines:
+            wordReps = line[line.find('{') + 1 : line.find('}')]
+            words = []
+            # TODO:
+            words.extend(pair.split(':')[0] for pair in wordReps.split(','))
+            # words for embedding matrix loading need decode to utf-8
+            textWordSequences.append(word.decode('utf-8') for word in words)
+            
+            # words for pad sequence need keep unicode string
+#             textStr = ' '.join(words)
+#             textList.append(textStr)
+            
+        if linksFile.name.find('train') != -1 or loadType == 'train':
+            for i in range(len(linkDataLines)):
+                line = linkDataLines[i]
+                label = line[line.find('}') + 1:line.find('}') + 2]
+                if(label == '0' or label == '1'):
+                    labelList.append(int(label))
+                else:
+                    labelList.append(0)
+                    print('no label:' + (i + 1))
+                    
+        linksFile.close()
+        
+        return textWordSequences, labelList
     
     def loadDetachedLinksReps(self, linksDataPathList, testWithLabel=False):
         '''
@@ -269,7 +312,7 @@ class MedGraphMining(object):
         
         return classes, proba
     
-    def evaluateLinksClassifier_file(self,layerModel,
+    def evaluateLinksClassifier_file(self, layerModel,
                               gensimModelPath,
                               trainLinksDataPath,
                               testLinksDataPath,
