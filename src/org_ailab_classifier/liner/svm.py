@@ -12,9 +12,26 @@ from sklearn.svm.classes import SVC
 
 class SupportVectorMachine(object):
     
-    def prodWeightsVecPadData(self, wordWeightSeqList):
+    def prodWeightsVecPadData(self, wordWeightSeqList, MAX_VEC_LENGTH=3000):
         '''
         '''
+        totalWordDic = {}
+        for seq in wordWeightSeqList:
+            for tup in seq:
+                if tup[0] in totalWordDic.keys():
+                    totalWordDic[tup[0]] += 1
+                else:
+                    totalWordDic[tup[0]] = 1
+        # sort all words by their weight, use python's function programming
+        sortedWordTuplelist = sorted(totalWordDic.iteritems(), key=lambda asd:asd[1])
+        # filter the selected word's dic
+        selectedWordList = []
+        for i in range(MAX_VEC_LENGTH):
+            selectedWordList.append(sortedWordTuplelist[i][0])
+            
+        # TODO: prod word sequence vectors
+        for seq in wordWeightSeqList:
+            initArray = numpy.zeros(MAX_VEC_LENGTH)
     
     def prodWordRepTrainTestData(self):
         '''
