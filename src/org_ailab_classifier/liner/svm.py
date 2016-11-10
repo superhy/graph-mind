@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
 
 '''
+Created on 2016年11月8日
+
 @author: superhy
 '''
 
@@ -29,13 +31,50 @@ class SupportVectorMachine(object):
         for i in range(MAX_VEC_LENGTH):
             selectedWordList.append(sortedWordTuplelist[i][0])
             
-        # TODO: prod word sequence vectors
+        # prod word sequence vectors
+        pad_vec_list = []
         for seq in wordWeightSeqList:
-            initArray = numpy.zeros(MAX_VEC_LENGTH)
+            repsVecArray = numpy.zeros(MAX_VEC_LENGTH)
+            for tup in seq:
+                if tup[0] in selectedWordList:
+                    repsVecArray[selectedWordList.index(tup[0])] = tup[1]
+            pad_vec_list.append(repsVecArray)
+        # np array the pad_vec_list
+        pad_data = numpy.array(pad_vec_list)
+        
+        return MAX_VEC_LENGTH, pad_data
     
-    def prodWordRepTrainTestData(self):
+    def prodTrainTestData(self, pad_data, interBoundary, labelList=[]):
         '''
+        prod sequence padding train & test data
+        (split pad_data by inter_boundary, so get the single train_data or test_data)
+        
+        if interBoundary > 0, intercept the first len_boundary elements from
+        pad_data as x_data, if interBoundary < 0, intercept the last len_boundary
+        elements from pad_data as x_data
+        
+        interBoundary can not be 0
         '''
+        
+        x_data = None
+        y_data = None
+        
+        print('total size: ' + str(len(pad_data))),
+        
+        if interBoundary == 0:
+            print('interBoundary can not be zero!')
+            return x_data, y_data
+        
+        if interBoundary > 0:
+            x_data = pad_data[:interBoundary]
+        elif interBoundary < 0:
+            x_data = pad_data[len(pad_data) + interBoundary:]  # add a negative value equaled  subtract
+        if len(labelList) != 0:
+            y_data = numpy.asarray(labelList)
+            
+        print('treated size: ' + str(len(x_data)))
+            
+        return x_data, y_data
     
     def SVCClassify(self, x_train, y_train):
         '''

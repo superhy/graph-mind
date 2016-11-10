@@ -15,7 +15,7 @@ from json.encoder import JSONEncoder
 import platform
 import time
 
-from org_ailab_classifier.networks.layerClassifier import NeuralLayerClassifier
+from org_ailab_classifier.networks.layer import NeuralLayerClassifier
 from org_ailab_kg.medGraphMiningOpt import MedGraphMining
 from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 from org_ailab_seg.wordSeg import WordSeg
@@ -145,7 +145,7 @@ def testClassifyLinks():
     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
     
     layerModel = medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath, trainLinksDataPath, testLinksDataPath)
-    classes, proba = medMiningObj.testLinksClasses_file(layerModel, gensimModelPath, trainLinksDataPath, testLinksDataPath)
+    classes, proba = medMiningObj.testLayerLinksClasses_file(layerModel, gensimModelPath, trainLinksDataPath, testLinksDataPath)
     
 #     for i in range(len(classes)):
 #         print(str(classes[i]) + ': ' + str(proba[i]))
@@ -170,7 +170,7 @@ def testEvaluateLinksClassify():
     
     layerModel = medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath, trainLinksDataPath, testLinksDataPath,
                                                         testWithLabel=True, v_ratio=0.15)
-    score = medMiningObj.evaluateLinksClassifier_file(layerModel, gensimModelPath, trainLinksDataPath, testLinksDataPath)
+    score = medMiningObj.evalLayerLinksClassifier_file(layerModel, gensimModelPath, trainLinksDataPath, testLinksDataPath)
     
     print(score)
     
@@ -216,12 +216,12 @@ def testLoadLinksClassifier():
     layerModel = layerObj.loadStoredModel(storeFilePath, recompile=True)
 #     print(layerModel.to_json())
     #===========================================================================
-    # classes, proba = medMiningObj.testLinksClasses_file(layerModel, gensimModelPath, testLinksDataPath)
+    # classes, proba = medMiningObj.testLayerLinksClasses_file(layerModel, gensimModelPath, testLinksDataPath)
     # 
     # return classes, proba
     #===========================================================================
     
-    score = medMiningObj.evaluateLinksClassifier_file(layerModel, gensimModelPath,
+    score = medMiningObj.evalLayerLinksClassifier_file(layerModel, gensimModelPath,
                                                       trainLinksDataPath, testLinksDataPath)
     print(score)
     
@@ -239,7 +239,7 @@ def testPredictNewLinks():
     storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifier_cnnlstm'
     
     layerModel = layerObj.loadStoredModel(storeFilePath, recompile=False)
-    classes, proba = medMiningObj.testLinksClasses_file(layerModel, gensimModelPath,
+    classes, proba = medMiningObj.testLayerLinksClasses_file(layerModel, gensimModelPath,
                                                         trainLinksDataPath, predictLinksDataPath,
                                                         testWithLabel=False)
      

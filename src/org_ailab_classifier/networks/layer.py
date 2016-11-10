@@ -76,6 +76,7 @@ class NeuralLayerClassifier(object):
     def prodTrainTestData(self, pad_data, interBoundary, labelList=[]):
         '''
         prod sequence padding train & test data
+        (split pad_data by inter_boundary, so get the single train_data or test_data)
         
         if interBoundary > 0, intercept the first len_boundary elements from
         pad_data as x_data, if interBoundary < 0, intercept the last len_boundary
@@ -96,7 +97,7 @@ class NeuralLayerClassifier(object):
         if interBoundary > 0:
             x_data = pad_data[:interBoundary]
         elif interBoundary < 0:
-            x_data = pad_data[len(pad_data) + interBoundary:]  # add a negative value equalled  subtract
+            x_data = pad_data[len(pad_data) + interBoundary:]  # add a negative value equaled  subtract
         if len(labelList) != 0:
             y_data = numpy.asarray(labelList)
             

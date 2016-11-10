@@ -6,7 +6,7 @@ Created on 2016年8月26日
 @author: hylovedd
 '''
 import numpy
-from org_ailab_classifier.networks.layerClassifier import NeuralLayerClassifier
+from org_ailab_classifier.networks.layer import NeuralLayerClassifier
 from org_ailab_tools.cache import ROOT_PATH
 
 

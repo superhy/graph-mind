@@ -8,12 +8,13 @@ Created on 2016年8月16日
 
 import time
 
-from org_ailab_classifier.networks.layerClassifier import NeuralLayerClassifier
+from org_ailab_classifier.networks.layer import NeuralLayerClassifier
 from org_ailab_data.graph.neoDataAdvanceOpt import NeoDataAdvanceOpt
 from org_ailab_data.graph.neoDataGraphOpt import NeoDataGraphOpt
 from org_ailab_kg import medGraphSupOpt
 from org_ailab_seg.word2vec.wordVecOpt import WordVecOpt
 from org_ailab_tools.cache import ROOT_PATH
+from org_ailab_classifier.liner.svm import SupportVectorMachine
 
 
 _medW2VModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'
@@ -223,6 +224,7 @@ class MedGraphMining(object):
                                       v_ratio=0.15, storeFilePath=None):
         '''
         Only CNNs
+        return model is Keras-Neural Networks Layer model
         '''
         
         layerObj = NeuralLayerClassifier()
@@ -266,6 +268,7 @@ class MedGraphMining(object):
                                   v_ratio=0.15, storeFilePath=None):
         '''
         Hybird by CNNs and LSTM
+        return model is Keras-Neural Networks Layer model
         '''
         
         layerObj = NeuralLayerClassifier()
@@ -302,12 +305,30 @@ class MedGraphMining(object):
         
         return model
     
-    def testLinksClasses_file(self, layerModel,
+    def trainSVMLinksClassifier_file(self, trainLinksDataPath,
+                                     testLinksDataPath,
+                                     testWithLabel=False,
+                                     v_ratio=0.15, storeFilePath=None):
+        '''
+        SVM
+        return model is sklearn estimator model
+        '''
+        
+        svmObj = SupportVectorMachine()
+        
+        load_start = time.clock()
+        
+        linksDataPathList = [trainLinksDataPath, testLinksDataPath]
+        totalWeightSequenceList, interBoundary, labelLists = self.loadDetachedLinksWeightReps(linksDataPathList, testWithLabel)
+    
+    def testLayerLinksClasses_file(self, layerModel,
                               gensimModelPath,
                               trainLinksDataPath,
                               testLinksDataPath,
                               testWithLabel=False):
         '''
+        test links' classes by Keras-Neural Networks Layer model
+        (input model must be produced by Keras)
         '''
         layerObj = NeuralLayerClassifier()
         
@@ -331,12 +352,14 @@ class MedGraphMining(object):
         
         return classes, proba
     
-    def evaluateLinksClassifier_file(self, layerModel,
+    def evalLayerLinksClassifier_file(self, layerModel,
                               gensimModelPath,
                               trainLinksDataPath,
                               testLinksDataPath,
                               testWithLabel=True):
         '''
+        evaluate Keras-Neural Networks Layer model
+        (input model must be produced by Keras)
         '''
         layerObj = NeuralLayerClassifier()
         
