@@ -5,6 +5,7 @@ Created on 2016年8月18日
 
 @author: hylovedd
 '''
+from org_ailab_classifier.liner.svm import SupportVectorMachine
 '''
 test find relate BZ from patient
 then find +/- food for patient's
@@ -182,7 +183,7 @@ then evaluate the loaded model
      
 def testSaveLinksClassifier():
     medMiningObj = MedGraphMining()
-    layerObj = NeuralLayerClassifier()
+#     layerObj = NeuralLayerClassifier()
     gensimModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'
     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
@@ -281,6 +282,18 @@ def testLoadPreEmbedingMat():
     print(x_train)
     print('x_test:----------------------------')
     print(x_test)
+    
+def testSVMLinksTrainTest():
+    medMiningObj = MedGraphMining()
+#     svmObj = SupportVectorMachine()
+    trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
+    testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
+    
+    estimator = medMiningObj.trainSVMLinksClassifier_file(trainLinksDataPath, testLinksDataPath)
+    accuracy, recall = medMiningObj.evalEstimatorlinksClasses_file(estimator, trainLinksDataPath, testLinksDataPath)
+    
+    print('accuracy: ' + str(accuracy))
+    print('recall: ' + str(recall))
 
 if __name__ == '__main__':
     '''
@@ -334,10 +347,12 @@ if __name__ == '__main__':
     test save model on disk
     then load it from disk and use it to classify
     '''
-#     print ROOT_PATH.auto_config_root()
-    testSaveLinksClassifier()
-#     classes, proba = testLoadLinksClassifier()
-    testLoadLinksClassifier()
+#===============================================================================
+# #     print ROOT_PATH.auto_config_root()
+#     testSaveLinksClassifier()
+# #     classes, proba = testLoadLinksClassifier()
+#     testLoadLinksClassifier()
+#===============================================================================
     
 #     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
 #     printLinksClassifyRes(testLinksDataPath, classes, proba)
@@ -357,3 +372,10 @@ if __name__ == '__main__':
     #===========================================================================
     # testLoadPreEmbedingMat()
     #===========================================================================
+    
+    '''
+    test use total data train a svm estimator
+    then, evaluate the trained estimator
+    '''
+    testSVMLinksTrainTest()
+    

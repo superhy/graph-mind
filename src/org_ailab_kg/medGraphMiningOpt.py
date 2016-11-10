@@ -308,7 +308,7 @@ class MedGraphMining(object):
     def trainSVMLinksClassifier_file(self, trainLinksDataPath,
                                      testLinksDataPath,
                                      testWithLabel=False,
-                                     v_ratio=0.15, storeFilePath=None):
+                                     storeFilePath=None):
         '''
         SVM
         return model is sklearn estimator model
@@ -320,6 +320,24 @@ class MedGraphMining(object):
         
         linksDataPathList = [trainLinksDataPath, testLinksDataPath]
         totalWeightSequenceList, interBoundary, labelLists = self.loadDetachedLinksWeightReps(linksDataPathList, testWithLabel)
+        
+        MAX_VEC_LENGTH, pad_data = svmObj.prodWeightsVecPadData(totalWeightSequenceList, MAX_VEC_LENGTH=6000)
+        x_train, y_train = svmObj.prodTrainTestData(pad_data, interBoundary, labelLists[0])
+        
+        load_end = time.clock()
+        print('load data runtime %f s' % (load_end - load_start))
+        
+        train_start = time.clock()
+        
+        estimator = svmObj.SVCClassify(x_train, y_train)
+        
+        train_end = time.clock()
+        print('train model runtime %f s' % (train_end - train_start))
+        
+        if storeFilePath != None:
+            pass
+        
+        return estimator
     
     def testLayerLinksClasses_file(self, layerModel,
                               gensimModelPath,
@@ -348,6 +366,30 @@ class MedGraphMining(object):
         print('load data runtime %f s' % (load_end - load_start))
         
         classes, proba = layerObj.layerClassifyPredict(layerModel, x_test)
+        print('give the predict result')
+        
+        return classes, proba
+    
+    def testEstimatorlinksClasses_file(self, sk_estimator,
+                                       trainLinksDataPath,
+                                       testLinksDataPath,
+                                       testWithLabel=False):
+        '''
+        '''
+        svmObj = SupportVectorMachine()
+        
+        load_start = time.clock()
+        
+        linksDataPathList = [trainLinksDataPath, testLinksDataPath]
+        totalWeightSequenceList, interBoundary, labelLists = self.loadDetachedLinksWeightReps(linksDataPathList, testWithLabel)
+        
+        MAX_VEC_LENGTH, pad_data = svmObj.prodWeightsVecPadData(linksDataPathList, MAX_VEC_LENGTH=3000)
+        x_test, y_test = svmObj.prodTrainTestData(pad_data, interBoundary - len(totalWeightSequenceList), labelLists[0])
+        
+        load_end = time.clock()
+        print('load data runtime %f s' % (load_end - load_start))
+        
+        classes, proba = svmObj.svmClassifyPredict(sk_estimator, x_test, withProba=True)
         print('give the predict result')
         
         return classes, proba
@@ -381,6 +423,31 @@ class MedGraphMining(object):
         print('give the evaluate result')
         
         return score
+    
+    def evalEstimatorlinksClasses_file(self, sk_estimator,
+                                       trainLinksDataPath,
+                                       testLinksDataPath,
+                                       testWithLabel=True):
+        '''
+        '''
+        svmObj = SupportVectorMachine()
+        
+        print('loading evaluate data...')
+        load_start = time.clock()
+        
+        linksDataPathList = [trainLinksDataPath, testLinksDataPath]
+        totalWeightSequenceList, interBoundary, labelLists = self.loadDetachedLinksWeightReps(linksDataPathList, testWithLabel)
+        
+        MAX_VEC_LENGTH, pad_data = svmObj.prodWeightsVecPadData(totalWeightSequenceList, MAX_VEC_LENGTH=3000)
+        x_test, y_test = svmObj.prodTrainTestData(pad_data, interBoundary - len(totalWeightSequenceList), labelLists[1])
+        
+        load_end = time.clock()
+        print('load data runtime %f s' % (load_end - load_start))
+        
+        accuracy, recall = svmObj.svmClassifiyEvaluate(sk_estimator, x_test, y_test)
+        print('give the evaluate result')
+        
+        return accuracy, recall
 
 if __name__ == '__main__':
 #     testObj = MedGraphMining()

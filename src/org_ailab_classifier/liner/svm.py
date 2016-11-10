@@ -28,6 +28,7 @@ class SupportVectorMachine(object):
         sortedWordTuplelist = sorted(totalWordDic.iteritems(), key=lambda asd:asd[1])
         # filter the selected word's dic
         selectedWordList = []
+        print('words number: ' + str(len(sortedWordTuplelist)))
         for i in range(MAX_VEC_LENGTH):
             selectedWordList.append(sortedWordTuplelist[i][0])
             
@@ -84,7 +85,7 @@ class SupportVectorMachine(object):
         # the parameter can be set
         kernel = 'rbf'
         # init classifier and train it
-        # 
+        # if need the proba-predict result, parameter probability must be =True
         clf = SVC(kernel=kernel, probability=True)
         clf.fit(x_train, y_train)
         
