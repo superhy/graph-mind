@@ -39,6 +39,8 @@ class SupportVectorMachine(object):
             for tup in seq:
                 if tup[0] in selectedWordList:
                     repsVecArray[selectedWordList.index(tup[0])] = tup[1]
+                    print(tup[0] + ' '),
+            print('')
             pad_vec_list.append(repsVecArray)
         # np array the pad_vec_list
         pad_data = numpy.array(pad_vec_list)
@@ -73,7 +75,10 @@ class SupportVectorMachine(object):
         if len(labelList) != 0:
             y_data = numpy.asarray(labelList)
             
-        print('treated size: ' + str(len(x_data)))
+        print('treated size: ' + str(len(x_data)) + '\n#===================================#')
+        print(x_data),
+        print(list(x_data[500]).count(0.))
+        print(y_data)
             
         return x_data, y_data
     
@@ -117,7 +122,7 @@ class SupportVectorMachine(object):
         average = 'micro'
         
         predicted = cross_val_predict(clf, x_test, y_test)
-        print('predicted: ' + str(predicted) + 'num of label0: ' + str(list(predicted).count(0)) + 'num of label1: ' + str(list(predicted).count(1)))
+        print('predicted: ' + str(predicted) + 'num of label0: ' + str(list(predicted).count(0)) + ', num of label1: ' + str(list(predicted).count(1)))
         
         accuracy = metrics.accuracy_score(y_test, predicted)
         recall = metrics.recall_score(y_test, predicted, average=average)

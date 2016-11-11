@@ -321,7 +321,7 @@ class MedGraphMining(object):
         linksDataPathList = [trainLinksDataPath, testLinksDataPath]
         totalWeightSequenceList, interBoundary, labelLists = self.loadDetachedLinksWeightReps(linksDataPathList, testWithLabel)
         
-        MAX_VEC_LENGTH, pad_data = svmObj.prodWeightsVecPadData(totalWeightSequenceList, MAX_VEC_LENGTH=6000)
+        MAX_VEC_LENGTH, pad_data = svmObj.prodWeightsVecPadData(totalWeightSequenceList, MAX_VEC_LENGTH=3000)
         x_train, y_train = svmObj.prodTrainTestData(pad_data, interBoundary, labelLists[0])
         
         load_end = time.clock()
