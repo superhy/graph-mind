@@ -117,7 +117,7 @@ class SupportVectorMachine(object):
         average = 'micro'
         
         predicted = cross_val_predict(clf, x_test, y_test)
-        print('predicted: ' + str(predicted))
+        print('predicted: ' + str(predicted) + 'num of label0: ' + str(list(predicted).count(0)) + 'num of label1: ' + str(list(predicted).count(1)))
         
         accuracy = metrics.accuracy_score(y_test, predicted)
         recall = metrics.recall_score(y_test, predicted, average=average)
