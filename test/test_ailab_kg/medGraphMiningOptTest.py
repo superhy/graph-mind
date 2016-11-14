@@ -185,31 +185,63 @@ def testSaveLinksClassifier():
     medMiningObj = MedGraphMining()
 #     layerObj = NeuralLayerClassifier()
     gensimModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'
-    trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
-    testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
+    
+    '''1'''
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/1/shicai2bingzheng_train_links301-1500.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/1/shicai2bingzheng_test_links1-300.txt'
+    '''2'''
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/2/shicai2bingzheng_train_links1-300,601-1500.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/2/shicai2bingzheng_test_links301-600.txt'
+    '''3'''
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/3/shicai2bingzheng_train_links1-600,901-1500.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/3/shicai2bingzheng_test_links601-900.txt'
+    '''4'''
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/4/shicai2bingzheng_train_links1-900,1201-1500.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/4/shicai2bingzheng_test_links901-1200.txt'
+    '''5'''
+    trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/5/shicai2bingzheng_train_links1-1200.txt'
+    testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/5/shicai2bingzheng_test_links1201-1500.txt'
     
 #     storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifiecr_cnnlstmT'
     storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifiecr_cnnsT' 
     
     '''cnns + lstm part'''
-#     medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath,
-#                                            trainLinksDataPath,
-#                                            testLinksDataPath,
-#                                            v_ratio=0.15,
-#                                            storeFilePath=storeFilePath)
-    '''cnns part'''
-    medMiningObj.trainCNNsLinksClassifier_file(gensimModelPath,
+    medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath,
                                            trainLinksDataPath,
                                            testLinksDataPath,
                                            v_ratio=0.15,
                                            storeFilePath=storeFilePath)
+    '''cnns part'''
+#     medMiningObj.trainCNNsLinksClassifier_file(gensimModelPath,
+#                                            trainLinksDataPath,
+#                                            testLinksDataPath,
+#                                            v_ratio=0.15,
+#                                            storeFilePath=storeFilePath)
     
 def testLoadLinksClassifier():
     medMiningObj = MedGraphMining()
     layerObj = NeuralLayerClassifier()
     gensimModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'
-    trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
-    testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
+
+    '''1'''
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/1/shicai2bingzheng_train_links301-1500.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/1/shicai2bingzheng_test_links1-300.txt'
+    '''2'''
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/2/shicai2bingzheng_train_links1-300,601-1500.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/2/shicai2bingzheng_test_links301-600.txt'
+    '''3'''
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/3/shicai2bingzheng_train_links1-600,901-1500.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/3/shicai2bingzheng_test_links601-900.txt'
+    '''4'''
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/4/shicai2bingzheng_train_links1-900,1201-1500.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/4/shicai2bingzheng_test_links901-1200.txt'
+    '''5'''
+    trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/5/shicai2bingzheng_train_links1-1200.txt'
+    testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/5/shicai2bingzheng_test_links1201-1500.txt'
     
 #     storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifiecr_cnnlstmT'
     storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifiecr_cnnsT' 
@@ -348,12 +380,10 @@ if __name__ == '__main__':
     test save model on disk
     then load it from disk and use it to classify
     '''
-#===============================================================================
-# #     print ROOT_PATH.auto_config_root()
-#     testSaveLinksClassifier()
-# #     classes, proba = testLoadLinksClassifier()
-#     testLoadLinksClassifier()
-#===============================================================================
+#     print ROOT_PATH.auto_config_root()
+    testSaveLinksClassifier()
+#     classes, proba = testLoadLinksClassifier()
+    testLoadLinksClassifier()
     
 #     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
 #     printLinksClassifyRes(testLinksDataPath, classes, proba)
@@ -378,5 +408,7 @@ if __name__ == '__main__':
     test use total data train a svm estimator
     then, evaluate the trained estimator
     '''
-    testSVMLinksTrainTest()
+    #===========================================================================
+    # testSVMLinksTrainTest()
+    #===========================================================================
     

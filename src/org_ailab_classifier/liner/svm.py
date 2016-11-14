@@ -11,11 +11,16 @@ from sklearn import metrics
 from sklearn.model_selection._validation import cross_val_predict
 from sklearn.svm.classes import SVC
 
+from org_ailab_tools.decorator import deprecated
+
 
 class SupportVectorMachine(object):
     
+    
+    @deprecated
     def prodWeightsVecPadData(self, wordWeightSeqList, MAX_VEC_LENGTH=3000):
         '''
+        @deprecated: 
         '''
         totalWordDic = {}
         for seq in wordWeightSeqList:
