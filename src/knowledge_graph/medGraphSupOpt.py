@@ -6,9 +6,11 @@ Created on 2016年8月8日
 @author: hylovedd
 '''
 
-from orgword_segrd2vec.wordTypeFilter import WordTypeFilter
-from orgword_segrd2vec.wordVecOpt import WordVecOpt
+
 from gensim.models.word2vec import Word2Vec
+
+from word_seg.word2vec.wordTypeFilter import WordTypeFilter
+from word_seg.word2vec.wordVecOpt import WordVecOpt
 
 
 def prodFieldW2VModel(modelStoragePath, corpusFilePath, dimension_size=100):

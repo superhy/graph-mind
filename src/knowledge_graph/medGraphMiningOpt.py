@@ -8,13 +8,12 @@ Created on 2016年8月16日
 
 import time
 
-from orgclassifiertworks.layer import NeuralLayerClassifier
-from orgdatastoreaph.neoDataAdvanceOpt import NeoDataAdvanceOpt
-from orgdatastoreaph.neoDataGraphOpt import NeoDataGraphOpt
-from orgknowledge_graphport medGraphSupOpt
-from orgword_segrd2vec.wordVecOpt import WordVecOpt
-from orgtoolsche import ROOT_PATH
-from orgclassifierner.svm import SupportVectorMachine
+from classifier.liner.svm import SupportVectorMachine
+from classifier.networks.layer import NeuralLayerClassifier
+from datastore.graph.neoDataAdvanceOpt import NeoDataAdvanceOpt
+from datastore.graph.neoDataGraphOpt import NeoDataGraphOpt
+from knowledge_graph import medGraphSupOpt
+from tools.cache import ROOT_PATH
 
 
 _medW2VModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'

@@ -12,9 +12,9 @@ import warnings
 
 from gensim.models.word2vec import Word2Vec, LineSentence
 
-from orgword_segtraSegOpt import ExtraSegOpt
-from orgtoolsport localFileOptUnit
-from orgtoolsche import ROOT_PATH
+from tools import localFileOptUnit
+from tools.cache import ROOT_PATH
+from word_seg.extraSegOpt import ExtraSegOpt
 
 
 class WordVecOpt(object):

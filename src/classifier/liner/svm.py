@@ -11,7 +11,7 @@ from sklearn import metrics
 from sklearn.model_selection._validation import cross_val_predict
 from sklearn.svm.classes import SVC
 
-from orgtoolscorator import deprecated
+from tools.decorator import deprecated
 
 
 class SupportVectorMachine(object):

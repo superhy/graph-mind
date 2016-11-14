@@ -4,8 +4,8 @@ Created on 2016年4月10日
 
 @author: hylovedd, jj_ma
 '''
-from orgdatastoreaph.neoDataGraphOpt import NeoDataGraphOpt, _user, \
-    _password, _service_ip
+from datastore.graph.neoDataGraphOpt import NeoDataGraphOpt, _user, _password, _service_ip
+
 
 class NeoDataAdvanceOpt(NeoDataGraphOpt):
     

@@ -12,9 +12,6 @@ import types
 from gensim.models.word2vec import LineSentence
 from jieba import posseg
 
-from orgword_segtraSegOpt import ExtraSegOpt
-from orgtoolsche import ROOT_PATH
-
 
 def checkFileState(filePath):
     '''

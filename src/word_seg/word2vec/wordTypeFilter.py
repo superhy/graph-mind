@@ -8,7 +8,7 @@ Created on 2016年3月30日
 
 from gensim.models.word2vec import LineSentence
 
-from orgtoolsche import WORD_POS
+from tools.cache import WORD_POS
 
 
 _entityPosTags = WORD_POS.noun
