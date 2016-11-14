@@ -208,17 +208,17 @@ def testSaveLinksClassifier():
     storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifiecr_cnnsT' 
     
     '''cnns + lstm part'''
-    medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath,
-                                           trainLinksDataPath,
-                                           testLinksDataPath,
-                                           v_ratio=0.15,
-                                           storeFilePath=storeFilePath)
-    '''cnns part'''
-#     medMiningObj.trainCNNsLinksClassifier_file(gensimModelPath,
+#     medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath,
 #                                            trainLinksDataPath,
 #                                            testLinksDataPath,
 #                                            v_ratio=0.15,
 #                                            storeFilePath=storeFilePath)
+    '''cnns part'''
+    medMiningObj.trainCNNsLinksClassifier_file(gensimModelPath,
+                                           trainLinksDataPath,
+                                           testLinksDataPath,
+                                           v_ratio=0.15,
+                                           storeFilePath=storeFilePath)
     
 def testLoadLinksClassifier():
     medMiningObj = MedGraphMining()
