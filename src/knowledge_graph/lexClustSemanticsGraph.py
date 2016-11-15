@@ -7,10 +7,12 @@ Created on 2016年5月16日
 
 import numpy
 
-from orgclustertworks.SOMNetWork import KohonenSOM
-from orgdatastoreaph.neoDataGraphOpt import NeoDataGraphOpt
-from orgword_segrd2vec.wordTypeFilter import WordTypeFilter
-from orgword_segrd2vec.wordVecOpt import WordVecOpt
+from cluster.networks.SOMNetWork import KohonenSOM
+from datastore.graph.neoDataGraphOpt import NeoDataGraphOpt
+from word_seg.word2vec.wordTypeFilter import WordTypeFilter
+from word_seg.word2vec.wordVecOpt import WordVecOpt
+
+
 
 class LexClustSemanticsGraph(object):
     '''

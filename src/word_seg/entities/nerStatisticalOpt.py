@@ -5,7 +5,8 @@ Created on 2016年6月21日
 
 @author: hylovedd
 '''
-from orgtoolsth.statisticsCountOpt import countElePorbInList
+from tools.math.statisticsCountOpt import countElePorbInList
+
 
 def cptStartP(tagMatrix):
     '''

@@ -40,7 +40,7 @@ class NeuralLayerClassifier(object):
         nb_words = len(allWords)
         print('nb_words: ' + str(nb_words))
         
-        embedding_matrix = numpy.zeros((nb_words + 1, EMBEDDING_DIM))
+        embedding_matrix = numpy.zeros((nb_words, EMBEDDING_DIM))
         for i in range(len(allWords)):
             if allWords[i] in w2vVocab:
                 embedding_vector = wordVecObj.getWordVec(w2vModel, allWords[i])
@@ -119,8 +119,8 @@ class NeuralLayerClassifier(object):
         '''
         
         # set some fixed parameter in Convolution layer
-        nb_filter = 128  # convolution core num       
-        filter_length = 3  # convolution core size
+        nb_filter = 160  # convolution core num       
+        filter_length = 5  # convolution core size
         border_mode = 'valid'
         cnn_activation = 'relu'
         subsample_length = 1
@@ -129,12 +129,12 @@ class NeuralLayerClassifier(object):
         # set some fixed parameter in Dense layer
         hidden_dims = 80
         # set some fixed parameter in Dropout layer
-        dropout_rate = 0.5
+        dropout_rate = 0.05
         # set some fixed parameter in Activation layer
         final_activation = 'sigmoid'
         # set some fixed parameter in training
-        batch_size = 32
-        nb_epoch = 2
+        batch_size = 2
+        nb_epoch = 50
         
         #=======================================================================
         # set callbacks function for auto early stopping
@@ -143,7 +143,7 @@ class NeuralLayerClassifier(object):
         callbacks = []
         if auto_stop == True:
             monitor = 'val_loss' if validation_split > 0.0 else 'loss'
-            patience = 2
+            patience = 5
             mode = 'min'
             early_stopping = EarlyStopping(monitor=monitor,
                                            patience=patience,
@@ -152,7 +152,7 @@ class NeuralLayerClassifier(object):
         
         # produce deep layer model
         model = Sequential()
-        model.add(Embedding(embeddingParamsDic['nb_words'] + 1,
+        model.add(Embedding(embeddingParamsDic['nb_words'],
                             embeddingParamsDic['EMBEDDING_DIM'],
                             weights=[embeddingParamsDic['embedding_matrix']],
                             input_length=embeddingParamsDic['MAX_SEQUENCE_LENGTH'],
@@ -202,7 +202,7 @@ class NeuralLayerClassifier(object):
         '''
         
         # set some fixed parameter in Convolution layer
-        nb_filter = 128  # convolution core num       
+        nb_filter = 80  # convolution core num       
         filter_length = 5  # convolution core size
         border_mode = 'valid'
         cnn_activation = 'relu'
@@ -210,14 +210,14 @@ class NeuralLayerClassifier(object):
         # set some fixed parameter in MaxPooling layer
         pool_length = 2
         # set some fixed parameter in LSTM layer
-        lstm_output_size = 64
+        lstm_output_size = 40
         # set some fixed parameter in Dropout layer
-        dropout_rate = 0.25
+        dropout_rate = 0.05
         # set some fixed parameter in Activation layer
         final_activation = 'sigmoid'
         # set some fixed parameter in training
-        batch_size = 32
-        nb_epoch = 2
+        batch_size = 4
+        nb_epoch = 30
         
         #=======================================================================
         # set callbacks function for auto early stopping
@@ -226,7 +226,7 @@ class NeuralLayerClassifier(object):
         callbacks = []
         if auto_stop == True:
             monitor = 'val_loss' if validation_split > 0.0 else 'loss'
-            patience = 2
+            patience = 5
             mode = 'min'
             early_stopping = EarlyStopping(monitor=monitor,
                                            patience=patience,
@@ -237,7 +237,7 @@ class NeuralLayerClassifier(object):
         model = Sequential()
         # load pre-trained word embeddings into an Embedding layer
         # note that we set trainable = False so as to keep the embeddings fixed
-        model.add(Embedding(embeddingParamsDic['nb_words'] + 1,
+        model.add(Embedding(embeddingParamsDic['nb_words'],
                             embeddingParamsDic['EMBEDDING_DIM'],
                             weights=[embeddingParamsDic['embedding_matrix']],
                             input_length=embeddingParamsDic['MAX_SEQUENCE_LENGTH'],

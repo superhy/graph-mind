@@ -5,11 +5,12 @@ Created on 2016年7月26日
 
 @author: hylovedd
 '''
+from cluster.association.apriori import aprioriAss
+from tools.cache import ROOT_PATH
+from word_seg.word2vec.wordTypeFilter import WordTypeFilter
+from word_seg.word2vec.wordVecOpt import WordVecOpt
 
-from orgclustersociation.apriori import aprioriAss
-from orgword_segrd2vec.wordVecOpt import WordVecOpt
-from orgtoolsche import ROOT_PATH
-from orgword_segrd2vec.wordTypeFilter import WordTypeFilter
+
 
 def prodFieldW2VModel(modelStoragePath, corpusFilePath, dimension_size=100):
     wordVecOptObj = WordVecOpt(modelStoragePath, size=dimension_size)

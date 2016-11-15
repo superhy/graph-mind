@@ -6,12 +6,14 @@ Created on 2016年6月5日
 @author: hylovedd
 '''
 
-from orgword_segrdSeg import WordSeg
-from orgword_segtities import nerStatisticalOpt
-from orgclassifierob_graph.hmm import HiddenMarkov
 
-from json.encoder import JSONEncoder
+
 from json.decoder import JSONDecoder
+from json.encoder import JSONEncoder
+
+from word_seg.entities import nerStatisticalOpt
+from word_seg.wordSeg import WordSeg
+
 
 class TagPOSSeqModel(object):
     def __init__(self, tagStartP, tagPOSEmitP, tagHiddens, tag2tagTransP):

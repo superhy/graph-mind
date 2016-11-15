@@ -141,8 +141,11 @@ def testLoadLinksReps():
 def testClassifyLinks():
     medMiningObj = MedGraphMining()
     gensimModelPath = ROOT_PATH.auto_config_root() + u'model/word2vec/zongheword2vecModel.vector'
-    trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
-    testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
+#     trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_train_links1-1200.txt'
+#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
+    '''2'''
+    trainLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/2/shicai2bingzheng_train_links1-300,601-1500.txt'
+    testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/cross_test/2/shicai2bingzheng_test_links301-600.txt'
     
     layerModel = medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath, trainLinksDataPath, testLinksDataPath)
     classes, proba = medMiningObj.testLayerLinksClasses_file(layerModel, gensimModelPath, trainLinksDataPath, testLinksDataPath)
@@ -207,17 +210,17 @@ def testSaveLinksClassifier():
     storeFilePath = ROOT_PATH.auto_config_root() + u'model/keras/links(sc2bz)_classifiecr_cnnsT' 
     
     '''cnns + lstm part'''
-#     medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath,
-#                                            trainLinksDataPath,
-#                                            testLinksDataPath,
-#                                            v_ratio=0.15,
-#                                            storeFilePath=storeFilePath)
-    '''cnns part'''
-    medMiningObj.trainCNNsLinksClassifier_file(gensimModelPath,
+    medMiningObj.trainHybirdLinksClassifier_file(gensimModelPath,
                                            trainLinksDataPath,
                                            testLinksDataPath,
                                            v_ratio=0.15,
                                            storeFilePath=storeFilePath)
+    '''cnns part'''
+#     medMiningObj.trainCNNsLinksClassifier_file(gensimModelPath,
+#                                            trainLinksDataPath,
+#                                            testLinksDataPath,
+#                                            v_ratio=0.15,
+#                                            storeFilePath=storeFilePath)
     
 def testLoadLinksClassifier():
     medMiningObj = MedGraphMining()
@@ -365,10 +368,16 @@ if __name__ == '__main__':
     test relation classify from shicai to bingzheng
     give the classify result
     '''
-#     classes, proba = testClassifyLinks()
-#     
-#     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1000-1500.txt'
-#     printLinksClassifyRes(testLinksDataPath, classes, proba)
+    #===========================================================================
+    # classes, proba = testClassifyLinks()
+    # print('classify res: ' + str(classes))
+    # print('num of label 1: ' + str(list(classes).count(1)))
+    #===========================================================================
+     
+    #===========================================================================
+    # testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1000-1500.txt'
+    # printLinksClassifyRes(testLinksDataPath, classes, proba)
+    #===========================================================================
     
     '''
     test evaluate the relation classify result from shicai to bingzheng
@@ -379,12 +388,10 @@ if __name__ == '__main__':
     test save model on disk
     then load it from disk and use it to classify
     '''
-#===============================================================================
-# #     print ROOT_PATH.auto_config_root()
-#     testSaveLinksClassifier()
-# #     classes, proba = testLoadLinksClassifier()
-#     testLoadLinksClassifier()
-#===============================================================================
+#     print ROOT_PATH.auto_config_root()
+    testSaveLinksClassifier()
+#     classes, proba = testLoadLinksClassifier()
+    testLoadLinksClassifier()
     
 #     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
 #     printLinksClassifyRes(testLinksDataPath, classes, proba)
@@ -409,5 +416,7 @@ if __name__ == '__main__':
     test use total data train a svm estimator
     then, evaluate the trained estimator
     '''
-    testSVMLinksTrainTest()
+    #===========================================================================
+    # testSVMLinksTrainTest()
+    #===========================================================================
     

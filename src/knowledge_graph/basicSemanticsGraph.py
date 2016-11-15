@@ -5,10 +5,11 @@ Created on 2016年4月11日
 
 @author: hylovedd
 '''
+from datastore.graph.neoDataGraphOpt import NeoDataGraphOpt
+from word_seg.word2vec.wordTypeFilter import WordTypeFilter
+from word_seg.word2vec.wordVecOpt import WordVecOpt
 
-from orgdatastoreaph.neoDataGraphOpt import NeoDataGraphOpt
-from orgword_segrd2vec.wordTypeFilter import WordTypeFilter
-from orgword_segrd2vec.wordVecOpt import WordVecOpt
+
 
 class BasicSemanticsGraph(object):
     '''
