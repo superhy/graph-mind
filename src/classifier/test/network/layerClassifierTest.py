@@ -32,7 +32,7 @@ def testCNNPoolingLSTMClassify(x_train, y_train, input_shape, x_test, x_evaluate
 def testCNNClassify(x_train, y_train, input_shape, x_test, x_evaluate=None, y_evaluate=None):
     layerObj = NeuralLayerClassifier()
     
-    model = layerObj.CNNsClassify(x_train, y_train, input_shape, x_evaluate, y_evaluate)
+    model = layerObj.CNNCNNsClassify_Embedtrain, y_train, input_shape, x_evaluate, y_evaluate)
     classes, proba = layerObj.layerClassifyPredict(model, x_test)
     
     print(classes)

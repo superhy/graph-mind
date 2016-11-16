@@ -16,11 +16,14 @@ from tools.decorator import deprecated
 
 class SupportVectorMachine(object):
     
+    '''
+    part of pre-processing of input data
+    '''
     
     @deprecated
     def prodWeightsVecPadData(self, wordWeightSeqList, MAX_VEC_LENGTH=3000):
         '''
-        @deprecated: 
+        @deprecated: text feature's padding make vector space too sparse!
         '''
         totalWordDic = {}
         for seq in wordWeightSeqList:
@@ -87,6 +90,10 @@ class SupportVectorMachine(object):
             
         return x_data, y_data
     
+    '''
+    part of train svm model
+    '''
+    
     def SVCClassify(self, x_train, y_train):
         '''
         Basic Support Vector Machine Classifier
@@ -100,6 +107,10 @@ class SupportVectorMachine(object):
         clf.fit(x_train, y_train)
         
         return clf
+    
+    '''
+    part of other function like storage model, run predict, evaluate the model
+    '''
     
     def svmClassifyPredict(self, clf,
                            x_test,

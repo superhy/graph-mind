@@ -20,6 +20,10 @@ from word_seg.word2vec.wordVecOpt import WordVecOpt
 
 class NeuralLayerClassifier(object):
     
+    '''
+    part of pre-processing of input data
+    '''
+    
     def prodPreWordEmbedingMat(self, gensimModelPath, wordSequencesList):
         '''
         load the pred word embedding matrix
@@ -105,7 +109,11 @@ class NeuralLayerClassifier(object):
             
         return x_data, y_data
     
-    def CNNsClassify(self, embeddingParamsDic,
+    '''
+    part of train layer model
+    '''
+    
+    def CNNsClassify_Embed(self, embeddingParamsDic,
                     x_train, y_train,
                     validation_split=0.15,
                     auto_stop = False):
@@ -188,7 +196,7 @@ class NeuralLayerClassifier(object):
         
         return model
     
-    def CNNPoolingLSTMClassify(self, embeddingParamsDic,
+    def CNNPoolingLSTMClassify_Embed(self, embeddingParamsDic,
                                x_train, y_train,
                                validation_split=0.15,
                                auto_stop=False):
@@ -268,6 +276,10 @@ class NeuralLayerClassifier(object):
                   callbacks=callbacks)
         
         return model
+    
+    '''
+    part of other function like storage model, run predict, evaluate the model
+    '''
     
     def layerClassifyRecompile(self, model):
         '''
