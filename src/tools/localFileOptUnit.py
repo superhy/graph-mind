@@ -6,11 +6,13 @@ Created on 2015年10月25日
 @author: hylovedd
 '''
 
+from gensim.models.word2vec import LineSentence
+from jieba import posseg
 import os
 import types
 
-from gensim.models.word2vec import LineSentence
-from jieba import posseg
+from tools.cache import ROOT_PATH
+from word_seg.extraSegOpt import ExtraSegOpt
 
 
 def checkFileState(filePath):
