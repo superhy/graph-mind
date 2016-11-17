@@ -5,10 +5,11 @@ Created on 2016年7月29日
 
 @author: hylovedd
 '''
-from orgclustersociation.apriori import aprioriAss
-from orgknowledge_graphport freqAssGraphSupOpt
-from orgtoolsche import ROOT_PATH
-from orgword_segrd2vec.wordVecOpt import WordVecOpt
+from knowledge_graph import freqAssGraphSupOpt
+from tools.cache import ROOT_PATH
+from word_seg.word2vec.wordVecOpt import WordVecOpt
+
+
 
 def testLoadEntitiesFromDict():
     dict_path = ROOT_PATH.seg_dictwin64 + u'jieba_shicai.txt'
