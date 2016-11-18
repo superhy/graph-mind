@@ -231,7 +231,7 @@ class MedLinksPredict():
         model = layerObj.CNNPoolingLSTMClassify_Embed(embeddingParamsDic,
                                                 x_train, y_train,
                                                 validation_split=v_ratio,
-                                                auto_stop=False)
+                                                auto_stop=True)
         
         train_end = time.clock()
         print('train model runtime %f s' % (train_end - train_start))

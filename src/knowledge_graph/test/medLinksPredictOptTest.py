@@ -257,12 +257,10 @@ if __name__ == '__main__':
     test save model on disk
     then load it from disk and use it to classify
     '''
-#===============================================================================
-# #     print ROOT_PATH.auto_config_root()
-#     testSaveLinksClassifier()
-# #     classes, proba = testLoadLinksClassifier()
-#     testLoadLinksClassifier()
-#===============================================================================
+#     print ROOT_PATH.auto_config_root()
+    testSaveLinksClassifier()
+#     classes, proba = testLoadLinksClassifier()
+    testLoadLinksClassifier()
     
 #     testLinksDataPath = ROOT_PATH.auto_config_root() + u'model_cache/relation_learning/shicai2bingzheng_test_links1201-1500.txt'
 #     printLinksClassifyRes(testLinksDataPath, classes, proba)
@@ -287,4 +285,6 @@ if __name__ == '__main__':
     test use total data train a svm estimator
     then, evaluate the trained estimator
     '''
-    testSVMLinksTrainTest()
+    #===========================================================================
+    # testSVMLinksTrainTest()
+    #===========================================================================

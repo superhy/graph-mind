@@ -142,7 +142,7 @@ class NeuralLayerClassifier(object):
         final_activation = 'sigmoid'
         # set some fixed parameter in training
         batch_size = 2
-        nb_epoch = 50
+        nb_epoch = 10
         
         #=======================================================================
         # set callbacks function for auto early stopping
@@ -150,9 +150,9 @@ class NeuralLayerClassifier(object):
         #=======================================================================
         callbacks = []
         if auto_stop == True:
-            monitor = 'val_loss' if validation_split > 0.0 else 'loss'
-            patience = 5
-            mode = 'min'
+            monitor = 'val_acc' if validation_split > 0.0 else 'acc'
+            patience = 2
+            mode = 'max'
             early_stopping = EarlyStopping(monitor=monitor,
                                            patience=patience,
                                            mode=mode)
@@ -177,7 +177,8 @@ class NeuralLayerClassifier(object):
         model.add(Flatten())
         
         model.add(Dense(hidden_dims))
-        model.add(Dropout(p=dropout_rate))
+        if dropout_rate > 0:
+            model.add(Dropout(p=dropout_rate))
         model.add(Activation(activation=cnn_activation))
         
         model.add(Dense(1))
@@ -210,7 +211,7 @@ class NeuralLayerClassifier(object):
         '''
         
         # set some fixed parameter in Convolution layer
-        nb_filter = 80  # convolution core num       
+        nb_filter = 160  # convolution core num       
         filter_length = 5  # convolution core size
         border_mode = 'valid'
         cnn_activation = 'relu'
@@ -218,14 +219,16 @@ class NeuralLayerClassifier(object):
         # set some fixed parameter in MaxPooling layer
         pool_length = 2
         # set some fixed parameter in LSTM layer
-        lstm_output_size = 40
+        lstm_output_size = 160
+        # set some fixed parameter in Dense layer
+        hidden_dims = 80
         # set some fixed parameter in Dropout layer
         dropout_rate = 0.05
         # set some fixed parameter in Activation layer
         final_activation = 'sigmoid'
         # set some fixed parameter in training
-        batch_size = 4
-        nb_epoch = 30
+        batch_size = 2
+        nb_epoch = 100
         
         #=======================================================================
         # set callbacks function for auto early stopping
@@ -233,9 +236,9 @@ class NeuralLayerClassifier(object):
         #=======================================================================
         callbacks = []
         if auto_stop == True:
-            monitor = 'val_loss' if validation_split > 0.0 else 'loss'
-            patience = 5
-            mode = 'min'
+            monitor = 'val_acc' if validation_split > 0.0 else 'acc'
+            patience = 2
+            mode = 'max'
             early_stopping = EarlyStopping(monitor=monitor,
                                            patience=patience,
                                            mode=mode)
@@ -258,8 +261,10 @@ class NeuralLayerClassifier(object):
         model.add(MaxPooling1D(pool_length=pool_length))
         
         model.add(LSTM(output_dim=lstm_output_size))
+        model.add(Dense(hidden_dims))
         if dropout_rate > 0:
             model.add(Dropout(p=dropout_rate))
+        model.add(Activation(activation=cnn_activation))
             
         model.add(Dense(1))
         model.add(Activation(activation=final_activation))
@@ -295,7 +300,7 @@ class NeuralLayerClassifier(object):
     def layerClassifyPredict(self, model, x_test):
         '''
         '''
-        batch_size = 32
+        batch_size = 2
         
         classes = model.predict_classes(x_test, batch_size=batch_size)
         proba = model.predict_proba(x_test, batch_size=batch_size)
@@ -305,7 +310,7 @@ class NeuralLayerClassifier(object):
     def layerClassifiyEvaluate(self, model, x_test, y_test):
         '''
         '''
-        batch_size = 32
+        batch_size = 2
         score = model.evaluate(x_test, y_test, batch_size=batch_size)
 #         print('\nmodel score params： ' + str(model.metrics_names))
         
