@@ -49,7 +49,7 @@ def predict(model, data):
 if __name__ == '__main__':
     data, labels = generateData(500, 20, 2)
     
-    print(data)
+    print(labels)
     
     model = multilayerPerceptron(data, labels)
     
