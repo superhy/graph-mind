@@ -248,17 +248,4 @@ class WordVecOpt(object):
         return self.copeMSimilarVecsbtwWordLists(model, wordStrList1, wordStrList2, topN_rev, topN)
     
 if __name__ == '__main__':
-    
-    first_path = ROOT_PATH.root_win64 + u'med_seg\\2食材百科\\阿胶(seg).txt'
-    second_path = ROOT_PATH.root_win64 + u'med_seg\\2食材百科\\艾叶(seg).txt'
-    model_path = ROOT_PATH.root_win64 + u'model\\word2vec\\test_model.vector'
-    
-    model = Word2Vec(LineSentence(first_path), size=100, window=5, min_count=1, workers=multiprocessing.cpu_count())
-    print(u'corpus num: ' + str(model.corpus_count))
-    
-    change = model.train(LineSentence(second_path))
-    print(u'change num: ' + str(change))
-    print(u'corpus num: ' + str(model.corpus_count))
-    
-    print(model.most_similar(u'阿胶n'))
-    print(model.most_similar(u'艾叶nr'))
+    pass
